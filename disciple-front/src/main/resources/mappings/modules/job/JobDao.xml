@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.job.dao.JobDao">
+    
+	<sql id="jobColumns">
+		a.id AS "id",
+		a.company_id AS "company.id",
+		a.industry_id AS "industry.id",
+		a.name AS "name",
+		a.city_id AS "city.id",
+		a.practice_number AS "practiceNumber",
+		a.job_attract AS "jobAttract",
+		a.description AS "description",
+		a.address AS "address",
+		a.lowest AS "lowest",
+		a.highest AS "highest",
+		a.day_number AS "dayNumber",
+		a.language AS "language",
+		a.education_id AS "education",
+		a.begin_date AS "beginDate",
+		a.end_date AS "endDate",
+		a.expiry_date AS "expiryDate",
+		a.chance AS "chance",
+		a.is_overseas AS "isOverseas",
+		a.is_resume AS "isResume",
+		a.email AS "email",
+		a.number AS "number",
+		a.state AS "state",
+		a.is_push AS "isPush",
+		a.comment AS "comment",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.is_hit AS "isHit",
+		a.del_flag AS "delFlag",
+		a.qr_code AS "qrCode",
+		a.company_push_id AS "companyPushId",
+		ROUND(DATEDIFF(a.end_date,a.begin_date)/30,0) AS "practiceMonth",
+		c.name AS "company.name",
+		c.short_name AS "company.shortName",
+		i.name AS "industry.name",
+		sa.name AS "city.name"
+	</sql>
+
+
+	<sql id="jobJoinsJl">
+		left join company c on c.id=a.company_id
+		left join industry i on i.id=a.industry_id
+		left join sys_area sa on sa.id=a.city_id
+	</sql>
+	<sql id="jobJoins">
+		left join company c on c.id=a.company_id
+		left join industry i on i.id=a.industry_id
+		left join sys_area sa on sa.id=a.city_id
+	</sql>
+
+	<sql id="jobPushJoins">
+		left join company c on c.id=a.company_push_id
+		left join industry i on i.id=a.industry_id
+		left join sys_area sa on sa.id=a.city_id
+	</sql>
+    
+	<select id="get" resultType="Job">
+		SELECT 
+			<include refid="jobColumns"/>
+		FROM job a
+		<include refid="jobJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getPush" resultType="Job">
+		SELECT
+		<include refid="jobColumns"/>
+		FROM job a
+		<include refid="jobPushJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getPushIds" resultType="java.lang.String">
+		SELECT
+		GROUP_CONCAT(company_push_id)
+		FROM
+		job
+		WHERE
+		is_push = "0"
+	</select>
+
+	<update id="bindCompanyJob">
+		UPDATE job SET company_push_id = #{companyPushId} where id = #{id}
+	</update>
+	
+	<select id="findList" resultType="Job">
+		SELECT 
+			<include refid="jobColumns"/>
+		FROM job a
+		<include refid="jobJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.end_date >= NOW()
+			<include refid="companyIfWhere" />
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<sql id="companyIfWhere">
+		<if test="company != null and company.id !=null and company.id != ''">
+			AND a.company_id = #{company.id}
+		</if>
+		<if test="industry != null and industry.id !=null and industry.id != ''">
+			AND FIND_IN_SET(a.industry_id,#{industry.id})
+		</if>
+		<if test="city != null and city.id !=null and city.id != ''">
+			AND a.city_id = #{city.id}
+		</if>
+		<if test="name != null and name != ''">
+			AND a.name LIKE
+			<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+		</if>
+		<if test="lowest != null and lowest != '' and highest != null and highest != ''">
+			AND a.lowest &lt;= #{lowest}
+			AND a.highest >= #{lowest}
+			OR a.lowest &lt;= #{highest}
+			AND a.highest >= #{highest}
+		</if>
+		<if test="highest != null and highest != '' and (lowest == null or lowest == '')">
+			AND a.lowest &lt;= #{highest}
+			AND a.highest >= #{highest}
+		</if>
+		<if test="lowest != null and lowest != '' and (highest == null or highest == '')">
+			AND a.lowest &lt;= #{lowest}
+			AND a.highest >= #{lowest}
+		</if>
+		<if test="searchName != null and searchName != ''">
+			AND (a.name like concat('%',#{searchName},'%')
+			OR c.name like concat('%',#{searchName},'%')
+			OR sa.name like concat('%',#{searchName},'%'))
+		</if>
+		<if test="dayNumber != null and dayNumber != ''">
+			and a.day_number = #{dayNumber}
+		</if>
+		<if test="education != null and education != ''">
+			and a.education_id = #{education}
+		</if>
+		<if test="chance != null and chance != ''">
+			and a.chance = #{chance}
+		</if>
+		<if test="isPush != null and isPush != ''">
+			and a.is_push = #{isPush}
+		</if>
+		<if test="ids != null and ids != ''">
+			and FIND_IN_SET(a.id,#{ids})
+		</if>
+		<if test="state != null and state != ''">
+			and a.state = #{state}
+		</if>
+		<if test="minPracticeMonth != null">
+			and ROUND(DATEDIFF(a.end_date,a.begin_date)/30,0) >= #{minPracticeMonth}
+		</if>
+		<if test="maxPracticeMonth != null">
+			and ROUND(DATEDIFF(a.end_date,a.begin_date)/30,0) &lt;= #{maxPracticeMonth}
+		</if>
+		<if test="homeShow != null and homeShow != ''">
+			and a.home_show = #{homeShow}
+		</if>
+	</sql>
+
+	<select id="findListPush" resultType="Job">
+		SELECT
+		<include refid="jobColumns"/>
+		FROM job a
+		<include refid="jobPushJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<include refid="companyIfWhere"/>
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Job">
+		SELECT 
+			<include refid="jobColumns"/>
+		FROM job a
+		<include refid="jobJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		ORDER BY a.update_date DESC
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 
+			* 
+		FROM job a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(id)
+			* 
+		FROM job a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO job(
+			id,
+			company_id,
+			industry_id,
+			name,
+			city_id,
+			practice_number,
+			job_attract,
+			description,
+			address,
+			lowest,
+			highest,
+			day_number,
+			language,
+			education_id,
+			begin_date,
+			end_date,
+			expiry_date,
+			chance,
+			is_overseas,
+			is_resume,
+			email,
+			state,
+			comment,
+			create_date,
+			update_date,
+			remarks,
+			is_hit,
+			company_push_id,
+			qr_code,
+			del_flag
+		) VALUES (
+			#{id},
+			#{company.id},
+			#{industry.id},
+			#{name},
+			#{city.id},
+			#{practiceNumber},
+			#{jobAttract},
+			#{description},
+			#{address},
+			#{lowest},
+			#{highest},
+			#{dayNumber},
+			#{language},
+			#{education},
+			#{beginDate},
+			#{endDate},
+			#{expiryDate},
+			#{chance},
+			#{isOverseas},
+			#{isResume},
+			#{email},
+			#{state},
+			#{comment},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{isHit},
+			#{companyPushId},
+			#{qrCode},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE job SET 	
+			company_id = #{company.id},
+			industry_id = #{industry.id},
+			name = #{name},
+			city_id = #{city.id},
+			practice_number = #{practiceNumber},
+			job_attract = #{jobAttract},
+			description = #{description},
+			address = #{address},
+			lowest = #{lowest},
+			highest = #{highest},
+			day_number = #{dayNumber},
+			language = #{language},
+			education_id = #{education},
+			begin_date = #{beginDate},
+			end_date = #{endDate},
+			expiry_date = #{expiryDate},
+			chance = #{chance},
+			is_overseas = #{isOverseas},
+			is_resume = #{isResume},
+			email = #{email},
+			state = #{state},
+			is_push = #{isPush},
+			is_hit = #{isHit},
+			comment = #{comment},
+			update_date = #{updateDate},
+			qr_code = #{qrCode},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE job SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 删除用户和角色关联表数据 -->
+	<delete id="deleteJobLabel">
+		DELETE FROM job_label_list WHERE job_id = #{id}
+	</delete>
+	
+	<!-- 插入用户和角色关联表数据 -->
+	<insert id="insertJobLabel">
+		INSERT INTO job_label_list(job_id, job_label_id)
+		<foreach collection="jobLabelList" item="jobLabel" separator=" union all ">
+			SELECT #{id}, #{jobLabel.id} FROM dual
+		</foreach>
+	</insert>
+
+	<select id="getCompanyJobs" resultType="Job">
+		SELECT
+		<include refid="jobColumns"/>
+		FROM job a
+		<include refid="jobJoinsJl"/>
+		<where>
+			<if test="companyId != null  and companyId != ''">
+				AND a.company_id = #{companyId}
+			</if>
+			<if test="isHitJob !=null and isHitJob != ''">
+				AND a.is_hit = #{isHitJob}
+			</if>
+		</where>
+	</select>
+
+	<select id="getHitNum" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM job
+	</select>
+
+	<select id="getJobInNumTotal" resultType="java.lang.Integer" parameterType="java.lang.String">
+		SELECT COUNT(*) FROM job_in WHERE company_id = #{companyId}
+	</select>
+
+	<select id="getJobNumTotal" resultType="java.lang.Integer" parameterType="java.lang.String">
+		SELECT COUNT(*) FROM job WHERE company_id = #{companyId}
+	</select>
+
+	<select id="getJobInFaceTotal" resultType="java.lang.Integer" parameterType="java.lang.String">
+		SELECT COUNT(*) FROM job_in WHERE company_id = #{companyId} and `status` = "1"
+	</select>
+
+	<select id="getPublishCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM job WHERE company_id = #{companyId} AND  DATE_FORMAT(create_date,"%Y-%m-%d") = DATE_FORMAT(NOW(),"%Y-%m-%d")
+	</select>
+
+	<select id="getJobNum" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM job
+		<where>
+			company_id = #{company.id}
+			AND state = #{state}
+			<if test="expiryDate != null and expiryDate != ''">
+				AND expiry_date >= #{expiryDate}
+			</if>
+		</where>
+	</select>
+
+	<select id="getLabels" resultType="JobLabel" parameterType="java.lang.String">
+		SELECT
+			a.id AS "id",
+			a.name AS "name",
+			a.sort AS "sort",
+			a.create_date AS "createDate",
+			a.update_date AS "updateDate",
+			a.remarks AS "remarks",
+			a.del_flag AS "delFlag"
+		FROM
+			job_label a
+		LEFT JOIN job_label_list b ON a.id = b.job_label_id
+		WHERE
+			b.job_id = #{jobId}
+	</select>
+
+	<select id="getJobNames" resultType="Job">
+		SELECT
+		a.name AS "name"
+		FROM job a
+		WHERE a.company_id = #{companyId}
+		group by a.name
+	</select>
+
+	<update id="lineOff" parameterType="java.lang.String">
+		UPDATE job SET
+			state = "2"
+		WHERE id = #{id}
+	</update>
+
+	<delete id="deleteJob">
+		DELETE FROM job WHERE id = #{id}
+	</delete>
+
+	<update id="fresh" parameterType="java.lang.String">
+		update job set update_date = now() where id = #{id};
+	</update>
+
+	<update id="overdueJob">
+		update job set state = "3" where expiry_date > now();
+	</update>
+
+	<update id="addNumber" parameterType="java.lang.String">
+		update job set number = number+1 where id = #{id}
+	</update>
+</mapper>

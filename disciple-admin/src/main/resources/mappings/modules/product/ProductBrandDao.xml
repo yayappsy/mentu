@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.product.dao.ProductBrandDao">
+    
+	<sql id="productBrandColumns">
+		a.id AS "id",
+		a.product_category_id AS "productCategory.id",
+		a.name AS "name",
+		a.english_name AS "englishName",
+		a.logo_url AS "logoUrl",
+		a.site_url AS "siteUrl",
+		a.description AS "description",
+		a.status AS "status",
+		a.is_recommend AS "isRecommend",
+		a.sort AS "sort",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+		,prodC.name As "productCategory.name"		
+	</sql>
+	
+	<sql id="productBrandJoins">
+	     inner join product_category prodC on prodC.id = a.product_category_id
+	</sql>
+    
+	<select id="get" resultType="ProductBrand">
+		SELECT 
+			<include refid="productBrandColumns"/>
+		FROM product_brand a
+		<include refid="productBrandJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="ProductBrand">
+		SELECT 
+			<include refid="productBrandColumns"/>
+		FROM product_brand a
+		<include refid="productBrandJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="ProductBrand">
+		SELECT 
+			<include refid="productBrandColumns"/>
+		FROM product_brand a
+		<include refid="productBrandJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="productCategory != null and productCategory.id != null and productCategory.id != ''">
+				AND a.product_category_id = #{productCategory.id}
+			</if>			
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ProductBrand">
+		SELECT 
+			<include refid="productBrandColumns"/>
+		FROM product_brand a
+		<include refid="productBrandJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="productCategory != null and productCategory.id != null and productCategory.id != ''">
+				AND a.product_category_id = #{productCategory.id}
+			</if>
+		</where>		
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM product_brand a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(*)		 
+		FROM product_brand a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO product_brand(
+			id,
+			product_category_id,
+			name,
+			english_name,
+			logo_url,
+			site_url,
+			description,
+			status,
+			is_recommend,
+			sort,
+			create_date,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{productCategory.id},
+			#{name},
+			#{englishName},
+			#{logoUrl},
+			#{siteUrl},
+			#{description},
+			#{status},
+			#{isRecommend},
+			#{sort},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE product_brand SET 	
+			product_category_id = #{productCategory.id},
+			name = #{name},
+			english_name = #{englishName},
+			logo_url = #{logoUrl},
+			site_url = #{siteUrl},
+			description = #{description},
+			status = #{status},
+			is_recommend = #{isRecommend},
+			sort = #{sort},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM product_brand
+	
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteEntity">
+		UPDATE product_brand SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

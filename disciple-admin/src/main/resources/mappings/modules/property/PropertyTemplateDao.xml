@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.property.dao.PropertyTemplateDao">
+    
+	<sql id="propertyTemplateColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.description AS "description",
+		a.sort AS "sort",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="propertyTemplateJoins">
+	</sql>
+    
+	<select id="get" resultType="PropertyTemplate">
+		SELECT 
+			<include refid="propertyTemplateColumns"/>
+		FROM property_template a
+		<include refid="propertyTemplateJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="PropertyTemplate">
+		SELECT 
+			<include refid="propertyTemplateColumns"/>
+		FROM property_template a
+		<include refid="propertyTemplateJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="PropertyTemplate">
+		SELECT 
+			<include refid="propertyTemplateColumns"/>
+		FROM property_template a
+		<include refid="propertyTemplateJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="PropertyTemplate">
+		SELECT 
+			<include refid="propertyTemplateColumns"/>
+		FROM property_template a
+		<include refid="propertyTemplateJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM property_template a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(*)		 
+		FROM property_template a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO property_template(
+			id,
+			name,
+			description,
+			sort,
+			create_date,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{name},
+			#{description},
+			#{sort},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE property_template SET 	
+			name = #{name},
+			description = #{description},
+			sort = #{sort},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM property_template
+	
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteEntity">
+		UPDATE property_template SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

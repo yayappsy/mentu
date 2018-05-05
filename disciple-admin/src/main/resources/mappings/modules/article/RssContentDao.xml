@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.article.dao.RssContentDao">
+    
+	<sql id="rssContentColumns">
+		a.id AS "id",
+		a.rss_name AS "rssName",
+		a.rss_url AS "rssUrl",
+		a.keywords AS "keywords",
+		a.number AS "number",
+		a.last_fetch_date AS "lastFetchDate",
+		a.article_category_id AS "articleCategory.id",
+		a.article_category_name AS "articleCategoryName",
+		a.is_enabled AS "isEnabled",
+		a.sort AS "sort",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="rssContentJoins">
+	</sql>
+    
+	<select id="get" resultType="RssContent">
+		SELECT 
+			<include refid="rssContentColumns"/>
+		FROM rss_content a
+		<include refid="rssContentJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="RssContent">
+		SELECT 
+			<include refid="rssContentColumns"/>
+		FROM rss_content a
+		<include refid="rssContentJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="RssContent">
+		SELECT 
+			<include refid="rssContentColumns"/>
+		FROM rss_content a
+		<include refid="rssContentJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="RssContent">
+		SELECT 
+			<include refid="rssContentColumns"/>
+		FROM rss_content a
+		<include refid="rssContentJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM rss_content a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(*)		 
+		FROM rss_content a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO rss_content(
+			id,
+			rss_name,
+			rss_url,
+			keywords,
+			article_category_id,
+			article_category_name,
+			is_enabled,
+			sort,
+			create_date,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{rssName},
+			#{rssUrl},
+			#{keywords},
+			#{articleCategory.id},
+			#{articleCategoryName},
+			#{isEnabled},
+			#{sort},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE rss_content SET 	
+			rss_name = #{rssName},
+			rss_url = #{rssUrl},
+			keywords = #{keywords},
+			article_category_id = #{articleCategory.id},
+			article_category_name = #{articleCategoryName},
+			is_enabled = #{isEnabled},
+			sort = #{sort},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateFetchCount">
+		UPDATE rss_content SET 	
+			number = #{number},
+			last_fetch_date = #{lastFetchDate},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM rss_content
+	
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatch">
+		DELETE FROM rss_content
+		WHERE
+			id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+	<update id="deleteEntity">
+		UPDATE rss_content SET 
+			del_flag = #{DEL_FLAG_DELETE}
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatchEntity">
+		UPDATE rss_content SET 
+			del_flag = '1'
+		where
+		    id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+	<update id="updateSort">
+		UPDATE rss_content
+		SET sort = CASE id
+		<foreach collection="list" item="item">
+			WHEN #{item.id} THEN #{item.sort}
+		</foreach>
+		END
+		WHERE
+			id in
+			<foreach collection="list" item="item" open="(" separator="," close=")">
+			 #{item.id} 
+			</foreach>
+	</update>
+</mapper>

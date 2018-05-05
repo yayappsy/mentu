@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>邮件内容提醒模板</title>
+    <link rel="stylesheet" href="../css/layout.css">
+    <script src="../res/jquery/jquery-3.1.1.js"></script>
+    <script src="../res/layer/layer.js"></script>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script type="text/javascript" src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <style>
+        .yj_box{
+            margin: 20px;
+            background: #f2f2f2;
+            overflow: hidden;
+        }
+        .header{
+            height:6px;
+            background: url("../css/img/linetop.png") 0 0 repeat-x;
+        }
+        .yj_wrap{
+            margin: 20px;
+            overflow: hidden;
+        }
+        .peizhi_label{
+            width:14%;
+        }
+        .form-group .form-control{
+            width:74%;
+        }
+    </style>
+</head>
+<body>
+<div class="yj_box">
+    <div class="header"></div>
+    <div class="yj_wrap">
+        <div class="form-group">
+            <label class="peizhi_label"><span style="color: red;">*</span>邮箱主题：</label>
+            <input type="email" class="form-control" placeholder="">
+            <span class="huoqu">选择模板</span>
+        </div>
+    </div>
+</div>
+</body>
+</html>

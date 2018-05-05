@@ -1,0 +1,23 @@
+/*可以在这里添加你自己的css*/
+
+.edui-default  .edui-for-insertremoteimage .edui-icon {
+    background-position: -726px -77px;
+}
+
+/*image-dialog*/
+.edui-default .edui-for-insertremoteimage .edui-dialog-content {
+    width: 650px;
+    height: 400px;
+    overflow: hidden;
+}
+
+.edui-default  .edui-for-insertuploadimage .edui-icon {
+    background-position: -726px -77px;
+}
+
+/*image-dialog*/
+.edui-default .edui-for-insertuploadimage .edui-dialog-content {
+    width: 650px;
+    height: 400px;
+    overflow: hidden;
+}

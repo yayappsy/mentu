@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.order.dao.OrderCouponDao">
+    
+	<sql id="orderCouponColumns">
+		a.id AS "id",
+		a.order_id AS "order.id",
+		a.coupon_id AS "coupon.id",
+		a.coupon_name AS "couponName",
+		a.quantity AS "quantity",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="orderCouponJoins">
+	</sql>
+    
+	<select id="get" resultType="OrderCoupon">
+		SELECT 
+			<include refid="orderCouponColumns"/>
+		FROM order_coupon a
+		<include refid="orderCouponJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="OrderCoupon">
+		SELECT 
+			<include refid="orderCouponColumns"/>
+		FROM order_coupon a
+		<include refid="orderCouponJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="OrderCoupon">
+		SELECT 
+			<include refid="orderCouponColumns"/>
+		FROM order_coupon a
+		<include refid="orderCouponJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="order != null and order.id !=null and order.id != ''">
+				AND a.order_id = #{order.id}
+			</if>
+			<if test="coupon != null and coupon.id !=null and coupon.id != ''">
+				AND a.coupon_id = #{coupon.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="OrderCoupon">
+		SELECT 
+			<include refid="orderCouponColumns"/>
+		FROM order_coupon a
+		<include refid="orderCouponJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM order_coupon a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(*)		 
+		FROM order_coupon a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO order_coupon(
+			id,
+			order_id,
+			coupon_id,
+			coupon_name,
+			quantity,
+			create_date,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{order.id},
+			#{coupon.id},
+			#{couponName},
+			#{quantity},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE order_coupon SET 	
+			order_id = #{order.id},
+			coupon_id = #{coupon.id},
+			coupon_name = #{couponName},
+			quantity = #{quantity},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM order_coupon
+	
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatch">
+		DELETE FROM order_coupon
+		WHERE
+			id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+	<update id="deleteEntity">
+		UPDATE order_coupon SET 
+			del_flag = #{DEL_FLAG_DELETE}
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatchEntity">
+		UPDATE order_coupon SET 
+			del_flag = '1'
+		where
+		    id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+</mapper>

@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.job.dao.ExpectPracticeDao">
+    
+	<sql id="expectPracticeColumns">
+		a.id AS "id",
+		a.resume_id AS "resumeId",
+		a.member_id AS "memberId",
+		a.position AS "position",
+		a.city_id AS "city.id",
+		sa.name AS "city.name",
+		a.days AS "days",
+		a.begin_month AS "beginMonth",
+		a.end_month AS "endMonth",
+		a.daily_wage AS "dailyWage",
+		a.arrival_date AS "arrivalDate",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		ROUND(DATEDIFF(a.end_month,a.begin_month)/30,1) AS "months",
+		u.avatar AS "userInfo.avatar",
+		u.`name` AS "userInfo.name",
+		u.gender AS "userInfo.gender",
+		u.residence_name AS "userInfo.residenceName",
+		j.create_date AS "jobIn.createDate",
+		e.school AS "educationBackground.school",
+		e.major_id AS "educationBackground.majorId",
+		e.education_id AS "educationBackground.educationId",
+		e.end_date AS "educationBackground.endDate"
+	</sql>
+	
+	<sql id="expectPracticeJoins">
+		LEFT JOIN user_info u ON a.member_id = u.id
+		LEFT JOIN education_background e ON a.resume_id = e.resume_id
+		LEFT JOIN job_in j ON a.resume_id = j.resume_id
+		LEFT JOIN sys_area sa ON a.city_id = sa.id
+	</sql>
+    
+	<select id="get" resultType="ExpectPractice">
+		SELECT 
+			<include refid="expectPracticeColumns"/>
+		FROM expect_practice a
+		<include refid="expectPracticeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getIndustryIds" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT
+			GROUP_CONCAT(position)
+		FROM
+			expect_practice
+		WHERE
+			member_id = #{userId}
+		AND del_flag = "0";
+	</select>
+	
+	<select id="getEntity" resultType="ExpectPractice">
+		SELECT 
+			<include refid="expectPracticeColumns"/>
+		FROM expect_practice a
+		<include refid="expectPracticeJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="ExpectPractice">
+		SELECT 
+			<include refid="expectPracticeColumns"/>
+		FROM expect_practice a
+		<include refid="expectPracticeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="resumeId != null and resumeId != ''">
+				AND a.resume_id = #{resumeId}
+			</if>
+			<if test="userInfo != null and userInfo.name != null and userInfo.name != ''">
+				AND u.name like concat('%',#{userInfo.name},'%')
+			</if>
+			<if test="userInfo != null and userInfo.gender != null and userInfo.gender != ''">
+				AND u.gender = #{userInfo.gender}
+			</if>
+			<if test="educationBackground != null and educationBackground.school != null and educationBackground.school != ''">
+				AND e.school like concat('%',#{educationBackground.school},'%')
+			</if>
+			<if test="educationBackground != null and educationBackground.educationId != null and educationBackground.educationId != ''">
+				AND e.education_id  = #{educationBackground.educationId}
+			</if>
+			<if test="educationBackground != null and educationBackground.endDate != null">
+				AND DATE_FORMAT(e.end_date,"%Y")  = #{educationBackground.endDate}
+			</if>
+			<if test="jobIn != null and jobIn.isLook != null and jobIn.isLook != ''">
+				AND j.is_look = #{jobIn.isLook}
+			</if>
+			<if test="jobIn != null and jobIn.status != null and jobIn.status != ''">
+				AND j.status = #{jobIn.status}
+			</if>
+			<if test="jobIn != null and jobIn.companyId != null and jobIn.companyId != ''">
+				AND j.company_id = #{jobIn.companyId}
+			</if>
+			<if test="city != null and city.id != null and city.id != ''">
+				AND a.city_id = #{city.id}
+			</if>
+			<if test="days != null">
+				AND a.days >= #{days}
+			</if>
+			<if test="months != null">
+				AND ROUND(DATEDIFF(a.end_month,a.begin_month)/30,1) >= #{months}
+			</if>
+			<if test="arrivalDate != null">
+				AND a.arrival_date &lt;= #{arrivalDate}
+			</if>
+			<if test="position != null and position != ''">
+				AND a.position like concat('%',#{position},'%')
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ExpectPractice">
+		SELECT 
+			<include refid="expectPracticeColumns"/>
+		FROM expect_practice a
+		<include refid="expectPracticeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="resumeId != null and resumeId != ''">
+				AND a.resume_id = #{resumeId}
+			</if>
+		</where>		
+		ORDER BY a.update_date DESC
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM expect_practice a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT 	count(a.id) 	 
+		FROM expect_practice a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO expect_practice(
+			id,
+			resume_id,
+			member_id,
+			position,
+			city_id,
+			days,
+			begin_month,
+			end_month,
+			daily_wage,
+			arrival_date,
+			create_date,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{resumeId},
+			#{memberId},
+			#{position},
+			#{city.id},
+			#{days},
+			#{beginMonth},
+			#{endMonth},
+			#{dailyWage},
+			#{arrivalDate},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<insert id="insertOrUpdate" >
+		<!-- 查看是否存,如果存在及更新，否则插入 -->
+	    <selectKey keyProperty="sqlMap.count" order="BEFORE" resultType="int">  
+	        select count(id) as num from expect_practice where id = #{id}
+	    </selectKey>  
+	    <if test="sqlMap.count > 0">  
+			UPDATE expect_practice SET 	
+								resume_id = #{resumeId},
+				member_id = #{memberId},
+				position = #{position},
+				city_id = #{city.id},
+				days = #{days},
+				begin_month = #{beginMonth},
+				end_month = #{endMonth},
+				daily_wage = #{dailyWage},
+				arrival_date = #{arrivalDate},
+				update_date = #{updateDate},
+				remarks = #{remarks}
+			WHERE id = #{id}
+   		 </if> 
+   		 <if test="sqlMap.count == 0">  
+			INSERT INTO expect_practice(
+											id,
+						resume_id,
+						member_id,
+						position,
+						city_id,
+						days,
+						begin_month,
+						end_month,
+						daily_wage,
+						arrival_date,
+						create_date,
+						update_date,
+						remarks,
+						del_flag
+					) VALUES (
+											#{id},
+						#{resumeId},
+						#{memberId},
+						#{position},
+						#{city.id},
+						#{days},
+						#{beginMonth},
+						#{endMonth},
+						#{dailyWage},
+						#{arrivalDate},
+						#{createDate},
+						#{updateDate},
+						#{remarks},
+						#{delFlag}
+					)
+		</if> 
+	</insert>
+	
+	<update id="update">
+		UPDATE expect_practice SET 	
+			resume_id = #{resumeId},
+			member_id = #{memberId},
+			position = #{position},
+			city_id = #{city.id},
+			days = #{days},
+			begin_month = #{beginMonth},
+			end_month = #{endMonth},
+			daily_wage = #{dailyWage},
+			arrival_date = #{arrivalDate},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM expect_practice
+	
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatch">
+		DELETE FROM expect_practice
+		WHERE
+			id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+	<update id="deleteEntity">
+		UPDATE expect_practice SET 
+			del_flag = #{DEL_FLAG_DELETE}
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatchEntity">
+		UPDATE expect_practice SET 
+			del_flag = '1'
+		where
+		    id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+</mapper>

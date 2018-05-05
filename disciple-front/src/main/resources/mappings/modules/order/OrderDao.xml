@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.order.dao.OrderDao">
+    
+	<sql id="orderColumns">
+		a.id AS "id",
+		a.sn AS "sn",
+		a.subject AS "subject",
+		a.member_id AS "member.id",
+		a.member_nickname AS "memberNickname",
+		a.detailed_address AS "detailedAddress",
+		a.contact_name AS "contactName",
+		a.mobile AS "mobile",
+		a.expire AS "expire",
+		a.status AS "status",
+		a.freight AS "freight",
+		a.amount_payable AS "amountPayable",
+		a.total_amount AS "totalAmount",
+		a.payment_status AS "paymentStatus",
+		a.payment_date AS "paymentDate",
+		a.payment_method_id AS "paymentMethod.id",
+		a.payment_method_name AS "paymentMethodName",
+		a.order_remarks AS "orderRemarks",
+		a.is_instalment_order AS "isInstalmentOrder",
+		a.is_use_coupons AS "isUseCoupons",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="orderJoins">
+	</sql>
+    
+	<select id="get" resultType="Order">
+		SELECT 
+			<include refid="orderColumns"/>
+		FROM shop_order a
+		<include refid="orderJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="Order">
+		SELECT 
+			<include refid="orderColumns"/>
+		FROM shop_order a
+		<include refid="orderJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="Order">
+		SELECT 
+			<include refid="orderColumns"/>
+		FROM shop_order a
+		<include refid="orderJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="memberNickname != null and memberNickname != ''">
+				AND a.member_nickname LIKE 
+					<if test="dbName == 'oracle'">'%'||#{memberNickname}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{memberNickname}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{memberNickname},'%')</if>
+			</if>
+			<if test="member != null and member.id !=null and member.id != ''">
+				AND a.member_id = #{member.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Order">
+		SELECT 
+			<include refid="orderColumns"/>
+		FROM shop_order a
+		<include refid="orderJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM shop_order a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(*)		 
+		FROM shop_order a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO shop_order(
+			id,
+			sn,
+			subject,
+			member_id,
+			member_nickname,
+			detailed_address,
+			contact_name,
+			mobile,
+			expire,
+			status,
+			freight,
+			amount_payable,
+			total_amount,
+			payment_status,
+			payment_date,
+			payment_method_id,
+			payment_method_name,
+			order_remarks,
+			is_instalment_order,
+			is_use_coupons,
+			create_date,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{sn},
+			#{subject},
+			#{member.id},
+			#{memberNickname},
+			#{detailedAddress},
+			#{contactName},
+			#{mobile},
+			#{expire},
+			#{status},
+			#{freight},
+			#{amountPayable},
+			#{totalAmount},
+			#{paymentStatus},
+			#{paymentDate},
+			#{paymentMethod.id},
+			#{paymentMethodName},
+			#{orderRemarks},
+			#{isInstalmentOrder},
+			#{isUseCoupons},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE shop_order SET 	
+			detailed_address = #{detailedAddress},
+			contact_name = #{contactName},
+			mobile = #{mobile},
+			expire = #{expire},
+			status = #{status},
+			freight = #{freight},
+			amount_payable = #{amountPayable},
+			total_amount = #{totalAmount},
+			payment_status = #{paymentStatus},
+			payment_date = #{paymentDate},
+			payment_method_id = #{paymentMethod.id},
+			payment_method_name = #{paymentMethodName},
+			order_remarks = #{orderRemarks},
+			is_instalment_order = #{isInstalmentOrder},
+			is_use_coupons = #{isUseCoupons},
+			subject = #{subject},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="payOrder">
+		UPDATE shop_order SET
+		payment_method_id = #{paymentMethod.id},
+		payment_method_name = #{paymentMethodName},
+		payment_date = #{paymentDate},
+		payment_status = #{paymentStatus},
+		status = #{status},
+		expire = #{expire},
+		is_use_coupons = #{isUseCoupons},
+		update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateOrderStatus">
+		UPDATE shop_order SET			
+		status = #{status},
+		update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM shop_order
+	
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteEntity">
+		UPDATE shop_order SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.company.dao.CompanyLabelDao">
+    
+	<sql id="companyLabelColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.sort AS "sort",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="companyLabelJoins">
+	</sql>
+    
+	<select id="get" resultType="CompanyLabel">
+		SELECT 
+			<include refid="companyLabelColumns"/>
+		FROM company_label a
+		<include refid="companyLabelJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CompanyLabel">
+		SELECT 
+			<include refid="companyLabelColumns"/>
+		FROM company_label a
+		<include refid="companyLabelJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.sort ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CompanyLabel">
+		SELECT 
+			<include refid="companyLabelColumns"/>
+		FROM company_label a
+		<include refid="companyLabelJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		ORDER BY a.sort ASC
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 
+			* 
+		FROM company_label a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(id)
+			* 
+		FROM company_label a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO company_label(
+			id,
+			name,
+			sort,
+			create_date,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{name},
+			#{sort},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE company_label SET 	
+			name = #{name},
+			sort = #{sort},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE company_label SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	<select id="findCompanyLabel" resultType="CompanyLabel">
+		SELECT 
+			<include refid="companyLabelColumns"/>
+		FROM company_label a
+		left join company_label_list l on l.company_label_id=a.id
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} and l.company_id=#{company.id}
+		</where>		
+		ORDER BY a.sort ASC
+	</select>
+
+	<select id="findCompanyLabelByCompanyId" resultType="CompanyLabel" parameterType="java.lang.String">
+		SELECT
+		<include refid="companyLabelColumns"/>
+		FROM company_label a
+		left join company_label_list b on b.company_label_id=a.id
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} and b.company_id=#{companyId}
+		</where>
+		ORDER BY a.sort ASC
+	</select>
+</mapper>

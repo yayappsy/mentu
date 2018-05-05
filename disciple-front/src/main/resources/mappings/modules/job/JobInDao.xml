@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.job.dao.JobInDao">
+    
+	<sql id="jobInColumns">
+		a.id AS "id",
+		a.company_id AS "companyId",
+		a.resume_id AS "resumeId",
+		a.is_look AS "isLook",
+		a.status AS "status",
+		a.job_id AS "jobId",
+		jb.name AS "jobName",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.user_id AS "userId",
+
+		sa.name AS "cityName",
+		sa.id AS "cityId",
+		u.avatar AS "userInfo.avatar",
+		u.`name` AS "userInfo.name",
+		u.gender AS "userInfo.gender",
+		u.residence_name AS "userInfo.residenceName",
+		e.school AS "educationBackground.school",
+		e.major_id AS "educationBackground.majorId",
+		e.education_id AS "educationBackground.educationId",
+		e.end_date AS "educationBackground.endDate",
+
+		ROUND(DATEDIFF(ep.end_month,ep.begin_month)/30,1) AS "expectPractice.months",
+		ep.position AS "expectPractice.position",
+		ep.days AS "expectPractice.days",
+		ep.arrival_date AS "expectPractice.arrivalDate"
+
+
+	</sql>
+	<sql id="jobInColumnsOne">
+	a.id AS "id",
+	a.company_id AS "companyId",
+	a.resume_id AS "resumeId",
+	a.is_look AS "isLook",
+	a.status AS "status",
+	a.job_id AS "jobId",
+	a.create_date AS "createDate",
+	a.update_date AS "updateDate",
+	a.remarks AS "remarks",
+	a.user_id AS "userId",
+	a.del_flag AS "delFlag"
+</sql>
+	
+	<sql id="jobInJoins">
+		LEFT JOIN resume re ON re.id = a.resume_id
+		LEFT JOIN user_info u ON re.user_info_id = u.id
+		LEFT JOIN education_highest e ON a.user_id = e.member_id
+		LEFT JOIN expect_practice ep ON ep.resume_id = a.resume_id
+		LEFT JOIN sys_area sa ON ep.city_id = sa.id
+		LEFT JOIN job jb ON jb.id = a.job_id
+	</sql>
+    
+	<select id="get" resultType="JobIn">
+		SELECT 
+			<include refid="jobInColumnsOne"/>
+		FROM job_in a
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="JobIn">
+		SELECT 
+			<include refid="jobInColumns"/>
+		FROM job_in a
+		<include refid="jobInJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="JobIn">
+		SELECT 
+			<include refid="jobInColumns"/>
+		FROM job_in a
+		<include refid="jobInJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="resumeId != null and resumeId != ''">
+				AND a.resume_id = #{resumeId}
+			</if>
+			<if test="userInfo != null and userInfo.name != null and userInfo.name != ''">
+				AND u.name like concat('%',#{userInfo.name},'%')
+			</if>
+			<if test="userInfo != null and userInfo.gender != null and userInfo.gender != ''">
+				AND u.gender = #{userInfo.gender}
+			</if>
+			<if test="educationBackground != null and educationBackground.school != null and educationBackground.school != ''">
+				AND e.school like concat('%',#{educationBackground.school},'%')
+			</if>
+			<if test="educationBackground != null and educationBackground.educationId != null and educationBackground.educationId != ''">
+				AND e.education_id  = #{educationBackground.educationId}
+			</if>
+			<if test="educationBackground != null and educationBackground.endDate != null">
+				AND DATE_FORMAT(e.end_date,"%Y")  = DATE_FORMAT(#{educationBackground.endDate},"%Y")
+			</if>
+			<if test="isLook != null and isLook != ''">
+				AND a.is_look = #{isLook}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="companyId != null and companyId != ''">
+				AND a.company_id = #{companyId}
+			</if>
+			<if test="cityId != null and cityId != ''">
+				AND sa.id = #{cityId}
+			</if>
+			<if test="expectPractice != null and expectPractice.days != null">
+				AND ep.days >= #{expectPractice.days}
+			</if>
+			<if test="expectPractice != null and expectPractice.months != null">
+				AND ROUND(DATEDIFF(ep.end_month,ep.begin_month)/30,1) >= #{expectPractice.months}
+			</if>
+			<if test="expectPractice != null and expectPractice.arrivalDate != null">
+				AND ep.arrival_date &lt;= #{expectPractice.arrivalDate}
+				AND ep.arrival_date >= now()
+			</if>
+			<if test="expectPractice != null and expectPractice.position != null and expectPractice.position != ''">
+				AND jb.NAME LIKE concat('%',#{expectPractice.position},'%')
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="JobIn">
+		SELECT 
+			<include refid="jobInColumns"/>
+		FROM job_in a
+		<include refid="jobInJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		ORDER BY a.update_date DESC
+	</select>
+
+	<select id="reJobInList" resultType="JobIn">
+		SELECT
+			a.job_id AS "jobId",
+			b.`name` AS "jobName",
+			c.id AS "companyId",
+			c.`name` AS "companyName",
+			b.city_id AS "cityId",
+			sa.name AS "cityName",
+			d.resume_type AS "resumeType",
+			a.update_date AS "updateDate"
+		FROM
+			job_in a
+		LEFT JOIN job b ON a.job_id = b.id
+		LEFT JOIN company c ON c.id = b.company_id
+		LEFT JOIN resume d ON d.id = a.resume_id
+		LEFT JOIN sys_area sa ON sa.id = b.city_id
+		<where>
+			d.user_info_id = #{userId}
+			<if test="type != null and type != ''">
+				<if test='type == "9"'>
+					and a.is_look = "1"
+				</if>
+				<if test='type != "9"'>
+					and a.status = #{type}
+				</if>
+
+			</if>
+		</where>
+		ORDER BY a.update_date DESC
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM job_in a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT 	count(a.id) 	 
+		FROM job_in a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO job_in(
+			id,
+			company_id,
+			resume_id,
+			is_look,
+			status,
+			create_date,
+			update_date,
+			remarks,
+			job_id,
+			user_id,
+			del_flag
+		) VALUES (
+			#{id},
+			#{companyId},
+			#{resumeId},
+			#{isLook},
+			#{status},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{jobId},
+			#{userId},
+			#{delFlag}
+		)
+	</insert>
+	
+	<insert id="insertOrUpdate" >
+		<!-- 查看是否存,如果存在及更新，否则插入 -->
+	    <selectKey keyProperty="sqlMap.count" order="BEFORE" resultType="int">  
+	        select count(id) as num from job_in where id = #{id}
+	    </selectKey>  
+	    <if test="sqlMap.count > 0">  
+			UPDATE job_in SET 	
+								company_id = #{companyId},
+				resume_id = #{resumeId},
+				is_look = #{isLook},
+				status = #{status},
+				job_id = #{jobId},
+				update_date = #{updateDate},
+				remarks = #{remarks}
+			WHERE id = #{id}
+   		 </if> 
+   		 <if test="sqlMap.count == 0">  
+			INSERT INTO job_in(
+											id,
+						company_id,
+						resume_id,
+						is_look,
+						status,
+						create_date,
+						update_date,
+						remarks,
+						job_id,
+						del_flag
+					) VALUES (
+											#{id},
+						#{companyId},
+						#{resumeId},
+						#{isLook},
+						#{status},
+						#{createDate},
+						#{updateDate},
+						#{remarks},
+						#{jobId},
+						#{delFlag}
+					)
+		</if> 
+	</insert>
+	
+	<update id="update">
+		UPDATE job_in SET 	
+			company_id = #{companyId},
+			resume_id = #{resumeId},
+			is_look = #{isLook},
+			status = #{status},
+			update_date = #{updateDate},
+			job_id = #{jobId},
+			user_id = #{userId},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM job_in
+	
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatch">
+		DELETE FROM job_in
+		WHERE
+			id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+	<update id="deleteEntity">
+		UPDATE job_in SET 
+			del_flag = #{DEL_FLAG_DELETE}
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatchEntity">
+		UPDATE job_in SET 
+			del_flag = '1'
+		where
+		    id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+
+	<select id="handleNum" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM
+			job_in
+		WHERE
+			is_look = "0"
+		AND company_id = #{companyId}
+		AND del_flag = "0"
+	</select>
+
+	<select id="lookResume">
+		UPDATE job_in SET is_look = "1" WHERE company_id = #{companyId} and resume_id = #{resumeId}
+	</select>
+	<select id="getJobInNum" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT
+		COUNT(*)
+		FROM
+		job_in
+		<where>
+			company_id = #{companyId}
+			AND del_flag = "0"
+			<if test="status!=null and `status` != ''">
+				AND `status` = #{status}
+			</if>
+			<if test="today!=null and today != ''">
+				AND DATE_FORMAT(create_date,"%Y-%m-%d") = #{today}
+			</if>
+		</where>
+	</select>
+</mapper>

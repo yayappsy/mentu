@@ -1,0 +1,19 @@
+
+.pe_chart{
+    width:100%;
+    overflow: hidden;
+}
+.pe_chartlist{
+    height:26px;
+    width:100%;
+    margin: 15px 0;
+}
+.pe_chartbox{
+    width:100%;
+}
+.pe_chartleft{
+    width:24%;
+}
+.pe_chartright{
+    width:76%;
+}

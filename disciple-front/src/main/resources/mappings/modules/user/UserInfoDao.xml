@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.user.dao.UserInfoDao">
+    
+	<sql id="userInfoColumns">
+		a.id AS "id",
+		a.sn AS "sn",
+		a.username AS "username",
+		a.register_ip AS "registerIp",
+		a.residence_id AS "residence.id",
+		a.name AS "name",
+		a.nickname AS "nickname",
+		a.avatar AS "avatar",
+		a.birth AS "birth",
+		a.email AS "email",
+		a.gender AS "gender",
+		a.mobile AS "mobile",
+		a.phone AS "phone",		
+		a.birthplace_id AS "birthplace.id",
+		a.identity_card AS "identityCard",
+		a.religious_belief AS "religiousBelief.id",
+		a.nation AS "nation.id",
+		((year(now())-year(birth)-1) + ( DATE_FORMAT(birth, '%m%d') &lt;= DATE_FORMAT(NOW(), '%m%d'))) AS  "age",
+		a.qq AS "qq",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.im_username AS "imUsername",
+		a.education_experience AS "educationExperience",
+		a.birthplace_name AS "birthplaceName",
+		a.residence_name AS "residence.name"
+
+	</sql>
+	
+	<sql id="userInfoJoins">
+	</sql>
+    
+	<select id="get" resultType="UserInfo">
+		SELECT
+			<include refid="userInfoColumns"/>
+		FROM user_info a
+		<include refid="userInfoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByUserId" resultType="UserInfo">
+		SELECT
+		<include refid="userInfoColumns"/>
+		FROM user_info a
+		<include refid="userInfoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByResume" resultType="UserInfo">
+		SELECT
+		<include refid="userInfoColumns"/>
+		FROM user_info a
+		<include refid="userInfoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<update id="updateType">
+		UPDATE user_info SET type = #{type} WHERE id = #{userId}
+	</update>
+
+	<select id="getType" resultType="java.lang.String" parameterType="java.lang.String">
+		SELECT type FROM user_info WHERE id = #{userId}
+	</select>
+	
+	<select id="getEntity" resultType="UserInfo">
+		SELECT 
+			<include refid="userInfoColumns"/>
+		FROM user_info a
+		<include refid="userInfoJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="UserInfo">
+		SELECT 
+			<include refid="userInfoColumns"/>
+		FROM user_info a
+		<include refid="userInfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="nickname != null and nickname != ''">
+				AND a.nickname LIKE 
+					<if test="dbName == 'oracle'">'%'||#{nickname}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{nickname}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{nickname},'%')</if>
+			</if>
+			<if test="startCreateDate != null">
+				AND a.create_date >= DATE_FORMAT(#{startCreateDate},'%Y-%m-%d')
+			</if>
+			<if test="endCreateDate != null">
+				AND a.create_date &lt;= DATE_FORMAT(#{endCreateDate},'%Y-%m-%d')
+			</if>
+			<if test="type !=null and type != ''">
+				AND a.type = #{type}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="UserInfo">
+		SELECT 
+			<include refid="userInfoColumns"/>
+		FROM user_info a
+		<include refid="userInfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM user_info a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(*)		 
+		FROM user_info a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO user_info(
+			id,
+			sn,
+			username,
+			name,
+			nickname,
+			avatar,
+			birth,
+			email,
+			gender,
+			mobile, 
+			phone,
+			birthplace_id,
+			identity_card,
+			religious_belief,
+			nation,
+			qq,
+			residence_id,
+			im_username,
+			education_experience,
+			birthplace_name,
+			residence_name,
+			register_ip,
+			create_date,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{sn},
+			#{username},
+			#{name},
+			#{nickname},
+			#{avatar},
+			#{birth},
+			#{email},
+			#{gender},
+			#{mobile},
+			#{phone},			
+			#{birthplace.id},
+			#{identityCard},
+			#{religiousBelief.id},
+			#{nation.id},
+			#{qq},
+			#{residence.id},
+			#{imUsername},
+			#{educationExperience},
+			#{birthplaceName},
+			#{residenceName},		
+			#{registerIp},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE user_info a SET
+			a.username = #{username},
+			a.name = #{name},
+			a.nickname = #{nickname},
+			a.avatar = #{avatar},
+			a.birth = #{birth},
+			a.email = #{email},
+			a.gender = #{gender},
+			a.mobile = #{mobile},
+			a.phone = #{phone},
+			a.birthplace_id = #{birthplace.id},
+			a.identity_card = #{identityCard},
+			a.religious_belief = #{religiousBelief.id},
+			a.nation = #{nation.id},
+			a.qq = #{qq},
+			a.residence_id = #{residence.id},
+			a.im_username = #{imUsername},
+			a.education_experience = #{educationExperience},
+			a.birthplace_name = #{birthplaceName},
+			a.residence_name	= #{residenceName},
+			a.register_ip = #{registerIp},
+			a.update_date = #{updateDate},
+			a.remarks = #{remarks}
+		WHERE a.id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM user_info
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteEntity">
+		UPDATE user_info SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+		
+	<!-- 更新个人信息信息  -->
+	<update id="updateProfile">
+		UPDATE user_info
+		<set>
+			<if test="avatar != null">
+			  avatar = #{avatar}, 
+			</if>
+			<if test="name != null">
+			  name = #{name}, 
+			</if>
+			<if test="avatar != null">
+			  nickname = #{nickname}, 
+			</if>
+			<if test="gender != null">
+			  gender = #{gender}, 
+			</if>
+			<if test="email != null">
+			  email = #{email}, 
+			</if>
+			<if test="birth != null">
+			  birth = #{birth}, 
+			</if>
+			<if test="residence != null and residence.id != null">
+			  residence_id = #{residence.id}, 
+			</if>			
+			<if test="birthplace != null and birthplace.id != null">
+			  birthplace_id = #{birthplace.id}, 
+			</if>			
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 更新用户密码 -->
+	<update id="updatePasswordById">
+		UPDATE user_info SET 
+			password = #{password} 
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 更新用户密码 -->
+	<update id="updateImUsername">
+		UPDATE user_info SET 
+			im_username = #{imUsername} 
+		WHERE id = #{id}
+	</update>
+	
+	<select id="usernameExists" resultType="boolean">
+		SELECT count(id)
+		FROM user_info a
+		<where>
+			a.username = #{username}
+		</where>				
+	</select>		
+	
+	<select id="emailExists" resultType="boolean">
+		SELECT count(id)
+		FROM user_info a
+		<where>
+			a.email = #{email}
+		</where>				
+	</select>
+	
+	<select id="mobileExists" resultType="boolean">
+		SELECT count(id)
+		FROM user_info a
+		<where>
+			a.mobile = #{mobile}
+		</where>				
+	</select>
+	
+</mapper>

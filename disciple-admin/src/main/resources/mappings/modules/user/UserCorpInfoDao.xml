@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.user.dao.UserCorpInfoDao">
+    
+	<sql id="userCorpInfoColumns">
+		a.user_info_id AS "userInfo.id",
+		a.corp_name AS "corpName",
+		a.corp_website AS "corpWebsite",
+		a.corp_phone AS "corpPhone",
+		a.corp_job AS "corpJob",
+		a.corp_industry_id AS "corpIndustry.id",
+		a.corp_address AS "corpAddress.id",
+		a.corp_address_name AS "corpAddressName",
+		a.corp_detailed_address AS "corpDetailedAddress"
+	</sql>
+	
+	<sql id="userCorpInfoJoins">
+	</sql>
+    
+	<select id="get" resultType="UserCorpInfo">
+		SELECT 
+			<include refid="userCorpInfoColumns"/>
+		FROM user_corp_info a
+		<include refid="userCorpInfoJoins"/>
+		WHERE a.user_info_id = #{userInfo.id}
+	</select>
+	
+	<select id="getEntity" resultType="UserCorpInfo">
+		SELECT 
+			<include refid="userCorpInfoColumns"/>
+		FROM user_corp_info a
+		<include refid="userCorpInfoJoins"/>
+        <where>
+			and a.user_info_id = #{userInfo.id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="UserCorpInfo">
+		SELECT 
+			<include refid="userCorpInfoColumns"/>
+		FROM user_corp_info a
+		<include refid="userCorpInfoJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="UserCorpInfo">
+		SELECT 
+			<include refid="userCorpInfoColumns"/>
+		FROM user_corp_info a
+		<include refid="userCorpInfoJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM user_corp_info a
+		<where>
+			AND a.user_info_id = #{userInfo.id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(*)		 
+		FROM user_corp_info a
+		<where>
+			AND a.user_info_id = #{userInfo.id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO user_corp_info(
+			user_info_id,
+			corp_name,
+			corp_website,
+			corp_phone,
+			corp_job,
+			corp_industry_id,
+			corp_address,
+			corp_address_name,
+			corp_detailed_address
+		) VALUES (
+			#{userInfo.id},
+			#{corpName},
+			#{corpWebsite},
+			#{corpPhone},
+			#{corpJob},
+			#{corpIndustry.id},
+			#{corpAddress.id},
+			#{corpAddressName},
+			#{corpDetailedAddress}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE user_corp_info SET 	
+			corp_name = #{corpName},
+			corp_website = #{corpWebsite},
+			corp_phone = #{corpPhone},
+			corp_job = #{corpJob},
+			corp_industry_id = #{corpIndustry.id},
+			corp_address = #{corpAddress.id},
+			corp_address_name = #{corpAddressName},
+			corp_detailed_address = #{corpDetailedAddress}
+		WHERE user_info_id = #{userInfo.id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM user_corp_info
+	
+	    WHERE user_info_id = #{id}
+	</update>
+	
+	<update id="deleteBatch">
+		DELETE FROM user_corp_info
+		WHERE
+			user_info_id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+	<update id="deleteEntity">
+		DELETE FROM user_corp_info
+	    WHERE user_info_id = #{id}
+	</update>
+	
+	<update id="deleteBatchEntity">
+		DELETE FROM user_corp_info
+		where
+		    user_info_id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+</mapper>

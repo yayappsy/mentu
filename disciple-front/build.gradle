@@ -1,0 +1,8 @@
+dependencies{
+	//qq»¥ÁªÐèÒª
+	// https://mvnrepository.com/artifact/commons-httpclient/commons-httpclient
+	compile group: 'commons-httpclient', name: 'commons-httpclient', version: '3.1'
+}
+
+
+

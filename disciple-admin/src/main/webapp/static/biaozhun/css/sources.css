@@ -1,0 +1,61 @@
+
+.sr_wrap2{
+    width:98%;
+    margin: 10px 1%;
+    padding:10px 1%;
+    background: white;
+}
+.sr_div1{
+    width:100%;
+    overflow: hidden;
+}
+.sr_div2{
+    width:26%;
+    overflow: hidden;
+    padding:10px;
+}
+.sr_div3{
+    width:74%;
+    overflow: hidden;
+    padding:10px;
+}
+
+
+
+.table-layout-02{
+    width:100%;
+    margin-top: 15px;
+}
+
+.table_btm{
+    height:26px;
+    width:100%;
+}
+
+.pagination {
+    display: inline-block;
+    padding-left: 0;
+    margin:0;
+    border-radius: 4px;
+}
+.vs_span3 {
+    height: 24px;
+    line-height: 24px;
+}
+.pagination {
+    margin: 0;
+    border-radius: 2px;
+}
+.vs_jumped {
+    height: 24px;
+    line-height: 24px;
+    margin: 0 5px;
+}
+.vs_jump {
+    width: 50px;
+    height: 24px;
+    line-height: 24px;
+}
+.vs_btn7 {
+    padding: 2px 12px;
+}

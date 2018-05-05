@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.track.dao.VisitTrackDao">
+    
+	<sql id="visitTrackColumns">
+		a.id AS "id",
+		a.site_id AS "siteId",
+		a.visitor_id AS "visitorId",
+		a.browse_id AS "browseId",
+		a.if_new_visitor AS "ifNewVisitor",
+		a.if_new_browse AS "ifNewBrowse",
+		a.url AS "url",
+		a.title AS "title",
+		a.referrer AS "referrer",
+		a.source_type AS "sourceType",
+		a.search_site AS "searchSite",
+		a.search_keywords AS "searchKeywords",
+		a.os AS "os",
+		a.device_type AS "deviceType",
+		a.resolution AS "resolution",
+		a.color_depth AS "colorDepth",
+		a.browser_name AS "browserName",
+		a.browser_type AS "browserType",
+		a.browser_version AS "browserVersion",
+		a.cookie_enabled AS "cookieEnabled",
+		a.java_enabled AS "javaEnabled",
+		a.flash_enabled AS "flashEnabled",
+		a.flash_version AS "flashVersion",
+		a.language AS "language",
+		a.ip AS "ip",
+		a.country AS "country",
+		a.area AS "area",
+		a.province AS "province",
+		a.city AS "city",
+		a.isp AS "isp",
+		a.create_date AS "createDate",
+		a.time AS "time",
+		a.time_on_page AS "timeOnPage",
+		a.page_view_depth AS "pageViewDepth",
+		a.year AS "year",
+		a.month AS "month",
+		a.day AS "day",
+		a.hour AS "hour"
+	</sql>
+	
+	<sql id="visitTrackJoins">
+	</sql>
+    
+	<select id="get" resultType="VisitTrack">
+		SELECT 
+			<include refid="visitTrackColumns"/>
+		FROM visit_track a
+		<include refid="visitTrackJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="VisitTrack">
+		SELECT 
+			<include refid="visitTrackColumns"/>
+		FROM visit_track a
+		<include refid="visitTrackJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="VisitTrack">
+		SELECT 
+			<include refid="visitTrackColumns"/>
+		FROM visit_track a
+		<include refid="visitTrackJoins"/>
+		<where>
+			
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="VisitTrack">
+		SELECT 
+			<include refid="visitTrackColumns"/>
+		FROM visit_track a
+		<include refid="visitTrackJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM visit_track a
+		<where>
+			
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(*)		 
+		FROM visit_track a
+		<where>
+			
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO visit_track(
+			id,
+			site_id,
+			visitor_id,
+			browse_id,
+			if_new_visitor,
+			if_new_browse,
+			url,
+			title,
+			referrer,
+			source_type,
+			search_site,
+			search_keywords,
+			os,
+			device_type,
+			resolution,
+			color_depth,
+			browser_name,
+			browser_type,
+			browser_version,
+			cookie_enabled,
+			java_enabled,
+			flash_enabled,
+			flash_version,
+			language,
+			ip,
+			country,
+			area,
+			province,
+			city,
+			isp,
+			create_date,
+			time,
+			time_on_page,
+			page_view_depth,
+			year,
+			month,
+			day,
+			hour
+		) VALUES (
+			#{id},
+			#{siteId},
+			#{visitorId},
+			#{browseId},
+			#{ifNewVisitor},
+			#{ifNewBrowse},
+			#{url},
+			#{title},
+			#{referrer},
+			#{sourceType},
+			#{searchSite},
+			#{searchKeywords},
+			#{os},
+			#{deviceType},
+			#{resolution},
+			#{colorDepth},
+			#{browserName},
+			#{browserType},
+			#{browserVersion},
+			#{cookieEnabled},
+			#{javaEnabled},
+			#{flashEnabled},
+			#{flashVersion},
+			#{language},
+			#{ip},
+			#{country},
+			#{area},
+			#{province},
+			#{city},
+			#{isp},
+			#{createDate},
+			#{createDate},
+			#{timeOnPage},
+			#{pageViewDepth},
+			#{year},
+			#{month},
+			#{day},
+			#{hour}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE visit_track SET 	
+			site_id = #{siteId},
+			visitor_id = #{visitorId},
+			browse_id = #{browseId},
+			if_new_visitor = #{ifNewVisitor},
+			if_new_browse = #{ifNewBrowse},
+			url = #{url},
+			title = #{title},
+			referrer = #{referrer},
+			search_keywords = #{searchKeywords},
+			os = #{os},
+			device_type = #{deviceType},
+			resolution = #{resolution},
+			color_depth = #{colorDepth},
+			browser_name = #{browserName},
+			browser_type = #{browserType},
+			browser_version = #{browserVersion},
+			cookie_enabled = #{cookieEnabled},
+			java_enabled = #{javaEnabled},
+			flash_enabled = #{flashEnabled},
+			flash_version = #{flashVersion},
+			language = #{language},
+			ip = #{ip},
+			country = #{country},
+			area = #{area},
+			province = #{province},
+			city = #{city},
+			isp = #{isp},
+			time = #{time},
+			time_on_page = #{timeOnPage},
+			page_view_depth = #{pageViewDepth},
+			year = #{year},
+			month = #{month},
+			day = #{day},
+			hour = #{hour}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM visit_track
+	
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatch">
+		DELETE FROM visit_track
+		WHERE
+			id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+	<update id="deleteEntity">
+		DELETE FROM visit_track
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatchEntity">
+		DELETE FROM visit_track
+		where
+		    id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+	<select id="findRealTimeVisitor" resultType="long">
+		select count(id) from visit_track where ADDDATE(create_date,interval time_on_page second) > #{searchDate}
+	</select>
+	
+    <select id="findRealTimeViewCount" resultType="long">
+     select COUNT(id) from visit_track where create_date = #{createDate} 
+	</select>
+	<select id="findRealTimeVisitorCount" resultType="long">
+	select count(DISTINCT visitor_id) from visit_track where create_date = #{createDate}
+	</select>
+	<select id="findMinuteVisitorCount" resultType="long">
+	select count(DISTINCT visitor_id) from visit_track where DATE_SUB(create_date,INTERVAL 1 MINUTE) > #{searchDate}
+	</select>
+	<select id="findMinuteViewCount" resultType="long">
+	select COUNT(id) from visit_track where DATE_SUB(create_date,INTERVAL 1 MINUTE) > #{searchDate}
+	</select>
+	
+</mapper>

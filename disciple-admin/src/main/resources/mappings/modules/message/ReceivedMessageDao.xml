@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.message.dao.ReceivedMessageDao">
+    
+	<sql id="receivedMessageColumns">
+		a.id AS "id",
+		a.message_id AS "message.id",
+		a.recipient_id AS "recipientId",
+		a.is_read AS "isRead",
+		a.is_favorite AS "isFavorite",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		m.title AS "message.title",
+		m.content AS "message.content"
+	</sql>
+	
+	<sql id="receivedMessageJoins">
+	join internal_message m on m.id=a.message_id
+	</sql>
+    
+	<select id="get" resultType="ReceivedMessage">
+		SELECT 
+			<include refid="receivedMessageColumns"/>
+		FROM received_message a
+		<include refid="receivedMessageJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="ReceivedMessage">
+		SELECT 
+			<include refid="receivedMessageColumns"/>
+		FROM received_message a
+		<include refid="receivedMessageJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="ReceivedMessage">
+		SELECT 
+			<include refid="receivedMessageColumns"/>
+		FROM received_message a
+		<include refid="receivedMessageJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="message != null and message.id !=null and message.id != ''">
+				AND a.message_id = #{message.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ReceivedMessage">
+		SELECT 
+			<include refid="receivedMessageColumns"/>
+		FROM received_message a
+		<include refid="receivedMessageJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM received_message a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(*)		 
+		FROM received_message a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO received_message(
+			id,
+			message_id,
+			recipient_id,
+			is_read,
+			is_favorite,
+			create_date,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{message.id},
+			#{recipientId},
+			#{isRead},
+			#{isFavorite},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE received_message SET 	
+			message_id = #{message.id},
+			recipient_id = #{recipientId},
+			is_read = #{isRead},
+			is_favorite = #{isFavorite},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM received_message
+	
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteEntity">
+		UPDATE received_message SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

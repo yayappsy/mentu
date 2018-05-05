@@ -1,0 +1,64 @@
+import org.gradle.plugins.ide.eclipse.model.Facet
+// 设置 Project Facets
+eclipse {
+	wtp {
+		facet {
+			facet name: 'jst.web', type: Facet.FacetType.fixed
+			facet name: 'wst.jsdt.web', type: Facet.FacetType.fixed
+			facet name: 'jst.java', type: Facet.FacetType.fixed
+			facet name: 'jst.web', version: '3.1'
+			facet name: 'jst.java', version: '1.8'
+			facet name: 'wst.jsdt.web', version: '1.0'
+		}
+	}
+}
+
+def jarArchiveName="${project.name}-${version}.jar"
+
+task jarWithoutResources(type: Jar) {
+	from(sourceSets.main.output.classesDir)
+	archiveName "$jarArchiveName"
+}
+
+task copyProperties {
+	doLast{
+		//  复制Properties
+		println   "copyProperties to $project.name "
+		copy{
+			from file("${project(":$myProjectName-core").projectDir}/language")
+		into(file("$webAppDir/WEB-INF/language "))
+	}
+}
+
+}
+
+war{
+dependsOn jarWithoutResources
+dependsOn copyProperties
+//from("$projectDir/src/main/resources") {
+//  into("WEB-INF/classes")
+//}
+classpath=classpath - sourceSets.main.output
+classpath fileTree(dir:libsDir, include:"$jarArchiveName")
+}
+
+
+
+//获取$myProjectName-core包，供发布时使用
+task getJars {
+doLast{
+
+	//  复制jar
+	print   "$project.name get jar file : "
+	println "${project(":$myProjectName-core").name}-${project(":$myProjectName-core").version}.jar"
+
+copy{
+	from project(":$myProjectName-core").libsDir
+	into(file("$webAppDir/WEB-INF/lib "))
+}
+}
+}
+
+getJars{ dependsOn ":$myProjectName-core:jar" }
+
+compileJava{ dependsOn getJars }

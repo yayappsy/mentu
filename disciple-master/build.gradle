@@ -1,0 +1,343 @@
+subprojects {
+	apply plugin: 'maven'
+	apply plugin: 'java'
+	apply plugin: 'eclipse'
+
+	sourceCompatibility = 1.8
+	version = '1.0'
+	[
+		compileJava,
+		compileTestJava,
+		javadoc
+	]*.options*.encoding = 'UTF-8'
+
+	//变量配置
+	ext {
+		springVersion = '4.2.8.RELEASE'
+		validatorVersion ='6.0.2.Final'
+		mybatisVersion= '3.2.8'
+		mybatisSpringVersion= '1.2.2'
+		mybatisEhcacheVersion= '1.0.3'
+		druidVersion= '1.0.17'
+		ehcacheVersion= '2.6.9'
+		ehcacheWebVersion= '2.0.4'
+		shiroVersion= '1.2.5'
+		sitemeshVersion= '2.4.2'
+		activitiVersion= '5.15.1'
+
+		//tools version setting
+		slf4jVersion= '1.7.25'
+		logbackVersion = '1.2.3'
+		commonsLang3Version= '3.3.2'
+		commonsIoVersion= '2.4'
+		commonsCodecVersion= '1.10'
+		commonsFileuploadVersion= '1.3.1'
+		commonsBeanutilsVersion= '1.9.1'
+		commonsEmailVersion= '1.4'
+		jacksonVersion= '2.9.0'
+		xstreamVersion= '1.4.7'
+		guavaVersion= '18.0'
+		dozerVersion= '5.5.1'
+		poiVersion= '3.9'
+		freemarkerVersion= '2.3.20'
+		itextpdfVersion = '5.5.11'
+		itextAsianVersion = '5.2.0'
+		jodaTimeVersion = '2.5'
+		zxingVersion = '3.3.0'
+		thumbnailatorVersion = '0.4.8'
+		// jdbc driver setting
+		mysqlDriverVersion = '5.1.35'
+
+		//activemq
+		activemqVersion = "5.13.3"
+
+		//quartz
+		quartzVersion = "2.2.2"
+
+        //微信订阅号、服务号开发
+        weixinJavaMpVersion = "2.7.0"
+		//使用kryo来序列化java类
+		kryoVersion = '4.0.1'
+		//使用fst来序列化java类
+		fstVersion = '2.53'
+		jsonVersion = '20160810'
+	}
+
+	repositories {
+		maven {
+			//mavenLocal() 如果有本地库使用
+        	//https://repo.maven.apache.org/maven2/ 推荐使用，如果私有库无法使用
+			//或者使用http://maven.oschina.net/content/groups/public/
+			//mavenCentral()
+			url 'http://maven.aliyun.com/nexus/content/groups/public' // 自定义库地址
+
+		}
+	}
+
+	configurations{
+		//移除依赖
+		all*.exclude group:'c3p0', module: 'c3p0'
+		all*.exclude group:'commons-logging'
+		all*.exclude group:'org.apache.commons', module: 'commons-io'
+	}
+
+	dependencies {
+     //使用文件夹中的jar包
+     compile fileTree(dir: 'libs', include: '*.jar')
+		compile(
+
+				//web 开始
+				//springweb being
+				"org.springframework:spring-webmvc:$springVersion",
+				//springweb end
+
+				//JSP中实现页面布局和装饰（layout and decoration）的框架组件
+				"opensymphony:sitemesh:$sitemeshVersion",
+
+				// https://mvnrepository.com/artifact/javax.el/javax.el-api
+                "javax.el:javax.el-api:3.0.1-b04",
+				
+                // https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
+               "javax.servlet:javax.servlet-api:3.1.0",
+                // https://mvnrepository.com/artifact/javax.servlet.jsp/javax.servlet.jsp-api
+               "javax.servlet.jsp:javax.servlet.jsp-api:2.3.2-b02",
+				
+				// https://mvnrepository.com/artifact/org.apache.taglibs/taglibs-standard-spec
+               "org.apache.taglibs:taglibs-standard-spec:1.2.5",
+               // http://mvnrepository.com/artifact/org.apache.taglibs/taglibs-standard-impl
+                "org.apache.taglibs:taglibs-standard-impl:1.2.5",
+				
+
+				//web end
+
+				//spring
+				//spring 核心
+				"org.springframework:spring-context-support:$springVersion",
+				//spring 核心 end
+
+				//spring 数据访问
+				"org.springframework:spring-jdbc:$springVersion",
+				"org.springframework:spring-orm:$springVersion",
+				"org.springframework:spring-oxm:$springVersion",
+				//spring 数据访问 end
+
+				//spring 切面
+				"org.springframework:spring-aop:$springVersion",
+				//spring 切面 end
+
+				//config redis data and client jar
+				'org.springframework.data:spring-data-redis:1.4.1.RELEASE',
+
+				//spring end
+
+				//bean validate
+				"org.hibernate:hibernate-validator:$validatorVersion",
+				//bean validate
+
+				//aop begin
+				"org.aspectj:aspectjrt:1.8.7",
+				"org.aspectj:aspectjweaver:1.8.7",
+				"cglib:cglib:3.2.0",
+				//aop end
+
+				//PERSISTENCE	begin
+				//mybatis
+				"org.mybatis:mybatis:$mybatisVersion",
+				"org.mybatis:mybatis-spring:$mybatisSpringVersion",
+				"com.github.miemiedev:mybatis-paginator:1.2.15",
+				// https://mvnrepository.com/artifact/org.mybatis/mybatis-ehcache
+				"org.mybatis.caches:mybatis-ehcache:$mybatisEhcacheVersion",
+				//connecor pool
+				"com.alibaba:druid:$druidVersion",
+
+				//jdbc driver
+				"mysql:mysql-connector-java:$mysqlDriverVersion",
+				//PERSISTENCE	end
+
+
+				//cache begin
+				"net.sf.ehcache:ehcache-core:$ehcacheVersion",
+				"net.sf.ehcache:ehcache-web:$ehcacheWebVersion",
+				"redis.clients:jedis:2.5.1",
+				// https://mvnrepository.com/artifact/com.googlecode.ehcache-spring-annotations/ehcache-spring-annotations
+				"com.googlecode.ehcache-spring-annotations:ehcache-spring-annotations:1.2.0",
+				//序列化java存储
+				//"com.esotericsoftware:kryo:$kryoVersion",
+				//使用kryo-shaded jar中的asm版本，重新定位到不同的package
+				"com.esotericsoftware:kryo-shaded:$kryoVersion",
+				// https://mvnrepository.com/artifact/de.ruedigermoeller/fst
+				"de.ruedigermoeller:fst:$fstVersion",
+				//cache end
+
+				//shiro begin
+				"org.apache.shiro:shiro-spring:$shiroVersion",
+				"org.apache.shiro:shiro-cas:$shiroVersion",
+				"org.apache.shiro:shiro-ehcache:$shiroVersion",
+				//shiro end
+
+				//logging begin
+				"ch.qos.logback:logback-classic:$logbackVersion",
+				"org.logback-extensions:logback-ext-spring:0.1.4",
+				// log4j 实际调用slf4j
+				// https://mvnrepository.com/artifact/org.slf4j/log4j-over-slf4j
+				"org.slf4j:log4j-over-slf4j:$slf4jVersion",
+				// common-logging 实际调用slf4j
+				"org.slf4j:jcl-over-slf4j:$slf4jVersion",
+				//java.util.logging 实际调用slf4j
+				"org.slf4j:jul-to-slf4j:$slf4jVersion",
+				//logging end
+
+				// GENERAL UTILS begin
+				//commmons
+				"org.apache.commons:commons-lang3:$commonsLang3Version",
+				"commons-io:commons-io:$commonsIoVersion",
+				"commons-codec:commons-codec:$commonsCodecVersion",
+				"commons-fileupload:commons-fileupload:$commonsFileuploadVersion",
+				"commons-beanutils:commons-beanutils:$commonsBeanutilsVersion",
+				"org.apache.commons:commons-email:$commonsEmailVersion",
+
+				//joda-Time
+				"joda-time:joda-time:$jodaTimeVersion",
+
+				//google java lib
+				"com.google.guava:guava:$guavaVersion",
+
+				// jackson json
+				"com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion",
+				"com.fasterxml.jackson.module:jackson-module-jaxb-annotations:$jacksonVersion",
+
+				// xstream xml
+				"com.thoughtworks.xstream:xstream:$xstreamVersion",
+
+				//pojo copy
+				"net.sf.dozer:dozer:$dozerVersion",
+
+				//freemarker engine
+				"org.freemarker:freemarker:$freemarkerVersion",
+
+    		    // email 
+    		    "javax.mail:mail:1.4.7",
+    		    "javax.activation:activation:1.1.1",
+    		    
+				// poi office
+				"org.apache.poi:poi:$poiVersion",
+				"org.apache.poi:poi-ooxml:$poiVersion",
+				"org.apache.poi:poi-ooxml-schemas:$poiVersion",
+
+				// image util
+				"com.drewnoakes:metadata-extractor:2.6.2",
+
+				//条形码、二维码生成
+				"com.google.zxing:core:$zxingVersion",
+				"com.google.zxing:javase:$zxingVersion",
+
+				// 中文分词
+//				"org.wltea:analyzer:2012_u6",
+
+				//图片压缩
+				"net.coobird:thumbnailator:$thumbnailatorVersion",
+
+				// User Agent
+				"eu.bitwalker:UserAgentUtils:1.20",
+
+				//验证码使用
+				"com.octo.captcha:jcaptcha:2.0-alpha-1",
+				"com.octo.captcha:jcaptcha-api:2.0-alpha-1",
+                // https://mvnrepository.com/artifact/com.jhlabs/filters
+                "com.jhlabs:filters:2.0.235-1",
+
+				//汉字转拼音的Java开源类库
+				"com.github.stuxuhai:jpinyin:1.1.8",
+				// GENERAL UTILS end
+
+
+				//spring-jms
+				"org.springframework:spring-jms:$springVersion",
+				//org.apache.activemq
+				"org.apache.activemq:activemq-spring:$activemqVersion",
+
+				//quartz 任务
+				"org.quartz-scheduler:quartz:$quartzVersion",
+				"org.quartz-scheduler:quartz-jobs:$quartzVersion",
+
+				//分页
+				"com.aliyun:aliyun-java-sdk-core:3.0.0",
+				"com.aliyun:aliyun-java-sdk-dm:3.1.0",
+				)
+		compile(
+				//加密组件
+				"bouncycastle:bcprov-jdk15:140",
+
+				//百度编辑器使用
+				"org.json:json:$jsonVersion",
+
+				//发送短信时使用
+				"org.apache.httpcomponents:httpclient:4.5.2",
+				
+                //weixin-java-tools  开发公众号（订阅号、服务号）应用
+                // 由me.chanjar 改为com.github.binarywang
+                "org.jodd:jodd-http:3.7",
+                //微信支付
+                "com.github.binarywang:qrcode-utils:1.1",
+                "com.github.binarywang:weixin-java-pay:$weixinJavaMpVersion",
+                
+				//淘宝sdk,发动短信时使用
+				// https://mvnrepository.com/artifact/com.ganshane.specs/taobao-sdk
+				"com.ganshane.specs:taobao-sdk:20120515",
+				
+				//环信服务端sdk
+				'com.easemob:rest-java-sdk:1.0.5',
+				)
+
+		compile group: 'com.github.spullara.mustache.java', name: 'compiler', version: '0.8.18'
+         
+		// rss订阅
+		// https://mvnrepository.com/artifact/com.rometools/rome
+		compile group: 'com.rometools', name: 'rome', version: '1.7.2'
+		
+		testCompile(
+				"junit:junit:4.11",
+				"org.springframework:spring-test:$springVersion",
+				"org.mockito:mockito-core:1.10.8"
+				)
+	}
+
+
+	uploadArchives {
+		repositories { flatDir { dirs 'repos' } }
+	}
+
+	task('jarPath'){
+		doLast{
+			configurations.runtime.resolve().each {
+				print it.toString()+";"
+			}
+			println();
+		}
+	}
+
+}
+configure(subprojects.findAll {!it.name.contains('core')}) {
+
+	apply plugin: 'war'
+	apply plugin: 'eclipse-wtp'
+	apply from: "${rootProject.projectDir}/my-war.gradle"
+
+	dependencies {
+		//编译时，依赖
+		compile project(":$myProjectName-core")
+		
+		//使用文件夹中的jar包
+		//compile fileTree(dir: 'libs', include: '*.jar')
+		
+		// https://mvnrepository.com/artifact/io.springfox/springfox-swagger2
+		compile("io.springfox:springfox-swagger2:2.6.0",
+				"io.springfox:springfox-petstore:2.6.0")
+
+		providedCompile	(
+				 // https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
+				"javax.servlet:javax.servlet-api:3.1.0",
+                // https://mvnrepository.com/artifact/javax.servlet.jsp/javax.servlet.jsp-api
+               "javax.servlet.jsp:javax.servlet.jsp-api:2.3.2-b02")
+	}
+}

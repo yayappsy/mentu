@@ -1,0 +1,155 @@
+/*顶部图表部分*/
+.vs_wrap1{
+    width:98%;
+    height:370px;
+    margin: 10px 1%;
+    background: white;
+    padding:10px 1%;
+}
+.vs_daojishi{
+    overflow: hidden;
+}
+.vs_miao{
+    color: #f05654;
+    padding: 0 5px;
+}
+.vs_div1{
+    width:18%;
+    overflow: hidden;
+}
+.vs_div2{
+    width:82%;
+    overflow: hidden;
+}
+.trend-overview-number-wrapper {
+    padding-top: 70px;
+    text-align: center;
+}
+.trend-overview-date {
+    font-size: 14px;
+    color: #5d5d61;
+}
+.trend-overview-number {
+    margin: 20px 0;
+    font-size: 42px;
+    font-weight: 700;
+    color: #323437;
+}
+.trend-overview-info {
+    font-size: 12px;
+    color: #5d5d61;
+}
+.vs_top1{
+    overflow: hidden;
+    text-align: center;
+    margin-top: 30px;
+}
+
+/*列表部分1*/
+.vs_div3{
+    height:46px;
+    overflow: hidden;
+}
+.vs_div4{
+    height:43px;
+    border-top:3px solid #4aa6fc;
+    line-height: 42px;
+    text-align: center;
+    width:7%;
+    font-size: 15px;
+}
+.vs_div5{
+    width:93%;
+    height:45px;
+    line-height: 43px;
+    border-bottom: 1px solid #ccc;
+    font-size: 12px;
+    border-left: 1px solid #ccc;
+    text-indent: 1em;
+}
+.vs_btn1{
+    padding:0;
+    border-radius: 2px;
+    height:24px;
+    line-height: 24px;
+
+}
+.vs_btn2{
+    padding:0 10px;
+    text-align: left;
+    text-indent: 4px;
+}
+.vs_btn3{
+    width:25px;
+}
+.vs_div6{
+    width:100%;
+    padding:15px 0;
+}
+.vs_span1{
+    height:100%;
+    padding:0;
+}
+
+.vs_ul1{
+    display: inline;
+}
+
+.vs_active{
+    background: #4aa6fc;
+    color: #fff;
+}
+
+.glyphicon-chevron-down{
+    color: #4aa6fc;
+}
+.vs_span2{
+    height:24px;
+    line-height: 24px;
+    margin-left:20px;
+}
+.vs_span3{
+    height:24px;
+    line-height: 24px;
+}
+
+.vs_wrap2{
+    width:98%;
+    margin: 15px 1%;
+    background: white;
+    padding:10px 1%;
+}
+.vs_div8{
+    height:25px;
+    margin: 10px 0;
+}
+
+
+/*表格*/
+.table_btm{
+    height:25px;
+}
+.pagination {
+    margin:0;
+    border-radius: 2px;
+}
+.vs_jump{
+    width:50px;
+    height:24px;
+    line-height: 24px;
+}
+.vs_jumped{
+    height:24px;
+    line-height: 24px;
+    margin: 0 5px;
+}
+
+.vs_btn7{
+    padding: 2px 12px;
+}
+.page-bottom-hint{
+    overflow: hidden;
+    width:100%;
+    padding-left: 20px;
+    margin-top: 20px;
+}

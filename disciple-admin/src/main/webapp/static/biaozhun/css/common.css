@@ -1,0 +1,175 @@
+*{
+    font-family: "Microsoft YaHei","Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB",Arial,SimSun,sans-serif;
+    color: #323437;
+    font-size: 13px;
+    list-style: none;
+    text-decoration: none;
+}
+a{
+    color: #323437;
+    text-decoration: none;
+}
+.form-group label{
+    font-weight: normal;
+    margin-top: 2px;
+}
+.fl{
+    float: left;
+}
+.fr{
+    float: right;
+}
+.cs{
+    cursor: pointer;
+}
+.icon .glyphicon{
+    top:2px;!important;
+}
+.selectbox{
+    background-color: #ececec;
+    overflow: hidden;
+    border-top:1px solid #ccc;
+}
+.table{
+    width:100%;
+    margin: 10px 0;
+}
+@media all and (min-width: 1280px){
+    .selectbox{
+        width: 100%;
+        overflow: hidden;
+    }
+}
+@media all and (min-width: 0px) and (max-width:1280px){
+    .selectbox{
+        width: 1108px;
+        overflow: hidden;
+    }
+}
+
+/*顶部下载导航样式*/
+.top{
+    width:100%;
+    padding:12px 20px;
+    overflow: hidden;
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.1);
+    box-shadow: 0 1px 3px rgba(0,0,0,.1);
+    background: #fff;
+}
+.su_lef{
+    font-weight: bold;
+}
+.glyphicon{
+    margin:0 3px;
+}
+.su_rig{
+    width:150px;
+}
+.su_select{
+    width:98%;
+    overflow: hidden;
+    margin:13px 1%;
+
+}
+.glyphicon-question-sign{
+    color: green;
+}
+.su_icon1{
+    color: #616468;
+}
+.icon .glyphicon-heart:hover{
+    color: #ff3a2e;
+}
+.icon .glyphicon-download-alt:hover{
+    color: #4fa8f9;
+}
+.icon .glyphicon-pushpin{
+    color: #4fa8f9;
+}
+.icon .glyphicon-chevron-up {
+    color: #4aa6fc;
+}
+.icon .glyphicon-chevron-down {
+    color: #4aa6fc;
+}
+.tj_active{
+    background: #4aa6fc;
+    color: #fff;
+}
+
+/*选择框*/
+.span_gao{
+    height:24px;
+    line-height: 24px;
+}
+.btn-group .btn_gao{
+    padding: 0 10px;
+    text-align: left;
+    text-indent: 4px;
+    border-radius: 2px;
+    height: 24px;
+    line-height: 24px;
+}
+.btn-group .btn_gao1{
+    padding: 0;
+    border-radius: 2px;
+    height: 24px;
+    line-height: 24px;
+    width: 25px;
+}
+
+.tj_ul{
+    display: inline-block;
+    border: 1px solid #e1e3e4;
+    overflow: hidden;
+    padding:0;
+}
+.tj_ul li {
+    float: left;
+    padding: 0 12px;
+    height: 24px;
+    line-height: 24px;
+    border-right: none;
+    cursor: pointer;
+    margin: 0;
+}
+.btn-group .tj_div6 {
+    width: 90%;
+    padding: 6px 0;
+    margin: 0 auto;
+    margin-left: 8px;
+}
+.btn-group .tj_btn4 {
+    height: 26px;
+    padding: 0;
+}
+.btn-group .form-control {
+    height: 26px;
+    padding: 0;
+}
+.btn-group .vs_btn4 {
+    height: 26px;
+    padding: 0;
+}
+.ta_ul2 {
+    margin-left: 10px;
+}
+
+/*下拉框*/
+.tj_navtap .nav-tabs>li>a {
+    line-height: 1.42857143;
+    border: 1px solid transparent;
+    border-radius:0;
+    border-top:3px solid transparent;
+    margin-right: 0;
+}
+.tj_navtap{
+    width:100%;
+    overflow: hidden;
+}
+.tj_ultap{
+    width:100%;
+}
+.active{
+    border-top:3px solid #4aa6fc;
+}

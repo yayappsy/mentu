@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.base.dao.RelationshipDao">
+    
+	<sql id="relationshipColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.description AS "description",
+		a.sort AS "sort",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="relationshipJoins">
+	</sql>
+    
+	<select id="get" resultType="Relationship">
+		SELECT 
+			<include refid="relationshipColumns"/>
+		FROM base_relationship a
+		<include refid="relationshipJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="Relationship">
+		SELECT 
+			<include refid="relationshipColumns"/>
+		FROM base_relationship a
+		<include refid="relationshipJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="Relationship">
+		SELECT 
+			<include refid="relationshipColumns"/>
+		FROM base_relationship a
+		<include refid="relationshipJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>	
+				ORDER BY a.sort ASC
+	</select>
+	
+	<select id="findAllList" resultType="Relationship">
+		SELECT 
+			<include refid="relationshipColumns"/>
+		FROM base_relationship a
+		<include refid="relationshipJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>				
+				ORDER BY a.sort ASC
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(*) 
+		FROM base_relationship a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(*)		 
+		FROM base_relationship a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO base_relationship(
+			id,
+			name,
+			description,
+			sort,
+			create_date,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{name},
+			#{description},
+			#{sort},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE base_relationship SET 	
+			name = #{name},
+			description = #{description},
+			sort = #{sort},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM base_relationship
+	
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteEntity">
+		UPDATE base_relationship SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.job.dao.ResumeDao">
+    
+	<sql id="resumeColumns">
+		a.id AS "id",
+		a.user_info_id AS "userInfoId",
+		a.language AS "language",
+		a.resume_type AS "resumeType",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.name AS "name",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="resumeJoins">
+	</sql>
+    
+	<select id="get" resultType="Resume">
+		SELECT 
+			<include refid="resumeColumns"/>
+		FROM resume a
+		<include refid="resumeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="Resume">
+		SELECT 
+			<include refid="resumeColumns"/>
+		FROM resume a
+		<include refid="resumeJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="Resume">
+		SELECT 
+			<include refid="resumeColumns"/>
+		FROM resume a
+		<include refid="resumeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="userInfoId != null and userInfoId != ''">
+				AND a.user_info_id = #{userInfoId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Resume">
+		SELECT 
+			<include refid="resumeColumns"/>
+		FROM resume a
+		<include refid="resumeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="userInfoId != null and userInfoId != ''">
+				AND a.user_info_id = #{userInfoId}
+			</if>
+			<if test="resumeType != null and resumeType != ''">
+				AND a.resume_type = #{resumeType}
+			</if>
+		</where>
+		ORDER BY a.update_date DESC
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM resume a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT 	count(a.id) 	 
+		FROM resume a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO resume(
+			id,
+			user_info_id,
+			language,
+			resume_type,
+			create_date,
+			update_date,
+			remarks,
+			name,
+			del_flag
+		) VALUES (
+			#{id},
+			#{userInfoId},
+			#{language},
+			#{resumeType},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{name},
+			#{delFlag}
+		)
+	</insert>
+	
+	<insert id="insertOrUpdate" >
+		<!-- 查看是否存,如果存在及更新，否则插入 -->
+	    <selectKey keyProperty="sqlMap.count" order="BEFORE" resultType="int">  
+	        select count(id) as num from resume where id = #{id}
+	    </selectKey>  
+	    <if test="sqlMap.count > 0">  
+			UPDATE resume SET 	
+								user_info_id = #{userInfoId},
+				language = #{language},
+				resume_type = #{resumeType},
+				update_date = #{updateDate},
+				remarks = #{remarks}
+			WHERE id = #{id}
+   		 </if> 
+   		 <if test="sqlMap.count == 0">  
+			INSERT INTO resume(
+											id,
+						user_info_id,
+						language,
+						resume_type,
+						create_date,
+						update_date,
+						remarks,
+						name,
+						del_flag
+					) VALUES (
+											#{id},
+						#{userInfoId},
+						#{language},
+						#{resumeType},
+						#{createDate},
+						#{updateDate},
+						#{remarks},
+						#{name},
+						#{delFlag}
+					)
+		</if> 
+	</insert>
+	
+	<update id="update">
+		UPDATE resume SET 	
+			user_info_id = #{userInfoId},
+			language = #{language},
+			resume_type = #{resumeType},
+			update_date = #{updateDate},
+			name = #{name},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	<update id="updateUpdateDate" parameterType="java.lang.String">
+		UPDATE resume SET update_date = now() WHERE  id = #{resumeId}
+	</update>
+
+	<select id="moduleIsExist" resultType="java.lang.Integer">
+		SELECT count(*) FROM ${moduleTableName} where resume_id = #{resumeId}
+	</select>
+
+	<select id="moduleIsExistRelatedOption" resultType="java.lang.Integer">
+		SELECT count(*) FROM ${moduleTableName} where resume_id = #{resumeId} and type = #{type}
+	</select>
+	
+	<update id="delete">
+
+		DELETE FROM resume
+	
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatch">
+		DELETE FROM resume
+		WHERE
+			id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+	<update id="deleteEntity">
+		UPDATE resume SET 
+			del_flag = #{DEL_FLAG_DELETE}
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatchEntity">
+		UPDATE resume SET 
+			del_flag = '1'
+		where
+		    id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+</mapper>

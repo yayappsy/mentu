@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.stats.dao.StatsSiteSourceDao">
+    
+	<sql id="statsSiteSourceColumns">
+		a.id AS "id",
+		a.page_view_count AS "pageViewCount",
+		a.visitor_count AS "visitorCount",
+		a.new_visitor_count AS "newVisitorCount",
+		a.new_visitor_rate AS "newVisitorRate",
+		a.browse_count AS "browseCount",
+		a.ip_count AS "ipCount",
+		a.bounce_rate AS "bounceRate",
+		a.conversions_count AS "conversionsCount",
+		a.conversions_rate AS "conversionsRate",
+		a.average_browse_page_count AS "averageBrowsePageCount",
+		a.average_access_time AS "averageAccessTime",
+		a.referrer AS "referrer",
+		a.search_site AS "searchSite",
+		a.source_type AS "sourceType",
+		a.device_type AS "deviceType",
+		a.if_new_visitor AS "ifNewVisitor",
+		a.create_date AS "createDate",
+		a.dimensions AS "dimensions",
+		a.year AS "year",
+		a.month AS "month",
+		a.day AS "day",
+		a.hour AS "hour"
+	</sql>
+	
+	<sql id="statsSiteSourceJoins">
+	</sql>
+    
+	<select id="get" resultType="StatsSiteSource">
+		SELECT 
+			<include refid="statsSiteSourceColumns"/>
+		FROM stats_site_source a
+		<include refid="statsSiteSourceJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="StatsSiteSource">
+		SELECT 
+			<include refid="statsSiteSourceColumns"/>
+		FROM stats_site_source a
+		<include refid="statsSiteSourceJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="StatsSiteSource">
+		SELECT 
+			<include refid="statsSiteSourceColumns"/>
+		FROM stats_site_source a
+		<include refid="statsSiteSourceJoins"/>
+		<where>
+			
+			<if test="deviceType != null and deviceType != ''">
+				AND a.device_type = #{deviceType}
+			</if>
+			<if test="ifNewVisitor != null and ifNewVisitor != ''">
+				AND a.if_new_visitor = #{ifNewVisitor}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="StatsSiteSource">
+		SELECT 
+			<include refid="statsSiteSourceColumns"/>
+		FROM stats_site_source a
+		<include refid="statsSiteSourceJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM stats_site_source a
+		<where>
+			
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(*)		 
+		FROM stats_site_source a
+		<where>
+			
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO stats_site_source(
+			id,
+			page_view_count,
+			visitor_count,
+			new_visitor_count,
+			new_visitor_rate,
+			browse_count,
+			ip_count,
+			bounce_rate,
+			conversions_count,
+			conversions_rate,
+			average_browse_page_count,
+			average_access_time,
+			referrer,
+			search_site,
+			source_type,
+			search_keywords,
+			device_type,
+			if_new_visitor,
+			create_date,
+			dimensions,
+			year,
+			month,
+			day,
+			hour
+		) VALUES (
+			#{id},
+			#{pageViewCount},
+			#{visitorCount},
+			#{newVisitorCount},
+			#{newVisitorRate},
+			#{browseCount},
+			#{ipCount},
+			#{bounceRate},
+			#{conversionsCount},
+			#{conversionsRate},
+			#{averageBrowsePageCount},
+			#{averageAccessTime},
+			#{referrer},
+			#{searchSite},
+			#{sourceType},
+			#{searchKeywords},
+			#{deviceType},
+			#{ifNewVisitor},
+			#{createDate},
+			#{dimensions},
+			#{year},
+			#{month},
+			#{day},
+			#{hour}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE stats_site_source SET 	
+			page_view_count = #{pageViewCount},
+			visitor_count = #{visitorCount},
+			new_visitor_count = #{newVisitorCount},
+			new_visitor_rate = #{newVisitorRate},
+			browse_count = #{browseCount},
+			ip_count = #{ipCount},
+			bounce_rate = #{bounceRate},
+			conversions_count = #{conversionsCount},
+			conversions_rate = #{conversionsRate},
+			average_browse_page_count = #{averageBrowsePageCount},
+			average_access_time = #{averageAccessTime},
+			referrer = #{referrer},
+			search_site = #{searchSite},
+			source_type = #{sourceType},
+			search_keywords = #{searchKeywords},
+			device_type = #{deviceType},
+			if_new_visitor = #{ifNewVisitor},
+			dimensions = #{dimensions},
+			year = #{year},
+			month = #{month},
+			day = #{day},
+			hour = #{hour}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM stats_site_source
+	
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatch">
+		DELETE FROM stats_site_source
+		WHERE
+			id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+	<update id="deleteEntity">
+		DELETE FROM stats_site_source
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatchEntity">
+		DELETE FROM stats_site_source
+		where
+		    id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+	<select id="findSiteSource" resultType="StatsSiteSource">
+		SELECT 
+			<include refid="statsSiteSourceColumns"/>
+		FROM stats_site_source a
+		<include refid="statsSiteSourceJoins"/>
+        <where>
+			a.year=#{year} and a.month=#{month} and a.day=#{day} and a.dimensions='day'
+			<if test="sourceType != null and sourceType != ''">
+				AND a.source_type = #{sourceType}
+			</if>
+			<if test="deviceType != null and deviceType != ''">
+				AND a.device_type = #{deviceType}
+			</if>
+			<if test="ifNewVisitor != null">
+				AND a.if_new_visitor = #{ifNewVisitor}
+			</if>
+		</where>	
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>	
+	</select>	
+	
+	<select id="findSourceByHour" resultType="StatsSiteSource">
+		SELECT 
+			<include refid="statsSiteSourceColumns"/>
+		FROM stats_site_source a
+		<include refid="statsSiteSourceJoins"/>
+        <where>
+			a.year=#{year} and a.month=#{month} and a.day=#{day} and a.dimensions='hour'
+			<if test="deviceType != null and deviceType != ''">
+				AND a.device_type = #{deviceType}
+			</if>
+			<if test="ifNewVisitor != null">
+				AND a.if_new_visitor = #{ifNewVisitor}
+			</if>
+			<if test="sourceType != null and sourceType != ''">
+				AND a.source_type = #{sourceType}
+			</if>
+		</where>		
+	</select>	
+	
+	
+</mapper>

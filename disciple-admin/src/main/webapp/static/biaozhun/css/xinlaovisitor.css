@@ -1,0 +1,77 @@
+
+/*头像相关*/
+.visitorbox table tr td {
+    padding: 0;
+    margin: 0;
+    line-height: 30px;
+    overflow: hidden;
+}
+.visitorbox table tr td.k{
+    text-align: right;
+    color: #999;
+}
+.visitorbox table tr td.v {
+    padding-left: 10px;
+    text-align: left;
+    color: #01ADDD;
+}
+.visitorbox table tr td.ratio {
+    font-size: 28px;
+    line-height: 28px;
+    font-weight: bolder;
+}
+.visitorbox table.new-visitor div.title {
+    color: #06AEF1;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+.visitorbox table.old-visitor td.v {
+    color: #666;
+}
+
+
+.li_div1{
+    width:100%;
+    overflow: hidden;
+    margin: 5px 0;
+}
+.newvisitor{
+    width:49%;
+}
+.oldvisitor{
+    width:46%;
+    padding:5px 10px;
+}
+.visitorbox{
+    width:300px;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+.new-visitor-table-title {
+    color: #00ABEF;
+    font-size: 14px;
+    margin: 40px 0 10px;
+}
+.old-visitor-table-title{
+    color: #9A9A9A;
+    font-size: 14px;
+    margin: 40px 0 10px;
+}
+.new-visitor-dg tr.th td {
+    background-color: #E1EFFA;
+    color: #969998;
+    white-space: nowrap;
+    cursor: auto;
+}
+.table-layout-01 tr td.tdr,.table-layout-01 tr th.tdr {
+    text-align: right;
+    width: 20%;
+    padding-right: 10px;
+}
+.old-visitor-dg tr.th td {
+    background-color: #DDD;
+    color: #989898;
+    white-space: nowrap;
+    cursor: auto;
+}

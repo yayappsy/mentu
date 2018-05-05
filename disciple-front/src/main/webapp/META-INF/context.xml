@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context docBase="weimhc-front" path="/weimhc-front" reloadable="false">
+	<!-- <Resources>
+		<PreResources base="D://tmp//weimhc//ueditor"
+			className="org.apache.catalina.webresources.DirResourceSet"
+			webAppMount="/ueupload" />
+	</Resources>
+	<Valve className="org.apache.catalina.valves.RemoteAddrValve"
+		allow=".*" /> -->
+</Context>

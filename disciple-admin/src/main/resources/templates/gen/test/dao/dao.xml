@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<name>dao</name>
+	<filePath>src/main/java/${packageName}/${moduleName}/dao/${subModuleName}</filePath>
+	<fileName>${ClassName}Dao.java</fileName>
+	<content><![CDATA[
+/**
+ * 
+ */
+package ${packageName}.${moduleName}.dao<#if subModuleName != "">.${subModuleName}</#if>;
+
+import com.thinkgem.javamg.common.persistence.annotation.MyBatisDao;
+import ${packageName}.${moduleName}.entity<#if subModuleName != "">.${subModuleName}</#if>.${ClassName};
+
+<#if table.sortExists>
+import com.weimhc.framework.persistence.SortableDao;
+<#else>
+import com.weimhc.framework.persistence.CrudDao;
+</#if>
+
+/**
+ * ${functionName}DAO接口
+ * @author ${functionAuthor}
+ * @version ${functionVersion}
+ */
+@MyBatisDao
+<#if table.sortExists>
+public interface ${ClassName}Dao extends SortableDao<${ClassName}> {
+<#else>
+public interface ${ClassName}Dao extends CrudDao<${ClassName}> {
+</#if>
+
+}]]>
+	</content>
+</template>

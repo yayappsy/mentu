@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.job.dao.CompanyContactDao">
+    
+	<sql id="companyContactColumns">
+		a.id AS "id",
+		a.company_id AS "companyId",
+		a.title AS "title",
+		a.place AS "place",
+		a.linkman AS "linkman",
+		a.linkphone AS "linkphone",
+		a.supply AS "supply",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="companyContactJoins">
+	</sql>
+    
+	<select id="get" resultType="CompanyContact">
+		SELECT 
+			<include refid="companyContactColumns"/>
+		FROM company_contact a
+		<include refid="companyContactJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="CompanyContact">
+		SELECT 
+			<include refid="companyContactColumns"/>
+		FROM company_contact a
+		<include refid="companyContactJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="CompanyContact">
+		SELECT 
+			<include refid="companyContactColumns"/>
+		FROM company_contact a
+		<include refid="companyContactJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CompanyContact">
+		SELECT 
+			<include refid="companyContactColumns"/>
+		FROM company_contact a
+		<include refid="companyContactJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		ORDER BY a.update_date DESC
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM company_contact a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT 	count(a.id) 	 
+		FROM company_contact a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO company_contact(
+			id,
+			company_id,
+			title,
+			place,
+			linkman,
+			linkphone,
+			supply,
+			create_date,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{companyId},
+			#{title},
+			#{place},
+			#{linkman},
+			#{linkphone},
+			#{supply},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<insert id="insertOrUpdate" >
+		<!-- 查看是否存,如果存在及更新，否则插入 -->
+	    <selectKey keyProperty="sqlMap.count" order="BEFORE" resultType="int">  
+	        select count(id) as num from company_contact where id = #{id}
+	    </selectKey>  
+	    <if test="sqlMap.count > 0">  
+			UPDATE company_contact SET 	
+								company_id = #{companyId},
+				title = #{title},
+				place = #{place},
+				linkman = #{linkman},
+				linkphone = #{linkphone},
+				supply = #{supply},
+				update_date = #{updateDate},
+				remarks = #{remarks}
+			WHERE id = #{id}
+   		 </if> 
+   		 <if test="sqlMap.count == 0">  
+			INSERT INTO company_contact(
+											id,
+						company_id,
+						title,
+						place,
+						linkman,
+						linkphone,
+						supply,
+						create_date,
+						update_date,
+						remarks,
+						del_flag
+					) VALUES (
+											#{id},
+						#{companyId},
+						#{title},
+						#{place},
+						#{linkman},
+						#{linkphone},
+						#{supply},
+						#{createDate},
+						#{updateDate},
+						#{remarks},
+						#{delFlag}
+					)
+		</if> 
+	</insert>
+	
+	<update id="update">
+		UPDATE company_contact SET 	
+			company_id = #{companyId},
+			title = #{title},
+			place = #{place},
+			linkman = #{linkman},
+			linkphone = #{linkphone},
+			supply = #{supply},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM company_contact
+	
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatch">
+		DELETE FROM company_contact
+		WHERE
+			id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+	<update id="deleteEntity">
+		UPDATE company_contact SET 
+			del_flag = #{DEL_FLAG_DELETE}
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatchEntity">
+		UPDATE company_contact SET 
+			del_flag = '1'
+		where
+		    id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+</mapper>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>管理网站</title>
+
+    <script type="text/javascript" src="../res/jquery/jquery-3.1.1.js"></script>
+    <link rel="stylesheet" href="../css/common.css">
+    <!--ztree-->
+    <link rel="stylesheet" href="../res/ztree/zTreeStyle.css">
+    <script type="text/javascript" src="../res/ztree/jquery.ztree.core.js"></script>
+
+    <!--时间段选择-->
+    <link rel="stylesheet" href="../res/time/daterangepicker-bs3.css">
+    <script type="text/javascript" src="../res/time/moment.min.js"></script>
+    <script type="text/javascript" src="../res/time/daterangepicker.js"></script>
+
+    <!--layui-->
+    <script src="../res/layer/layer.js"></script>
+
+    <!--bootstrap-->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script type="text/javascript" src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <style>
+        header{
+            width:100%;
+            height:50px;
+            background: #4aa6fc;
+        }
+        section{
+            width:100%;
+            overflow: hidden;
+        }
+        .section_left{
+            width:200px;
+            overflow: hidden;
+            background: #e5ebf0;
+
+        }
+        .section_right{
+            overflow: hidden;
+        }
+        .left_ul{
+            overflow: hidden;
+            box-shadow: 0 0 2px 1px #ccc inset;
+        }
+        .left_ul li{
+            height:30px;
+            line-height: 30px;
+            white-space: normal;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            cursor: pointer;
+            font-size: 16px;
+            width:100%;
+            text-align: center;
+            border-bottom: 1px solid #ccc;
+        }
+        .header_span{
+            height:50px;
+            width:50px;
+            text-align: center;
+            line-height: 50px;
+            background: #ff6f39;
+            color: #fff;
+        }
+
+    </style>
+
+</head>
+<body>
+<header>
+    <div class="header">
+        <div class="header_span fl">左</div>
+        <div class="header_span fr">右</div>
+    </div>
+</header>
+<section>
+    <div class="section_left fl">
+        <ul class="left_ul">
+            <li data-href="operation.html">业务提醒</li>
+            <li data-href="picturewarehouse.html">图片</li>
+            <li data-href="yewutixing.html">new业务提醒</li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+    <div class="section_right fl"></div>
+</section>
+<div  style="display: none;" class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="accordion" id="accordion-765183">
+                <div class="accordion-group">
+                    <div class="accordion-heading btn">
+                        <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion-765183" href="#accordion-element-104316">对客户提醒</a>
+                    </div>
+                    <div id="accordion-element-104316" class="accordion-body collapse in" aria-expanded="true">
+                        <div class="accordion-inner">会员注册</div>
+                        <div class="accordion-inner">会员审核通过</div>
+                        <div class="accordion-inner">修改密码</div>
+                        <div class="accordion-inner">找回密码</div>
+                        <div class="accordion-inner">到货提醒</div>
+                        <div class="accordion-inner">管理员回复留言</div>
+                        <div class="accordion-inner">提交简历</div>
+                        <div class="accordion-inner">订单提交（对会员）</div>
+                        <div class="accordion-inner">订单已发货（对会员）</div>
+                        <div class="accordion-inner">订单被管理员审核为无效</div>
+                        <div class="accordion-inner">订单提交（对管理员）</div>
+                        <div class="accordion-inner">订单已发货（对管理员）</div>
+                    </div>
+                </div>
+                <div class="accordion-group">
+                    <div class="accordion-heading btn">
+                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-765183" href="#accordion-element-903267">对管理员提醒</a>
+                    </div>
+                    <div id="accordion-element-903267" class="accordion-body collapse in">
+                        <div class="accordion-inner">会员注册</div>
+                        <div class="accordion-inner">提交留言</div>
+                        <div class="accordion-inner">提交简历</div>
+                        <div class="accordion-inner">提交订单</div>
+                        <div class="accordion-inner">询价提醒</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="../js/common.js"></script>
+<script>
+    var $section_right = $(".section_right");
+    $section_right.css("width",window.innerWidth-220+"px");
+    $(".op_sectionright").css("width",$(".section").width()-190+"px");
+    $(window).resize(function(){
+        $section_right.css("width",window.innerWidth-220+"px");
+        $(".op_sectionright").css("width",$(".section").width()-190+"px");
+    });
+    $section_right.load("yewutixing.html");
+    $(".left_ul").on("click","li",function () {
+        var c = Math.random().toString(36).slice(2);
+        var url = $(this).attr("data-href") + "?" + c;
+        $section_right.load(url);
+    });
+</script>
+</html>

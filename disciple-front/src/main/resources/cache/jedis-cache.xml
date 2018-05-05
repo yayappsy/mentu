@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jedisCache>
+
+	<!-- 公共key前缀，属性singleton为true的缓存，在公共key之下是唯一的 -->
+	<publicKeyPrefix >zqcxpt</publicKeyPrefix>
+	<!-- 私有key前缀，每个项目不同（在每个公共前缀下 唯一）-->
+	<privateKeyPrefix>front</privateKeyPrefix>
+
+	<!--  redis 缓存时间配置 -->
+	<!--默认缓存配置，以下属性是必须的： name ：cache的标识符，在一个CacheManager中必须唯一。 eternal ： 设定缓存的elements是否有有效期。如果为true，timeouts属性被忽略。 
+		以下属性是可选的： timeToIdleSeconds ： 缓存element在过期前的空闲时间。 timeToLiveSeconds ： 缓存element的有效生命期。 
+		memoryStoreEvictionPolicy ： 当内存缓存达到最大，有新的element加入的时候， 移除缓存中element的策略。默认是LRU，可选的有LFU和FIFO 。
+		singleton:是否单例,表示redis中，只有一个统一的前缀，没有下级前缀  ,默认为false-->
+
+	<!-- 默认缓存配置. -->
+	<defaultCache eternal="false" timeToIdleSeconds="300" timeToLiveSeconds="600" />
+
+	<!-- 用户缓存 -->
+	<cache name="userCache" eternal="false" timeToIdleSeconds="604800" />
+
+	<!-- 用户缓存 -->
+	<cache name="userStoreCache" eternal="false" timeToIdleSeconds="604800"/>
+
+	<!-- 系统活动会话缓存 -->
+	<cache name="activeSessionsCache"  eternal="true"/>
+
+	<cache name="tokenCache" eternal="false" timeToLiveSeconds="604800" timeToIdleSeconds="604800"/>
+
+	<cache name="seedTokenCache" eternal="false" timeToLiveSeconds="604800" timeToIdleSeconds="604800"/>
+
+	<!-- 短信缓存 -->
+	<cache name="SMSCache" eternal="false" timeToLiveSeconds="600"  />
+	
+   	<!-- 以下缓存需要同步 -->
+	<!-- 系统缓存 -->
+	<cache name="sysCache" eternal="true" singleton="true" />
+
+	<!-- 导航缓存 -->
+	<cache name="navigationCache"  eternal="true" singleton="true" />
+
+	<!-- 广告缓存 -->
+	<cache name="adCache"  eternal="false" timeToLiveSeconds="60" singleton="true"  />
+
+</jedisCache>

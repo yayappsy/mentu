@@ -1,0 +1,12 @@
+label.error {
+  padding-left: 18px;
+  padding-bottom: 2px;
+  font-weight: bold;
+  color: #EA5200;
+  margin-left: 10px;
+}
+label.fieldError {
+	line-height: 23px;
+	color: #ffb042;
+	padding-left: 6px;
+}

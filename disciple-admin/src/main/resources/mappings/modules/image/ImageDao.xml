@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.image.dao.ImageDao">
+    
+	<sql id="imageColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.album_id AS "album.id",
+		a.album_name AS "albumName",
+		a.storage_path AS "storagePath",
+		a.url AS "url",
+		a.path_type AS "pathType",
+		a.extension AS "extension",
+		a.width AS "width",
+		a.height AS "height",
+		a.is_show AS "isShow",
+		a.sort AS "sort",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="imageJoins">
+	</sql>
+    
+	<select id="get" resultType="Image">
+		SELECT 
+			<include refid="imageColumns"/>
+		FROM image a
+		<include refid="imageJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="Image">
+		SELECT 
+			<include refid="imageColumns"/>
+		FROM image a
+		<include refid="imageJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="Image">
+		SELECT 
+			<include refid="imageColumns"/>
+		FROM image a
+		<include refid="imageJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Image">
+		SELECT 
+			<include refid="imageColumns"/>
+		FROM image a
+		<include refid="imageJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM image a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(*)		 
+		FROM image a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO image(
+			id,
+			name,
+			album_id,
+			album_name,
+			storage_path,
+			url,
+			path_type,
+			extension,
+			width,
+			height,
+			sort,
+			create_date,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{name},
+			#{album.id},
+			#{albumName},
+			#{storagePath},
+			#{url},
+			#{pathType},
+			#{extension},
+			#{width},
+			#{height},
+			#{sort},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE image SET 	
+			name = #{name},
+			album_id = #{album.id},
+			album_name = #{albumName},
+			storage_path = #{storagePath},
+			url = #{url},
+			path_type = #{pathType},
+			extension = #{extension},
+			width = #{width},
+			height = #{height},
+			sort = #{sort},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM image
+	
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatch">
+		DELETE FROM image
+		WHERE
+			id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+	<update id="deleteEntity">
+		UPDATE image SET 
+			del_flag = #{DEL_FLAG_DELETE}
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatchEntity">
+		UPDATE image SET 
+			del_flag = '1'
+		where
+		    id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+	<update id="updateSort">
+		UPDATE image
+		SET sort = CASE id
+		<foreach collection="list" item="item">
+			WHEN #{item.id} THEN #{item.sort}
+		</foreach>
+		END
+		WHERE
+			id in
+			<foreach collection="list" item="item" open="(" separator="," close=")">
+			 #{item.id} 
+			</foreach>
+	</update>
+</mapper>

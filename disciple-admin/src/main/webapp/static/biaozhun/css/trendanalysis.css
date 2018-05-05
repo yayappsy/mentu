@@ -1,0 +1,113 @@
+
+.sr_wrap2{
+    width:98%;
+    margin: 10px 1%;
+    padding:10px 1%;
+    background: white;
+}
+.sr_div1{
+    width:100%;
+    overflow: hidden;
+}
+.sr_div2{
+    width:26%;
+    overflow: hidden;
+    padding:10px;
+}
+.sr_div3{
+    width:74%;
+    overflow: hidden;
+    padding:10px;
+}
+
+
+
+.table-layout-02{
+    width:100%;
+    margin-top: 15px;
+}
+
+.table_btm{
+    height:26px;
+    width:100%;
+}
+
+.pagination {
+    display: inline-block;
+    padding-left: 0;
+    margin:0;
+    border-radius: 4px;
+}
+.vs_span3 {
+    height: 24px;
+    line-height: 24px;
+}
+.pagination {
+    margin: 0;
+    border-radius: 2px;
+}
+.vs_jumped {
+    height: 24px;
+    line-height: 24px;
+    margin: 0 5px;
+}
+.vs_jump {
+    width: 50px;
+    height: 24px;
+    line-height: 24px;
+}
+.vs_btn7 {
+    padding: 2px 12px;
+}
+
+
+.ta_wrap1{
+    width:100%;
+    background: white;
+    margin-top: 20px;
+    padding:10px 0;
+}
+.ta_active{
+    background: #4aa6fc;
+    color: #fff;
+}
+
+
+
+.ta_btn5{
+    margin-right: 20px;
+}
+.ta_wrap2{
+    width:98%;
+    margin: 10px 1%;
+    padding:10px 1%;
+    background: white;
+}
+
+.ta_div2{
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 22px;
+}
+.ta_change{
+    height:26px;
+    width:100%;
+    line-height: 26px;
+    margin: 10px 0;
+}
+/*表格相关*/
+.ta_duibi{
+    height:26px;
+    width:100%;
+    text-align: center;
+}
+
+.ta_duibibox{
+    width:250px;
+    overflow: hidden;
+    margin: 0 auto;
+}
+.ta_chartline{
+    height:28px;
+    text-align: center;
+    border-top: 1px solid #f0f0f0;
+}

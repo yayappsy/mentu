@@ -1,0 +1,223 @@
+
+.su_div1{
+    width:100%;
+    padding:10px 1%;
+    background: #fff;
+}
+.su_div3{
+    margin:18px 0;
+    height:32px;
+    width:100%;
+    background: white;
+}
+.su_wrap1{
+    width:100%;
+    overflow: hidden;
+}
+.su_wrap2{
+    width:100%;
+    overflow: hidden;
+    margin-top: 20px;
+}
+.su_div4{
+    width:49%;
+    background: white;
+    height:390px;
+    padding:10px;
+}
+.su_div5{
+    width:49%;
+    height:390px;
+    background: white;
+    padding:10px;
+}
+.su_div_8{
+    width:100%;
+    margin: 20px 0;
+    overflow: hidden;
+}
+
+
+
+/*顶部表格*/
+div.table-list {
+    padding-top: 6px;
+    padding-right: 1px;
+    border: 1px solid #dedede;
+    border-bottom: 0;
+}
+.overview-card-title-container {
+    padding: 14px 15px 0;
+}
+div.table-list table.list {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 12px;
+}
+div.table-list table.list tr.title {
+    border-bottom: none;
+    height: 50px;
+    line-height: 50px;
+}
+div.table-list table.list th {
+    height: 16px;
+    line-height: 16px;
+    padding: 13px 20px 0 10px;
+    text-align: right;
+    color: #5b5d61;
+    white-space: nowrap;
+    font-weight: 400;
+}
+div.table-list table.list tr td {
+    border-left: 1px solid #f0f0f0;
+    padding: 6px 20px 6px 5px;
+    height: 17px;
+    line-height: 17px;
+    white-space: nowrap;
+    text-align: right;
+}
+div.table-list table.list tr.highlight td {
+    color: #111314;
+    font-size: 16px;
+    font-weight: bolder;
+}
+div.btw, div.fold {
+    height: 30px;
+    border-left: 1px solid #dedede;
+    border-right: 1px solid #dedede;
+    border-bottom: 1px solid #dedede;
+}
+.su_btn1{
+    width:100%;
+    text-align: center;
+    height:20px;
+    line-height: 20px;
+}
+.su_hide{
+    display: none;
+}
+/*导航*/
+.su_ul1{
+    overflow: hidden;
+    padding:0;
+}
+.su_ul1 li{
+    padding:0 20px;
+    border-right:1px solid #ccc;
+    line-height: 32px;
+    float: left;
+    cursor: pointer;
+}
+.suactive{
+    background: #4da7fd;
+    color: #fff;
+}
+/*导航2*/
+.su_span1{
+    font-weight: bold;
+}
+.su_li2{
+    float: left;
+    padding:0 9px;
+    height:24px;
+    line-height: 24px;
+    border: 1px solid #ccc;
+    border-left:none;
+    cursor: pointer;
+}
+.su_div6{
+    overflow: hidden;
+}
+.su_li3{
+    border-left: 1px solid #ccc;
+}
+.su_nav2{
+    margin: 6px 0;
+    position: relative;
+    height:30px;
+}
+.su_ul2{
+    position: absolute;
+    left:164px;
+    top:24px;
+    padding:0;
+    display: none;
+    -webkit-box-shadow: 0 0 2px 2px rgba(0,0,0,.3);
+    -moz-box-shadow: 0 0 2px 2px rgba(0,0,0,.3);
+    box-shadow: 0 0 2px 2px rgba(0,0,0,.3);
+    z-index: 12;
+}
+.su_ul2 li{
+    padding:0 9px;
+    height:24px;
+    line-height: 24px;
+    cursor: pointer;
+}
+.su_ul2 li:hover{
+    background: #4da7fd;
+    color: #fff;
+}
+.su_div7{
+    float: right;
+    padding-top:5px;
+}
+.checkbox+.checkbox, .radio+.radio {
+    margin-top: 0;
+}
+.checkbox, .radio {
+    position: relative;
+    display: block;
+    margin-top:0;
+    margin-bottom: 10px;
+}
+/*趋势图*/
+.su_div7,.su_div8{
+    overflow: hidden;
+}
+/*Top10搜索词*/
+.table-layout-01{
+    width:100%;
+}
+.table-layout-01 tr {
+    height:30px;
+    line-height: 30px;
+}
+/*Top10入口页面*/
+/*新老访客*/
+.su_div9{
+    width:33%;
+    height:70px;
+    border-right: 1px solid #ccc;
+    float: left;
+}
+.su_div10{
+    padding-top: 5px;
+    text-align: center;
+}
+.su_p2,.su_p3{
+    margin-left: 20px;
+    font-size: 16px;
+}
+.su_p4 span{
+    color: #48cb6d;
+}
+.su_p5 span{
+    color: #51a8f9;
+}
+.su_span2{
+    font-size: 30px;
+}
+.su_span3{
+    font-size: 18px;
+}
+.table-layout-02{
+    width:100%;
+    margin-top: 15px;
+}
+
+.table-layout-02 .visit-type-detail-name{
+    text-align: center;
+    text-indent: 0;
+}
+/*访客属性-年龄分布*/
+/*地域分布*/

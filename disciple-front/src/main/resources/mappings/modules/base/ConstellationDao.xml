@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.base.dao.ConstellationDao">
+    
+	<sql id="constellationColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.english_name AS "englishName",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		a.remarks AS "remarks",
+		a.begin_date AS "beginDate",
+		a.end_date AS "endDate"
+	</sql>
+	
+	<sql id="constellationJoins">
+	</sql>
+    
+	<select id="get" resultType="Constellation">
+		SELECT 
+			<include refid="constellationColumns"/>
+		FROM base_constellation a
+		<include refid="constellationJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="Constellation">
+		SELECT 
+			<include refid="constellationColumns"/>
+		FROM base_constellation a
+		<include refid="constellationJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="Constellation">
+		SELECT 
+			<include refid="constellationColumns"/>
+		FROM base_constellation a
+		<include refid="constellationJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name = #{name}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Constellation">
+		SELECT 
+			<include refid="constellationColumns"/>
+		FROM base_constellation a
+		<include refid="constellationJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(*) 
+		FROM base_constellation a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(*)		 
+		FROM base_constellation a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO base_constellation(
+			id,
+			name,
+			english_name,
+			create_date,
+			update_date,
+			del_flag,
+			remarks,
+			begin_date,
+			end_date
+		) VALUES (
+			#{id},
+			#{name},
+			#{englishName},
+			#{createDate},
+			#{updateDate},
+			#{delFlag},
+			#{remarks},
+			#{beginDate},
+			#{endDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE base_constellation SET 	
+			name = #{name},
+			english_name= #{englishName},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			begin_date = #{beginDate},
+			end_date = #{endDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM base_constellation
+	
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteEntity">
+		UPDATE base_constellation SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.remind.dao.RemindDao">
+    
+    <resultMap type="Remind" id="remindResultType">
+         <id property="id" column="id"/> 
+    
+    </resultMap>
+    
+	<sql id="remindColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.business_action AS "businessAction",
+		a.description AS "description",
+		a.target_type AS "targetType",
+		a.sort AS "sort",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="remindJoins">
+	</sql>
+    
+	<select id="get" resultType="Remind">
+		SELECT 
+			<include refid="remindColumns"/>
+		FROM remind a
+		<include refid="remindJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="Remind">
+		SELECT 
+			<include refid="remindColumns"/>
+		FROM remind a
+		<include refid="remindJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="Remind">
+		SELECT 
+			<include refid="remindColumns"/>
+		FROM remind a
+		<include refid="remindJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="targetType != null">
+				AND a.target_type = #{targetType}
+			</if>
+			<if test="businessAction != null">
+				AND a.business_action = #{businessAction}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Remind">
+		SELECT 
+			<include refid="remindColumns"/>
+		FROM remind a
+		<include refid="remindJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.sort 
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM remind a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(*)		 
+		FROM remind a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO remind(
+			id,
+			name,
+			business_action,
+			description,
+			target_type,
+			sort,
+			create_date,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{name},
+			#{businessAction},
+			#{description},
+			#{targetType},
+			#{sort},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE remind SET 	
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM remind
+	
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteEntity">
+		UPDATE remind SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 删除提醒和参数关联表数据 -->
+	<delete id="deleteSelectableParameter">
+		DELETE FROM remind_selectable_parameter WHERE remind_id = #{id}
+	</delete>
+	
+	<!-- 插入提醒和参数关联表数据 -->
+	<insert id="insertSelectableParameter">
+		INSERT INTO remind_selectable_parameter(remind_id, remind_parameter_id)
+		<foreach collection="remindParameterList" item="item" separator=" union all ">
+			SELECT #{id}, #{item.id} FROM dual
+		</foreach>
+	</insert>
+</mapper>

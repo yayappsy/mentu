@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.user.dao.UserLoginAuthorizationDao">
+    
+	<sql id="userLoginAuthorizationColumns">
+		a.id AS "id",
+		a.user_info_id AS "userInfo.id",
+		a.business_system AS "businessSystem",
+		a.if_enabled AS "ifEnabled",
+		a.if_locked AS "ifLocked",
+		a.locked_date AS "lockedDate",
+		a.login_date AS "loginDate",
+		a.login_num AS "loginNum",
+		a.login_failure_count AS "loginFailureCount",
+		a.login_ip AS "loginIp",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="userLoginAuthorizationJoins">
+	</sql>
+    
+	<select id="get" resultType="UserLoginAuthorization">
+		SELECT 
+			<include refid="userLoginAuthorizationColumns"/>
+		FROM user_login_authorization a
+		<include refid="userLoginAuthorizationJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="UserLoginAuthorization">
+		SELECT 
+			<include refid="userLoginAuthorizationColumns"/>
+		FROM user_login_authorization a
+		<include refid="userLoginAuthorizationJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="UserLoginAuthorization">
+		SELECT 
+			<include refid="userLoginAuthorizationColumns"/>
+		FROM user_login_authorization a
+		<include refid="userLoginAuthorizationJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="userInfo != null and userInfo.id != null and userInfo.id != ''">
+				and a.user_info_id = #{userInfo.id}
+			</if>
+			<if test="businessSystem != null ">
+				and a.business_system = #{businessSystem}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="UserLoginAuthorization">
+		SELECT 
+			<include refid="userLoginAuthorizationColumns"/>
+		FROM user_login_authorization a
+		<include refid="userLoginAuthorizationJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM user_login_authorization a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(*)		 
+		FROM user_login_authorization a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO user_login_authorization(
+			id,
+			user_info_id,
+			business_system,
+			create_date,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{userInfo.id},
+			#{businessSystem},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE user_login_authorization SET 	
+			if_enabled = #{ifEnabled},
+			update_date = #{updateDate}
+		<where>
+			id = #{id}
+			and user_info_id = #{userInfo.id} 
+			and business_system = #{businessSystem}
+		</where>
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM user_login_authorization
+	
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatch">
+		DELETE FROM user_login_authorization
+		WHERE
+			id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+	<update id="deleteEntity">
+		UPDATE user_login_authorization SET 
+			del_flag = #{DEL_FLAG_DELETE}
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatchEntity">
+		UPDATE user_login_authorization SET 
+			del_flag = '1'
+		where
+		    id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+</mapper>

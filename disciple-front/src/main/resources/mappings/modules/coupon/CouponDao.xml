@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.coupon.dao.CouponDao">
+    
+	<sql id="couponColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.description AS "description",
+		a.is_enabled AS "isEnabled",
+		a.price_limit AS "priceLimit",
+		a.price_expression AS "priceExpression",
+		a.exchange_limit AS "exchangeLimit",
+		a.status AS "status",
+		a.is_locked AS "isLocked",
+		a.quantity AS "quantity",
+		a.point AS "point",
+		a.begin_date AS "beginDate",
+		a.end_date AS "endDate",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="couponJoins">
+	</sql>
+    
+	<select id="get" resultType="Coupon">
+		SELECT 
+			<include refid="couponColumns"/>
+		FROM coupon a
+		<include refid="couponJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="Coupon">
+		SELECT 
+			<include refid="couponColumns"/>
+		FROM coupon a
+		<include refid="couponJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="Coupon">
+		SELECT 
+			<include refid="couponColumns"/>
+		FROM coupon a
+		<include refid="couponJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Coupon">
+		SELECT 
+			<include refid="couponColumns"/>
+		FROM coupon a
+		<include refid="couponJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(*) 
+		FROM coupon a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(*)		 
+		FROM coupon a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO coupon(
+			id,
+			name,
+			description,
+			is_enabled,
+			price_limit,
+			price_expression,
+			exchange_limit,
+			status,
+			is_locked,
+			quantity,
+			point,
+			begin_date,
+			end_date,
+			create_date,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{name},
+			#{description},
+			#{isEnabled},
+			#{priceLimit},
+			#{priceExpression},
+			#{exchangeLimit},
+			#{status},
+			#{isLocked},
+			#{quantity},
+			#{point},
+			#{beginDate},
+			#{endDate},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE coupon SET 	
+			name = #{name},
+			description = #{description},
+			is_enabled = #{isEnabled},
+			price_limit = #{priceLimit},
+			price_expression = #{priceExpression},
+			exchange_limit = #{exchangeLimit},
+			status = #{status},
+			is_locked = #{isLocked},
+			quantity = #{quantity},
+			point = #{point},
+			begin_date = #{beginDate},
+			end_date = #{endDate},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM coupon
+	
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatch">
+		DELETE FROM coupon
+		WHERE
+			id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+	<update id="deleteEntity">
+		UPDATE coupon SET 
+			del_flag = #{DEL_FLAG_DELETE}
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatchEntity">
+		UPDATE coupon SET 
+			del_flag = '1'
+		where
+		    id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+</mapper>

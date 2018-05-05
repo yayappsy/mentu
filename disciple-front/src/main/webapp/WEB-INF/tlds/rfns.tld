@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<taglib version="2.0" xmlns="http://java.sun.com/xml/ns/j2ee"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd">
+
+	<description>JSTL 1.1 functions library</description>
+ <display-name>JSTL functions for rysh</display-name>
+	<tlib-version>1.1</tlib-version>
+ <short-name>rfns</short-name>
+ <uri>http://www.itdiy.top/tags/rysh-functions</uri>
+
+	<!-- MemberUtils -->
+	<function>
+		<description>获取当前用户对象</description>
+		<name>getCurrentMember</name>
+		<function-class>com.weimhc.front.modules.utils.MemberUtils</function-class>
+		<function-signature>com.weimhc.modules.member.entity.Member getCurrent()</function-signature>
+		<example>${rfns:getCurrentMember()}</example>
+	</function>
+
+	<function>
+		<description>根据编码获取用户对象</description>
+		<name>getMemberById</name>
+		<function-class>com.weimhc.front.modules.utils.MemberUtils</function-class>
+		<function-signature>com.weimhc.modules.member.entity.Member
+			get(java.lang.String)</function-signature>
+		<example>${rfns:getMemberById(id)}</example>
+	</function>
+
+	<!-- 获取文章栏目相关缓存信息 -->
+
+	<function>
+		<description>根据id获取文章栏目</description>
+		<name>getArticleCategoryById</name>
+		<function-class>com.weimhc.modules.article.utils.ArticleCategoryUtils</function-class>
+		<function-signature>java.util.List findById(java.lang.String)</function-signature>
+		<example>${rfns:getArticleCategoryById(id)}</example>
+	</function>
+
+	<function>
+		<description>根据父id获取文章栏目</description>
+		<name>getArticleCategory</name>
+		<function-class>com.weimhc.modules.article.utils.ArticleCategoryUtils</function-class>
+		<function-signature>java.util.List findByParentId(java.lang.String)</function-signature>
+		<example>${rfns:getArticleCategory(parentId)}</example>
+	</function>
+
+	<function>
+		<description>根据文章栏目获取文章列表</description>
+		<name>getArticleByCategory</name>
+		<function-class>com.weimhc.modules.article.utils.ArticleCategoryUtils</function-class>
+		<function-signature>java.util.List findByCategoryId(java.lang.String)</function-signature>
+		<example>${rfns:getArticleByCategory(categoryId)}</example>
+	</function>
+	
+	<function>
+		<description>根据文章栏目获取文章列表</description>
+		<name>getArticleByCategoryId</name>
+		<function-class>com.weimhc.modules.article.utils.ArticleCategoryUtils</function-class>
+		<function-signature>java.util.List findNewsByCategoryId(java.lang.String)</function-signature>
+		<example>${rfns:getArticleByCategoryId(categoryId)}</example>
+	</function>
+	
+
+	<function>
+		<description>根据关键字获取广告</description>
+		<name>getAdByKeyword</name>
+		<function-class>com.weimhc.modules.ad.utils.AdUtils</function-class>
+		<function-signature>java.util.List findAdByKeyword(java.lang.String)</function-signature>
+		<example>${rfns:getAdByKeyword(keyword)}</example>
+	</function>
+
+
+</taglib>

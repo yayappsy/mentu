@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.user.dao.UserHealthInfoDao">
+    
+	<sql id="userHealthInfoColumns">
+		a.user_info_id AS "userInfo.id",
+		a.height AS "height",
+		a.weight AS "weight",
+		a.waistline AS "waistline",
+		a.bust AS "bust",
+		a.hipline AS "hipline"
+	</sql>
+	
+	<sql id="userHealthInfoJoins">
+	</sql>
+    
+	<select id="get" resultType="UserHealthInfo">
+		SELECT 
+			<include refid="userHealthInfoColumns"/>
+		FROM user_health_info a
+		<include refid="userHealthInfoJoins"/>
+		WHERE a.user_info_id = #{userInfo.id}
+	</select>
+	
+	<select id="getEntity" resultType="UserHealthInfo">
+		SELECT 
+			<include refid="userHealthInfoColumns"/>
+		FROM user_health_info a
+		<include refid="userHealthInfoJoins"/>
+        <where>
+			and a.user_info_id = #{userInfo.id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="UserHealthInfo">
+		SELECT 
+			<include refid="userHealthInfoColumns"/>
+		FROM user_health_info a
+		<include refid="userHealthInfoJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="UserHealthInfo">
+		SELECT 
+			<include refid="userHealthInfoColumns"/>
+		FROM user_health_info a
+		<include refid="userHealthInfoJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM user_health_info a
+		<where>
+			
+			AND a.user_info_id = #{userInfo.id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(*)		 
+		FROM user_health_info a
+		<where>
+			
+			AND a.user_info_id = #{userInfo.id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO user_health_info(
+			user_info_id,
+			height,
+			weight,
+			waistline,
+			bust,
+			hipline
+		) VALUES (
+			#{userInfo.id},
+			#{height},
+			#{weight},
+			#{waistline},
+			#{bust},
+			#{hipline}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE user_health_info SET 	
+			user_info_id = #{userInfo.id},
+			height = #{height},
+			weight = #{weight},
+			waistline = #{waistline},
+			bust = #{bust},
+			hipline = #{hipline}
+		WHERE user_info_id = #{userInfo.id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM user_health_info
+	
+	    WHERE user_info_id = #{userInfo.id}
+	</update>
+	
+	<update id="deleteBatch">
+		DELETE FROM user_health_info
+		WHERE
+			user_info_id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+	<update id="deleteEntity">
+		DELETE FROM user_health_info
+	    WHERE user_info_id = #{userInfo.id}
+	</update>
+	
+	<update id="deleteBatchEntity">
+		DELETE FROM user_health_info
+		where
+		    user_info_id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+</mapper>

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.inquiry.dao.InquiryProductDao">
+    
+	<sql id="inquiryProductColumns">
+		a.id AS "id",
+		a.inquiry_sheet_id AS "inquirySheet.id",
+		a.product_id AS "product.id",
+		a.product_name AS "productName",
+		a.product_sn AS "productSn",
+		a.sales_price AS "salesPrice",
+		a.expected_price AS "expectedPrice",
+		a.pre_order_quantity AS "preOrderQuantity",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="inquiryProductJoins">
+	</sql>
+    
+	<select id="get" resultType="InquiryProduct">
+		SELECT 
+			<include refid="inquiryProductColumns"/>
+		FROM inquiry_product a
+		<include refid="inquiryProductJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="InquiryProduct">
+		SELECT 
+			<include refid="inquiryProductColumns"/>
+		FROM inquiry_product a
+		<include refid="inquiryProductJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="InquiryProduct">
+		SELECT 
+			<include refid="inquiryProductColumns"/>
+		FROM inquiry_product a
+		<include refid="inquiryProductJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="InquiryProduct">
+		SELECT 
+			<include refid="inquiryProductColumns"/>
+		FROM inquiry_product a
+		<include refid="inquiryProductJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="inquirySheet != null and inquirySheet.id != null and inquirySheet.id != '' ">
+			  and  a.inquiry_sheet_id = #{inquirySheet.id}
+			</if>
+		</where>		
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM inquiry_product a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(*)		 
+		FROM inquiry_product a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO inquiry_product(
+			id,
+			inquiry_sheet_id,
+			product_id,
+			product_name,
+			product_sn,
+			sales_price,
+			expected_price,
+			pre_order_quantity,
+			create_date,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{inquirySheet.id},
+			#{product.id},
+			#{productName},
+			#{productSn},
+			#{salesPrice},
+			#{expectedPrice},
+			#{preOrderQuantity},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE inquiry_product SET 	
+			inquiry_sheet_id = #{inquirySheet.id},
+			product_id = #{product.id},
+			product_name = #{productName},
+			sales_price = #{salesPrice},
+			expected_price = #{expectedPrice},
+			pre_order_quantity = #{preOrderQuantity},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM inquiry_product
+	
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatch">
+		DELETE FROM inquiry_product
+		WHERE
+			id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+	<update id="deleteEntity">
+		UPDATE inquiry_product SET 
+			del_flag = #{DEL_FLAG_DELETE}
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatchEntity">
+		UPDATE inquiry_product SET 
+			del_flag = '1'
+		where
+		    id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+</mapper>

@@ -1,0 +1,17 @@
+参数	描述	默认值
+data-dimension	圆形图的宽度和高度px	250
+data-text	显示在圆圈内侧的文字内容	empty
+data-info	显示在data-text下的说明信息	empty
+data-width	圆圈的厚度px	15
+data-fontsize	圈内文字大小px	15
+data-percent	圆圈统计百分比%，1-100	50
+data-fgcolor	圆圈的前景色	#556b2f
+data-bgcolor	圆圈的背景色	#eeeeee
+data-fill	圆形的填充背景色	empty
+data-type	圆形统计类型，可以是”half”或”full”	或“moreHalf” full
+data-total	数据总量，和data-part配合使用	empty
+data-part	数据量，与data-total配合使用	empty
+data-border	圆形样式，可以加边框，如inline或outline	empty
+data-icon	Fontawesome图标样式，详情可参照：Fontawesome Website – Icons	empty
+data-icon-size	图标大小	empty
+data-icon-color	图标颜色

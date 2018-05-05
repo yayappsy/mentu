@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.order.dao.OrderItemDao">
+    
+	<sql id="orderItemColumns">
+		a.id AS "id",
+		a.order_id AS "order.id",
+		a.product_id AS "product.id",
+		a.product_name AS "productName",
+		a.price AS "price",
+		a.price_payable AS "pricePayable",
+		a.quantity AS "quantity",
+		a.images AS "images",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="orderItemJoins">
+	</sql>
+    
+	<select id="get" resultType="OrderItem">
+		SELECT 
+			<include refid="orderItemColumns"/>
+		FROM order_item a
+		<include refid="orderItemJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="OrderItem">
+		SELECT 
+			<include refid="orderItemColumns"/>
+		FROM order_item a
+		<include refid="orderItemJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="OrderItem">
+		SELECT 
+			<include refid="orderItemColumns"/>
+		FROM order_item a
+		<include refid="orderItemJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="OrderItem">
+		SELECT 
+			<include refid="orderItemColumns"/>
+		FROM order_item a
+		<include refid="orderItemJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM order_item a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(*)		 
+		FROM order_item a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO order_item(
+			id,
+			order_id,
+			product_id,
+			product_name,
+			price,
+			price_payable,
+			quantity,
+			images,
+			create_date,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{order.id},
+			#{product.id},
+			#{productName},
+			#{price},
+			#{pricePayable},
+			#{quantity},
+			#{images},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE order_item SET 	
+			order_id = #{order.id},
+			product_id = #{product.id},
+			product_name = #{productName},
+			price = #{price},
+			price_payable = #{pricePayable},
+			quantity = #{quantity},
+			images = #{images},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM order_item
+	
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteEntity">
+		UPDATE order_item SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

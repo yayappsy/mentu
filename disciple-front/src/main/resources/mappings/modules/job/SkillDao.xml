@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.job.dao.SkillDao">
+    
+	<sql id="skillColumns">
+		a.id AS "id",
+		a.resume_id AS "resumeId",
+		a.member_id AS "memberId",
+		a.type AS "type",
+		a.`explain` AS "explain",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="skillJoins">
+	</sql>
+    
+	<select id="get" resultType="Skill">
+		SELECT 
+			<include refid="skillColumns"/>
+		FROM skill a
+		<include refid="skillJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByResumeId" resultType="Skill" parameterType="java.lang.String">
+		SELECT
+			<include refid="skillColumns"/>
+		FROM skill a
+		<include refid="skillJoins"/>
+		WHERE a.resume_id = #{resumeId}
+	</select>
+	
+	<select id="getEntity" resultType="Skill">
+		SELECT 
+			<include refid="skillColumns"/>
+		FROM skill a
+		<include refid="skillJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="Skill">
+		SELECT 
+			<include refid="skillColumns"/>
+		FROM skill a
+		<include refid="skillJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="resumeId != null and resumeId != ''">
+				AND a.resume_id = #{resumeId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Skill">
+		SELECT 
+			<include refid="skillColumns"/>
+		FROM skill a
+		<include refid="skillJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="resumeId != null and resumeId != ''">
+				AND a.resume_id = #{resumeId}
+			</if>
+		</where>		
+		ORDER BY a.update_date DESC
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM skill a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT 	count(a.id) 	 
+		FROM skill a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO skill(
+			id,
+			resume_id,
+			member_id,
+			type,
+			`explain`,
+			create_date,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{resumeId},
+			#{memberId},
+			#{type},
+			#{explain},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<insert id="insertOrUpdate" >
+		<!-- 查看是否存,如果存在及更新，否则插入 -->
+	    <selectKey keyProperty="sqlMap.count" order="BEFORE" resultType="int">  
+	        select count(id) as num from skill where id = #{id}
+	    </selectKey>  
+	    <if test="sqlMap.count > 0">  
+			UPDATE skill SET 	
+								resume_id = #{resumeId},
+				member_id = #{memberId},
+				type = #{type},
+				`explain` = #{explain},
+				update_date = #{updateDate},
+				remarks = #{remarks}
+			WHERE id = #{id}
+   		 </if> 
+   		 <if test="sqlMap.count == 0">  
+			INSERT INTO skill(
+											id,
+						resume_id,
+						member_id,
+						type,
+						`explain`,
+						create_date,
+						update_date,
+						remarks,
+						del_flag
+					) VALUES (
+											#{id},
+						#{resumeId},
+						#{memberId},
+						#{type},
+						#{explain},
+						#{createDate},
+						#{updateDate},
+						#{remarks},
+						#{delFlag}
+					)
+		</if> 
+	</insert>
+	
+	<update id="update">
+		UPDATE skill SET 	
+			resume_id = #{resumeId},
+			member_id = #{memberId},
+			type = #{type},
+			`explain` = #{explain},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM skill
+	
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatch">
+		DELETE FROM skill
+		WHERE
+			id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+	<update id="deleteEntity">
+		UPDATE skill SET 
+			del_flag = #{DEL_FLAG_DELETE}
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatchEntity">
+		UPDATE skill SET 
+			del_flag = '1'
+		where
+		    id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+</mapper>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache updateCheck="false" name="defaultCache">
+
+	<!-- 磁盘存储:将缓存中暂时不使用的对象,转移到硬盘,类似于Windows系统的虚拟内存 path:指定在硬盘上存储对象的路径 -->
+	<diskStore path="./temp/zqcxpt-front/ehcache" />
+
+	<!--默认缓存配置，以下属性是必须的： name ：cache的标识符，在一个CacheManager中必须唯一。 maxElementsInMemory 
+		： 在内存中缓存的element的最大数目。 maxElementsOnDisk ： 在磁盘上缓存的element的最大数目。 eternal ： 
+		设定缓存的elements是否有有效期。如果为true，timeouts属性被忽略。 overflowToDisk ： 设定当内存缓存溢出的时候是否将过期的element缓存到磁盘上。 
+		以下属性是可选的： timeToIdleSeconds ： 缓存element在过期前的空闲时间。 timeToLiveSeconds ： 缓存element的有效生命期。 
+		diskPersistent ： 在VM重启的时候是否持久化磁盘缓存，默认是false。 diskExpiryThreadIntervalSeconds 
+		： 磁盘缓存的清理线程运行间隔，默认是120秒. memoryStoreEvictionPolicy ： 当内存缓存达到最大，有新的element加入的时候， 
+		移除缓存中element的策略。默认是LRU，可选的有LFU和FIFO 缓存子元素： cacheEventListenerFactory：注册相应的的缓存监听类，用于处理缓存事件，如put,remove,update,和expire 
+		bootstrapCacheLoaderFactory:指定相应的BootstrapCacheLoader，用于在初始化缓存，以及自动设置。 -->
+
+	<!-- 默认缓存配置. -->
+	<defaultCache maxEntriesLocalHeap="100" eternal="false" diskPersistent="true"
+		timeToIdleSeconds="300" timeToLiveSeconds="600" overflowToDisk="true"
+		maxEntriesLocalDisk="100000" />
+
+	<!-- cache:为指定名称的对象进行缓存的特殊配置 name:指定对象的完整名 -->
+	<!-- 用户缓存 -->
+	<cache name="userCache" maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="604800" overflowToDisk="true" diskPersistent="true"
+		maxEntriesLocalDisk="100000"/>
+
+	<!-- 用户缓存 -->
+	<cache name="userStoreCache" maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="604800" overflowToDisk="true" diskPersistent="true"
+		maxEntriesLocalDisk="100000"/>
+
+
+	<!-- 系统活动会话缓存 -->
+	<cache name="activeSessionsCache" maxEntriesLocalHeap="10000"
+		overflowToDisk="true" eternal="true" timeToLiveSeconds="0"
+		timeToIdleSeconds="0" diskPersistent="true"
+		diskExpiryThreadIntervalSeconds="600" />
+
+	<cache name="tokenCache" maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="604800"  overflowToDisk="true" diskPersistent="true"
+		maxEntriesLocalDisk="100000" />
+		
+	<cache name="seedTokenCache" maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="604800"  overflowToDisk="true" diskPersistent="true"
+		maxEntriesLocalDisk="100000" />
+		
+    <!-- 以下缓存需要同步 -->
+	<!-- 系统缓存 -->
+	<cache name="sysCache" maxEntriesLocalHeap="100" eternal="true"
+		diskPersistent="true" overflowToDisk="true" />
+
+	<!-- 导航缓存 -->
+	<cache name="navigationCache" maxEntriesLocalHeap="100" eternal="true"
+		overflowToDisk="false" />
+
+	<!-- 广告缓存 -->
+	<cache name="adCache" maxEntriesLocalHeap="100" eternal="false"
+		overflowToDisk="false" timeToLiveSeconds="60" maxEntriesLocalDisk="100000" />
+		
+	<!-- 短信缓存 -->
+	<cache name="SMSCache" maxEntriesLocalHeap="100" eternal="false"
+		overflowToDisk="false" timeToLiveSeconds="60" maxEntriesLocalDisk="100000" />
+
+	<!-- 文章栏目缓存 -->
+	<cache name="articleCategoryCache" maxEntriesLocalHeap="100"
+		eternal="false" overflowToDisk="false" timeToLiveSeconds="60"
+		maxEntriesLocalDisk="100" />
+
+	<!-- 文章缓存 -->
+	<cache name="articleCache" maxEntriesLocalHeap="100" eternal="false"
+		overflowToDisk="false" timeToLiveSeconds="60" maxEntriesLocalDisk="100" />
+
+	
+</ehcache>

@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.job.dao.EducationHighestDao">
+    
+	<sql id="educationHighestColumns">
+		a.id AS "id",
+		a.member_id AS "memberId",
+		a.school AS "school",
+		a.major_id AS "majorId",
+		a.education_id AS "educationId",
+		a.city_id AS "cityId",
+		a.begin_date AS "beginDate",
+		a.end_date AS "endDate",
+		a.class_rank AS "classRank",
+		a.major_course AS "majorCourse",
+		a.honor AS "honor",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="educationHighestJoins">
+	</sql>
+    
+	<select id="get" resultType="EducationHighest">
+		SELECT 
+			<include refid="educationHighestColumns"/>
+		FROM education_highest a
+		<include refid="educationHighestJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByMemberId" resultType="EducationHighest">
+		SELECT
+			<include refid="educationHighestColumns"/>
+		FROM education_highest a
+		<include refid="educationHighestJoins"/>
+		WHERE a.member_id = #{memberId}
+	</select>
+	
+	<select id="getEntity" resultType="EducationHighest">
+		SELECT 
+			<include refid="educationHighestColumns"/>
+		FROM education_highest a
+		<include refid="educationHighestJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="EducationHighest">
+		SELECT 
+			<include refid="educationHighestColumns"/>
+		FROM education_highest a
+		<include refid="educationHighestJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="EducationHighest">
+		SELECT 
+			<include refid="educationHighestColumns"/>
+		FROM education_highest a
+		<include refid="educationHighestJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		ORDER BY a.update_date DESC
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM education_highest a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT 	count(a.id) 	 
+		FROM education_highest a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO education_highest(
+			id,
+			member_id,
+			school,
+			major_id,
+			education_id,
+			city_id,
+			begin_date,
+			end_date,
+			class_rank,
+			major_course,
+			honor,
+			create_date,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{memberId},
+			#{school},
+			#{majorId},
+			#{educationId},
+			#{cityId},
+			#{beginDate},
+			#{endDate},
+			#{classRank},
+			#{majorCourse},
+			#{honor},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<insert id="insertOrUpdate" >
+		<!-- 查看是否存,如果存在及更新，否则插入 -->
+	    <selectKey keyProperty="sqlMap.count" order="BEFORE" resultType="int">  
+	        select count(id) as num from education_highest where id = #{id}
+	    </selectKey>  
+	    <if test="sqlMap.count > 0">  
+			UPDATE education_highest SET 	
+								member_id = #{memberId},
+				school = #{school},
+				major_id = #{majorId},
+				education_id = #{educationId},
+				city_id = #{cityId},
+				begin_date = #{beginDate},
+				end_date = #{endDate},
+				class_rank = #{classRank},
+				major_course = #{majorCourse},
+				honor = #{honor},
+				update_date = #{updateDate},
+				remarks = #{remarks}
+			WHERE id = #{id}
+   		 </if> 
+   		 <if test="sqlMap.count == 0">  
+			INSERT INTO education_highest(
+											id,
+						member_id,
+						school,
+						major_id,
+						education_id,
+						city_id,
+						begin_date,
+						end_date,
+						class_rank,
+						major_course,
+						honor,
+						create_date,
+						update_date,
+						remarks,
+						del_flag
+					) VALUES (
+											#{id},
+						#{memberId},
+						#{school},
+						#{majorId},
+						#{educationId},
+						#{cityId},
+						#{beginDate},
+						#{endDate},
+						#{classRank},
+						#{majorCourse},
+						#{honor},
+						#{createDate},
+						#{updateDate},
+						#{remarks},
+						#{delFlag}
+					)
+		</if> 
+	</insert>
+	
+	<update id="update">
+		UPDATE education_highest SET 	
+			member_id = #{memberId},
+			school = #{school},
+			major_id = #{majorId},
+			education_id = #{educationId},
+			city_id = #{cityId},
+			begin_date = #{beginDate},
+			end_date = #{endDate},
+			class_rank = #{classRank},
+			major_course = #{majorCourse},
+			honor = #{honor},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM education_highest
+	
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatch">
+		DELETE FROM education_highest
+		WHERE
+			id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+	<update id="deleteEntity">
+		UPDATE education_highest SET 
+			del_flag = #{DEL_FLAG_DELETE}
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatchEntity">
+		UPDATE education_highest SET 
+			del_flag = '1'
+		where
+		    id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+</mapper>

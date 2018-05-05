@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- For assistance related to logback-translator or configuration -->
+<!-- files in general, please contact the logback user mailing list -->
+<!-- at http://www.qos.ch/mailman/listinfo/logback-user -->
+<!-- -->
+<!-- For professional support please see -->
+<!-- http://www.qos.ch/shop/products/professionalSupport -->
+<!-- -->
+<configuration>
+	<property name="logsBaseDir" value="${logs.path}" />
+	<appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d %-5p [%c{5}] - %msg%n</pattern>
+		</encoder>
+	</appender>
+	<appender name="CommonRollingFile"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!--See http://logback.qos.ch/manual/appenders.html#RollingFileAppender -->
+		<!--and http://logback.qos.ch/manual/appenders.html#TimeBasedRollingPolicy -->
+		<!--for further documentation -->
+		<File>${logsBaseDir}/common.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!--日志文件输出的文件名 -->
+			<FileNamePattern>${logsBaseDir}/common.log.%d{yyyy-MM-dd}.log</FileNamePattern>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d [%t] %-5p [%c] - %m%n</pattern>
+		</encoder>
+	</appender>
+	<appender name="ErrorRollingFile"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!--See http://logback.qos.ch/manual/appenders.html#RollingFileAppender -->
+		<!--and http://logback.qos.ch/manual/appenders.html#TimeBasedRollingPolicy -->
+		<!--for further documentation -->
+		<File>${logsBaseDir}/error.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!--日志文件输出的文件名 -->
+			<FileNamePattern>${logsBaseDir}/error.log.%d{yyyy-MM-dd}.log</FileNamePattern>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%date %level [%thread] %logger{36} [%file : %line] %msg%n</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>Error</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+	</appender>
+	<appender name="EeasemobFile"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+           <FileNamePattern>${logsBaseDir}/easemob.log.%d{yyyy-MM-dd}.log</FileNamePattern>
+        </rollingPolicy>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level>
+        </filter>
+        <encoder>
+            <pattern>%date %level [%thread] %logger{36} [%file : %line] %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+	<logger name="com.thinkgem.javamg.common.utils.JedisUtils"
+		level="WARN" />
+	<logger name="com.thinkgem.javamg.modules.sys.web.LoginController"
+		level="WARN" />
+	<logger name="com.thinkgem.javamg.common.security.shiro" level="WARN" />
+	<logger name="com.thinkgem.javamg.modules.oa.dao.OaNotifyDao.findCount"
+		level="WARN" />
+	<logger name="com.weimhc.framework.web.utils" level="WARN" />
+	<logger name="com.thinkgem.javamg" level="DEBUG" />
+	<logger name="com.weimhc" level="DEBUG" />
+	<logger name="com.easemob.server.example" levle="DEBUG">
+		<appender-ref ref="EeasemobFile" />
+	</logger>
+	<root level="WARN">
+		<appender-ref ref="Console" />
+		<appender-ref ref="CommonRollingFile" />
+		<appender-ref ref="ErrorRollingFile" />
+	</root>
+</configuration>

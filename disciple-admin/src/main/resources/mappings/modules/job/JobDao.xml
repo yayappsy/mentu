@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.job.dao.JobDao">
+    
+	<sql id="jobColumns">
+		a.id AS "id",
+		a.company_id AS "company.id",
+		a.industry_id AS "industry.id",
+		a.name AS "name",
+		a.city_id AS "city.id",
+		a.practice_number AS "practiceNumber",
+		a.job_attract AS "jobAttract",
+		a.description AS "description",
+		a.address AS "address",
+		a.lowest AS "lowest",
+		a.highest AS "highest",
+		a.day_number AS "dayNumber",
+		a.language AS "language",
+		a.education_id AS "education",
+		a.begin_date AS "beginDate",
+		a.end_date AS "endDate",
+		a.expiry_date AS "expiryDate",
+		a.chance AS "chance",
+		a.home_show AS "homeShow",
+		a.is_overseas AS "isOverseas",
+		a.is_resume AS "isResume",
+		a.email AS "email",
+		a.number AS "number",
+		a.state AS "state",
+		a.is_push AS "isPush",
+		a.comment AS "comment",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.is_hit AS "isHit",
+		a.del_flag AS "delFlag",
+		c.name AS "company.name",
+		c.short_name AS "company.shortName",
+		i.name AS "industry.name",
+		sa.name AS "city.name",
+		e.school AS "education.name",
+		a.qr_code AS "qrCode"
+	</sql>
+	
+	<sql id="jobJoins">
+	left JOIN company c ON c.id = a.company_id
+	left JOIN industry i ON i.id = a.industry_id
+	left JOIN sys_area sa ON sa.id = a.city_id
+	left JOIN education_background e ON e.id = a.education_id
+	</sql>
+    
+	<select id="get" resultType="Job">
+		SELECT 
+			<include refid="jobColumns"/>
+		FROM job a
+		<include refid="jobJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Job">
+		SELECT 
+			<include refid="jobColumns"/>
+		FROM job a
+		<include refid="jobJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="company != null and company.id !=null and company.id != ''">
+				AND a.company_id = #{company.id}
+			</if>
+			<if test="industry != null and industry.id !=null and industry.id != ''">
+				AND a.industry_id = #{industry.id}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="homeShow != null and homeShow != ''">
+				AND a.home_show =#{homeShow}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Job">
+		SELECT 
+			<include refid="jobColumns"/>
+		FROM job a
+		<include refid="jobJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		ORDER BY a.update_date DESC
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 
+			* 
+		FROM job a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(id)
+			* 
+		FROM job a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO job(
+			id,
+			company_id,
+			industry_id,
+			name,
+			city_id,
+			practice_number,
+			job_attract,
+			description,
+			address,
+			lowest,
+			highest,
+			day_number,
+			language,
+			education_id,
+			begin_date,
+			end_date,
+			expiry_date,
+			chance,
+			is_overseas,
+			is_resume,
+			email,
+			number,
+			state,
+			is_push,
+			comment,
+			create_date,
+			update_date,
+			remarks,
+			is_hit,
+			home_show,
+			del_flag,
+			qr_code
+		) VALUES (
+			#{id},
+			#{company.id},
+			#{industry.id},
+			#{name},
+			#{city.id},
+			#{practiceNumber},
+			#{jobAttract},
+			#{description},
+			#{address},
+			#{lowest},
+			#{highest},
+			#{dayNumber},
+			#{language},
+			#{education},
+			#{beginDate},
+			#{endDate},
+			#{expiryDate},
+			#{chance},
+			#{isOverseas},
+			#{isResume},
+			#{email},
+			#{number},
+			#{state},
+			#{isPush},
+			#{comment},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{isHit},
+			#{homeShow},
+			#{delFlag},
+			#{qrCode}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE job SET 	
+			company_id = #{company.id},
+			industry_id = #{industry.id},
+			name = #{name},
+			city_id = #{city.id},
+			practice_number = #{practiceNumber},
+			job_attract = #{jobAttract},
+			description = #{description},
+			address = #{address},
+			lowest = #{lowest},
+			highest = #{highest},
+			day_number = #{dayNumber},
+			language = #{language},
+			education_id = #{education},
+			begin_date = #{beginDate},
+			end_date = #{endDate},
+			expiry_date = #{expiryDate},
+			chance = #{chance},
+			is_overseas = #{isOverseas},
+			is_resume = #{isResume},
+			email = #{email},
+			number = #{number},
+			state = #{state},
+			is_push = #{isPush},
+			is_hit = #{isHit},
+			comment = #{comment},
+			update_date = #{updateDate},
+			home_show = #{homeShow},
+			remarks = #{remarks},
+			qr_code = #{qrCode}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM job
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 删除用户和角色关联表数据 -->
+	<delete id="deleteJobLabel">
+		DELETE FROM job_label_list WHERE job_id = #{id}
+	</delete>
+	
+	<!-- 插入用户和角色关联表数据 -->
+	<insert id="insertJobLabel">
+		INSERT INTO job_label_list(job_id, job_label_id)
+		<foreach collection="jobLabelList" item="jobLabel" separator=" union all ">
+			SELECT #{id}, #{jobLabel.id} FROM dual
+		</foreach>
+	</insert>
+
+	<select id="getCompanyJobs" resultType="Job">
+		SELECT
+		<include refid="jobColumns"/>
+		FROM job a
+		<include refid="jobJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="companyId != null  and companyId != ''">
+				AND a.company_id = #{companyId}
+			</if>
+			<if test="labelId !=null and labelId != ''">
+				AND ll.company_label_id = #{labelId}
+			</if>
+			<if test="isHitJob !=null and isHitJob != ''">
+				AND a.is_hit = #{isHitJob}
+			</if>
+
+		</where>
+	</select>
+	
+</mapper>

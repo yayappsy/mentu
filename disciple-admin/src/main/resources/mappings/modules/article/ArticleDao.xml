@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.article.dao.ArticleDao">
+    
+	<sql id="articleColumns">
+		a.id AS "id",
+		a.category_id AS "category.id",
+		a.title AS "title",
+		a.url AS "url",
+		a.color AS "color",
+		a.image AS "image",
+		a.article_source AS "articleSource",
+		a.author AS "author",
+		a.author_identity AS "authorIdentity",
+		a.keywords AS "keywords",
+		a.description AS "description",
+		a.weight AS "weight",
+		a.weight_date AS "weightDate",
+		a.hits AS "hits",
+		a.posid AS "posid",
+		a.custom_content_view AS "customContentView",
+		a.view_config AS "viewConfig",
+		a.is_recommend AS "isRecommend",
+		a.is_hot AS "isHot",
+		a.sort AS "sort",			
+		a.article_type_id AS "articleType.id",
+		a.content AS "content",
+		a.page_view_count AS "pageViewCount",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+	    ac.name AS "category.name"
+	</sql>  
+	
+	<sql id="articleJoins">
+	 join article_category ac on ac.id=a.category_id
+	
+	</sql>
+    
+	<select id="get" resultType="Article">
+		SELECT 
+			<include refid="articleColumns"/>
+		FROM article a
+		<include refid="articleJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="Article">
+		SELECT 
+			<include refid="articleColumns"/>
+		FROM article a
+		<include refid="articleJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<!-- 根据文章分类父id查询 所有子类文章 -->
+	<select id="findCategoryChildrendArticle" resultType="Article">
+		SELECT
+		<include refid="articleColumns" />
+		FROM article a
+		<include refid="articleJoins" />
+		<where>
+		a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="category !=null and category.id != null and category.id != ''">
+				and a.category_id = #{category.id}
+			</if>
+			<if test="category !=null and category.parent != null 
+			    and category.parent.id != null  and category.parent.id != ''">
+				and ac.parent_id = #{category.parent.id}
+			</if>
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when
+				test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findList" resultType="Article">
+		SELECT 
+			<include refid="articleColumns"/>
+		FROM article a
+		<include refid="articleJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+			<if test="category !=null and category.id != null and category.id != ''">
+				AND a.category_id =#{category.id} 
+				
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Article">
+		SELECT 
+			<include refid="articleColumns"/>
+		FROM article a
+		<include refid="articleJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="category !=null and category.id != null and category.id != ''">
+				AND a.category_id =#{category.id} 
+				
+			</if>
+		</where>		
+            ORDER BY a.update_date DESC
+	</select>
+	
+	<!-- 热门文章 -->
+	<select id="findArticle" resultType="Article">
+		SELECT 
+			<include refid="articleColumns"/>
+		FROM article a
+		<include refid="articleJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			ORDER BY a.hits DESC
+		    limit 3
+		</where>		
+	</select>
+	
+	<!-- 最新文章 -->
+	<select id="findNewArticle" resultType="Article">
+		SELECT 
+			<include refid="articleColumns"/>
+		FROM article a
+		<include refid="articleJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			ORDER BY a.create_date DESC
+		    limit 1
+		</where>		
+	</select>
+	
+	
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM article a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(*)		 
+		FROM article a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO article(
+			id,
+			category_id,
+			title,
+			url,
+			color,
+			image,
+			article_source,
+			author,
+			author_identity,
+			keywords,
+			description,
+			weight,
+			weight_date,
+			hits,
+			posid,
+			custom_content_view,
+			view_config,
+			is_recommend,
+			is_hot,
+			sort,
+			article_type_id,
+			content,
+			page_view_count,
+			create_date,
+			
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{category.id},
+			#{title},
+			#{url},
+			#{color},
+			#{image},
+			#{articleSource},
+			#{author},
+			#{authorIdentity},
+			#{keywords},
+			#{description},
+			#{weight},
+			#{weightDate},
+			#{hits},
+			#{posid},
+			#{customContentView},
+			#{viewConfig},
+			#{isRecommend},
+			#{isHot},
+			#{sort},
+			#{articleType.id},
+			#{content},
+			#{pageViewCount},	
+			#{createDate},
+			
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE article SET 	
+			category_id = #{category.id},
+			title = #{title},
+			url = #{url},
+			color = #{color},
+			image = #{image},
+			article_source = #{articleSource},
+			author = #{author},
+			author_identity = #{authorIdentity},
+			keywords = #{keywords},
+			description = #{description},
+			weight = #{weight},
+			weight_date = #{weightDate},
+			hits = #{hits},
+			posid = #{posid},
+			custom_content_view = #{customContentView},
+			view_config = #{viewConfig},
+			is_recommend = #{isRecommend},
+			is_hot = #{isHot},
+			is_show = #{isShow},
+			is_top = #{isTop},
+			sort = #{sort},
+			article_type_id = #{articleType.id},
+			content = #{content},
+			page_view_count = #{pageViewCount},
+
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM article
+	
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteEntity">
+		UPDATE article SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

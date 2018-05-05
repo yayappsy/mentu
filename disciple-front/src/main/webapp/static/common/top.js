@@ -1,0 +1,10 @@
+$(document).ready(function(){
+  $(".t-nav").mouseover(function(){
+  	$(this).children(".tnavsub").show();
+	$(this).addClass("tnavon");
+  });
+ $(".t-nav").mouseout(function(){
+  	$(this).children(".tnavsub").hide();
+	$(this).removeClass("tnavon");
+  });
+});

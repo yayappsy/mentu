@@ -1,0 +1,311 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>首页</title>
+<link href="css/base.css" rel="stylesheet" type="text/css" />
+<link href="css/index.css" rel="stylesheet" type="text/css" />
+<script src="js/jquery-1.9.1.min.js"></script>
+<script src="js/base.js"></script>
+<script src="js/jquery.SuperSlide.2.1.1.js"></script>
+
+<!--图片放大-->
+<script type="text/javascript" src="js/jquery.zoomImgRollover.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+        $('.m-news .item').mouseover(function(){
+			$(this).addClass('current');
+			}).mouseout(function(){
+				$(this).removeClass('current');
+				});
+		
+		
+		$('.m-product .item').mouseover(function(){
+			$(this).children('.shade').show();
+			}).mouseout(function(){
+				$(this).children('.shade').hide();
+				});
+		
+		/*图片放大*/
+		$(".m-news .item .thumb img").zoomImgRollover();
+		$(".m-product .item .thumb img").zoomImgRollover();
+		$(".about_thumb").zoomImgRollover();
+		
+    });
+</script>
+</head>
+
+<body>
+<!--top-->
+<div class="m-top">
+  <div class="inner">
+    <div class="tel left">服务热线：4000-888-666</div>
+    <ul class="login right">
+      <li><a href="#">登录</a></li>
+      <li>|</li>
+      <li><a href="#">请注册</a></li>
+    </ul>
+    <ul class="user right">
+      <li><a href="#">会员中心</a></li>
+      <li>|</li>
+      <li><a href="#">APP下载</a></li>
+    </ul>
+  </div>
+</div>
+<!--top end--> 
+<!--head-->
+<div class="m-head">
+  <div class="inner">
+    <div class="logo left"><a href="#"><img src="images/logo.png"/></a></div>
+    <ul class="nav left">
+      <li><a href="首页.html" class="current">首页</a></li>
+      <li><a href="资讯中心.html">资讯中心</a></li>
+      <li><a href="健康产品.html">健康产品</a></li>
+      <li><a href="解决方案.html">服务解决方案</a></li>
+      <li><a href="关于我们.html">关于我们</a></li>
+    </ul>
+  </div>
+</div>
+<!--head end--> 
+<!--banner-->
+
+<div class="m-banner">
+  <div id="slideBox" class="slideBox">
+    <div class="hd"> </div>
+    <div class="bd">
+      <ul>
+        <li><a href="#" target="_blank" style="background:url(images/banner.png) center no-repeat;">&nbsp;</a></li>
+        <li><a href="#" target="_blank" style="background:url(images/banner.png) center no-repeat;">&nbsp;</a></li>
+        <li><a href="#" target="_blank" style="background:url(images/banner.png) center no-repeat;">&nbsp;</a></li>
+      </ul>
+    </div>
+    
+    <!-- 下面是前/后按钮代码，如果不需要删除即可 --> 
+    <a class="prev" href="javascript:void(0)"></a> <a class="next" href="javascript:void(0)"></a> </div>
+  <script type="text/javascript">
+		jQuery(".slideBox").slide({mainCell:".bd ul",autoPlay:true});
+		</script> 
+</div>
+
+<!--banner end--> 
+
+<!--关于我们-->
+<section class="m-block m-about">
+  <div class="inner clearfix">
+    <div class="m-title">关于我们
+      <div class="line"></div>
+    </div>
+    <div class="main">
+      <div class="desc desc1">
+        <p>愿景</p>
+        以人类健康养生为目标，使人类平均寿命100岁；</div>
+      <div class="desc desc2">
+        <p>使命</p>
+        通过量子医疗技术手段，结合中国传统健康养生术，为人类的生命健康养生服务；</div>
+      <div class="detail">
+        <div class="content left">
+          <p>荣耀世华科技股份公司是一家致力于生命大健康的高科技公司，以全球华人健康谋福社为事业宗旨，基于量子生物医学的理论，结合大数据、云计算等信息化产品，公司通过构筑“生态大健康云平台”为用户提供从检测到诊治，从治疗到康复的一体化生命周期管理解决方案，从而实现疾病筛查、大病预防、病情治疗、康复生养和健康管理的全覆盖，提高身体活力，提升生命质量。</p>
+          <p>当前，结合公司业务特点，荣耀世华积极拓展医疗健康及养老产业相关渠道，已在民营综合医院、专科医院、医疗后勤服务、医疗器械制造、养老服务等领域布局，为公司长期发展医养结合的大健康产业夯实基础，进一步提升公司的核心竞争力，最终实现公司的持续稳定发展，亦为实现“健康中国”、“幸福。中国”的美好愿景贡献一份心力。</p>
+        </div>
+        <div class="pic right"><img class="about_thumb" src="images/about.gif"/></div>
+      </div>
+    </div>
+  </div>
+</section>
+<!--关于我们 end--> 
+
+<!--资讯中心-->
+<section class="m-block m-news">
+  <div class="inner clearfix">
+    <div class="m-title">资讯中心
+      <div class="line"></div>
+    </div>
+    <div class="main clearfix">
+      <div class="item">
+        <div class="thumb"><img src="images/news_thumb1.png"/></div>
+        <p class="typename">公司新闻</p>
+        <ul>
+          <li><a href="#"><span>●</span>荣耀世华成功研发出单机版量子耳麦</a></li>
+          <li><a href="#"><span>●</span>荣耀世华成功研发出单机版量子耳麦</a></li>
+          <li><a href="#"><span>●</span>荣耀世华成功研发出单机版量子耳麦</a></li>
+        </ul>
+      </div>
+      <!--item end-->
+      <div class="item">
+        <div class="thumb"><img src="images/news_thumb2.png"/></div>
+        <p class="typename">行业新闻</p>
+        <ul>
+          <li><a href="#"><span>●</span>荣耀世华成功研发出单机版量子耳麦</a></li>
+          <li><a href="#"><span>●</span>荣耀世华成功研发出单机版量子耳麦</a></li>
+          <li><a href="#"><span>●</span>荣耀世华成功研发出单机版量子耳麦</a></li>
+        </ul>
+      </div>
+      <!--item end-->
+      <div class="item" style="margin-right:0px;">
+        <div class="thumb"><img src="images/news_thumb3.png"/></div>
+        <p class="typename">学术新闻</p>
+        <ul>
+          <li><a href="#"><span>●</span>荣耀世华成功研发出单机版量子耳麦</a></li>
+          <li><a href="#"><span>●</span>荣耀世华成功研发出单机版量子耳麦</a></li>
+          <li><a href="#"><span>●</span>荣耀世华成功研发出单机版量子耳麦</a></li>
+        </ul>
+      </div>
+      <!--item end--> 
+    </div>
+  </div>
+</section>
+<div class="m-shade"></div>
+<!--资讯中心 end--> 
+
+<!--健康产品-->
+<section class="m-block m-product">
+  <div class="inner clearfix">
+    <div class="m-title">健康产品
+      <div class="line"></div>
+    </div>
+    <div class="main clearfix">
+      <div class="item p1">
+        <div class="shade"></div>
+        <div class="thumb"><img src="images/product_thumb1.png"/></div>
+        <p class="typename">硬件采集设备</p>
+        <p class="desc">健康数据采集小桌和量子耳麦，采集身体健康数据；存入健康数据智控中心。</p>
+      </div>
+      <!--item end-->
+      <div class="item p2">
+        <div class="shade"></div>
+        <div class="thumb"><img src="images/product_thumb2.png"/></div>
+        <p class="typename">检查评估报告</p>
+        <p class="desc">通过对采集数据的分析和通过对用户的调研问卷，产出用户身体状况报告</p>
+      </div>
+      <!--item end-->
+      <div class="item p3" style="margin-right:0px;">
+        <div class="shade"></div>
+        <div class="thumb"><img src="images/product_thumb3.png"/></div>
+        <p class="typename">医疗康养用品</p>
+        <p class="desc">用户根据报告，可以选择与身体状况相应的康养产品，如康养水等。</p>
+      </div>
+      <!--item end-->
+      <div class="item p4">
+        <div class="shade"></div>
+        <div class="thumb"><img src="images/product_thumb4.png"/></div>
+        <p class="typename">健康用品</p>
+        <p class="desc">健康数据采集小桌和量子耳麦，采集身体健康数据；存入健康数据智控中心。</p>
+      </div>
+      <!--item end-->
+      <div class="item p5">
+        <div class="shade"></div>
+        <div class="thumb"><img src="images/product_thumb5.png"/></div>
+        <p class="typename">健康器械</p>
+        <p class="desc">通过对采集数据的分析和通过对用户的调研问卷，产出用户身体状况报告。</p>
+      </div>
+      <!--item end-->
+      <div class="item p6" style="margin-right:0px;">
+        <div class="shade"></div>
+        <div class="thumb"><img src="images/product_thumb6.png"/></div>
+        <p class="typename">医疗技术</p>
+        <p class="desc">用户根据报告，可以选择与身体状况相应的康养产品，如康养水等。</p>
+      </div>
+      <!--item end--> 
+    </div>
+  </div>
+</section>
+<div class="m-shade1"></div>
+<!--健康产品 end--> 
+
+<!--解决方案-->
+<section class="m-block m-solution">
+  <div class="inner clearfix">
+    <div class="m-title">服务解决方案
+      <div class="line"></div>
+    </div>
+    <div class="main clearfix">
+      <div class="item s1">
+        <p class="typename">一站式服务介绍</p>
+        <p class="desc">健康数据采集小桌和量子耳麦，采集身体健康数据；存入健康数据智控中心。</p>
+      </div>
+      <!--item end-->
+      <div class="item s2">
+        <p class="typename">服务流程图</p>
+        <p class="desc">健康数据采集小桌和量子耳麦，采集身体健康数据；存入健康数据智控中心。</p>
+      </div>
+      <!--item end-->
+      <div class="item s3">
+        <p class="typename">就医通道</p>
+        <p class="desc">健康数据采集小桌和量子耳麦，采集身体健康数据；存入健康数据智控中心。</p>
+      </div>
+      <!--item end-->
+      <div class="item s4">
+        <p class="typename">健康调养方案</p>
+        <p class="desc">健康数据采集小桌和量子耳麦，采集身体健康数据；存入健康数据智控中心。</p>
+      </div>
+      <!--item end-->
+      <div class="item s5" style="margin-right:0px;">
+        <p class="typename">健康专家组</p>
+        <p class="desc">健康数据采集小桌和量子耳麦，采集身体健康数据；存入健康数据智控中心。</p>
+      </div>
+      <!--item end--> 
+      
+    </div>
+  </div>
+</section>
+<!--解决方案 end--> 
+
+<!--footer-->
+<div class="m-footer">
+  <div class="box clearfix">
+    <div class="service left">
+      <p class="p1">4000-888-666</p>
+      <p class="p2">周一至周日 9：30—18:30<br/>
+        （仅收市话费）</p>
+      <p class="p3">在线客服</p>
+    </div>
+    <div class="ewm right clearfix"> <img class="left" src="images/ewm.gif"/>
+      <p class="left">心智辅政<span>微信公众号</span></p>
+    </div>
+  </div>
+</div>
+<!--footer end--> 
+<!--bottom-->
+<div class="m-bottom">
+  <div class="inner">
+    <div class="copyright left">Copyright @ 2011 荣耀世华 版权所有 Powered By ieSDM</div>
+    <ul class="bnav right">
+      <li><a href="#">联系我们</a></li>
+      <li>|</li>
+      <li><a href="#">客服服务</a></li>
+      <li>|</li>
+      <li><a href="#">意见反馈</a></li>
+      <li>|</li>
+      <li><a href="#">免责声明</a></li>
+      <li>|</li>
+      <li><a href="#">招贤纳士</a></li>
+      <li>|</li>
+      <li><a href="#">官方微博</a></li>
+    </ul>
+  </div>
+</div>
+<!--bottom end--> 
+
+<!--联系-->
+<link href="iconfont/iconfont.css" rel="stylesheet" type="text/css" />
+<div class="m-content">
+  <div class="item"><a><i class="iconfont">&#xe62d;</i></a></div>
+  <div class="item"><a><i class="iconfont">&#xe624;</i></a></div>
+  <div class="item"><a id="c_weixin"><i class="iconfont">&#xe66f;</i></a></div>
+  <div class="item"><a id="c_phone"><i class="iconfont">&#xe604;</i></a></div>
+  <div class="item"><a class="backtobottom"><i class="iconfont">&#xe648;</i></a></div>
+</div>
+<!--联系 end-->
+<div class="c_phone clearfix">
+  <div class="phone_l left">服务热线
+    <p>4000-888-666</p>
+  </div>
+  <div class="phone_r right">
+    <p>· 贴心的1对1咨询服务</p>
+    <p>· 快速敏捷的服务相应</p>
+    <p>· 专家团队保航服务</p>
+  </div>
+</div>
+<div class="c_weixin clearfix"> <img src="images/ewm.gif" width="192" height="192"/> </div>
+</body>
+</html>

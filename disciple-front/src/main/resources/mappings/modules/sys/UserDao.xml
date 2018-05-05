@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.sys.dao.UserDao">
+    
+	
+	<sql id="userColumns">
+	    a.id AS "id",
+		a.sn AS "sn",
+		a.username AS "username",
+		a.name AS "name",
+		a.nickname AS "nickname",
+		a.avatar AS "avatar",
+		a.birth AS "birth",
+		a.email AS "email",
+		a.gender AS "gender",
+		a.mobile AS "mobile",
+		a.birthplace_id AS "birthplace.id",
+		a.identity_card AS "identityCard",
+		a.religious_belief AS "religiousBelief",
+		a.nation AS "nation",
+		a.qq AS "qq",
+		a.residence_id AS "residence.id",
+		a.register_ip AS "registerIp",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag,
+		a.login_ip AS "userLoginAuthorization.loginIp",
+		a.login_date AS "userLoginAuthorization.loginDate",
+		a.if_enabled AS "userLoginAuthorization.ifEnabled",
+		a.im_username AS "imUsername",
+		a.education_experience AS "educationExperience",
+		a.birthplace_name AS "birthplaceName",
+		a.residence_name AS "residenceName"
+	</sql>
+	
+	<sql id="userJoins">
+	</sql>
+    
+	<!-- 根据编号获得用户 -->
+	<select id="get" resultType="User">
+		SELECT
+			<include refid="userColumns"/>
+		FROM v_sys_user a
+		<include refid="userJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<!-- 根据登录名查询用户 -->
+	<select id="getByUsername" resultType="User" parameterType="User">
+		SELECT
+			<include refid="userColumns"/>
+		FROM v_sys_user a
+		<include refid="userJoins"/>
+		WHERE a.username = #{username} AND a.del_flag = #{DEL_FLAG_NORMAL}
+	</select>
+	
+	<!-- 分页查询用户信息 -->
+	<select id="findList" resultType="User">
+		SELECT
+			<include refid="userColumns"/>
+		FROM v_sys_user a
+		<include refid="userJoins"/>
+		<if test="role != null and role.id != null and role.id != ''">
+			JOIN sys_user_role ur ON ur.user_id = a.id AND ur.role_id = #{role.id}
+		</if>
+		<where>
+		a.del_flag = #{DEL_FLAG_NORMAL}
+	 	<!-- 如果不是超级管理员，则不显示超级管理员用户 -->
+		<if test="!currentUser.admin">
+			AND a.id != '1'
+		</if>
+		<if test="username != null and username != ''">
+			AND a.username like 
+					<if test="dbName == 'oracle'">'%'||#{username}||'%'</if>
+					<if test="dbName == 'mysql'">CONCAT('%', #{username}, '%')</if>
+		</if>
+		<if test="name != null and name != ''">
+			AND a.name like 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.name
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+	<!-- 查询全部用户 -->
+	<select id="findAllList" resultType="User">
+		SELECT 
+			<include refid="userColumns"/>
+		FROM sys_user a
+		<include refid="userJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+		
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM v_sys_user a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(*)		 
+		FROM v_sys_user a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="findAllCount" resultType="long">
+		SELECT
+			COUNT(1)
+		FROM v_sys_user a
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+	</select>	
+	
+	
+	<!-- 删除用户和角色关联表数据 -->
+	<delete id="deleteUserRole">
+		DELETE FROM sys_user_role WHERE user_id = #{id}
+	</delete>
+	
+	<!-- 插入用户和角色关联表数据 -->
+	<insert id="insertUserRole">
+		INSERT INTO sys_user_role(user_id, role_id)
+		<foreach collection="roleList" item="role" separator=" union all ">
+			SELECT #{id}, #{role.id} FROM dual
+		</foreach>
+	</insert>
+
+</mapper>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>业务提醒</title>
+
+    <link rel="stylesheet" href="../css/operation.css">
+    <script type="text/javascript" src="../js/operation.js"></script>
+
+    <style>
+        body{
+            overflow: hidden;
+        }
+        .hybianji_boxcenter{
+            height:200px;
+            overflow: hidden;
+            background: #cbd0d5;
+            margin-bottom: 10px;
+        }
+        .hy_li5{
+            left:294px;
+        }
+        .hy_bianjileft1{
+            background: white;
+        }
+    </style>
+</head>
+<body>
+<div class="section">
+    <div class="op_sectiontop">
+        <span class="iconfont icon-ren"></span><span class="icon-ren1">您正在：</span><span class="icon-ren2">企业业务提醒</span>
+    </div>
+    <div class="op_sectionleft fl">
+        <ul id="treeDemo" class="ztree showIcon"></ul>
+    </div>
+    <div class="op_sectionright fl">
+        <div class="op_wrap huiyuanzhuce">
+            <div class="hy_box">
+                <p class="hy_p1"><span>业务提醒：</span><span>会员注册</span></p>
+                <p class="hy_p1"><span>提醒对象：	</span><span>注册会员</span></p>
+                <p class="hy_p1"><span>提醒方式：	</span><span class="hy_spanposi"><input class="hy_input" type="checkbox" placeholder="" checked>邮件提醒</span><span class="hy_spanposi"><input class="hy_input" type="checkbox" placeholder="">短信提醒</span></p>
+            </div>
+            <div class="hy_nav">
+                <div class="hy_li1">提醒模板：</div>
+                <div class="hy_li2 hy_li3 hy_liactive">邮件提醒</div>
+                <div class="hy_li2 hy_li4">短信提醒</div>
+                <div class="hy_li2 hy_li5">站内消息</div>
+            </div>
+            <div class="hy_navwrap">
+                <div class="hy_navbox hy_bianji1 hy_disactive">
+                    <div class="hy_bianjileft fl">
+                        <div class="hybianji_boxtop">
+                            <div class="form-inline">
+                                <div class="form-group">
+                                    <label for="exampleInputName2" class="hybianji_boxtoplabel text-justify">主题：</label>
+                                    <input type="text" class="form-control" id="exampleInputName2" placeholder="">
+                                </div>
+                                <div class="hybianji_boxcenter"></div>
+                                <div class="hy_btn2">
+                                    <button type="button" class="btn btn-info hy_btn1">邮件测试</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hy_bianjiright fl">
+                        <div class="add_temp">
+                            <div class="add_temptop">点击下列信息插入至光标处</div>
+                            <ul class="add_temp_list">
+                                <li class="add_temp_listli" data-href="<(发送时间)>"><i class="add_temp_listi fl"></i><span class="add_temp_listspan fl">发送时间</span></li>
+                                <li class="add_temp_listli" data-href="<(网站名称)>"><i class="add_temp_listi fl"></i><span class="add_temp_listspan fl">网站名称</span></li>
+                                <li class="add_temp_listli" data-href="<(带连接的网站名称)>"><i class="add_temp_listi fl"></i><span class="add_temp_listspan fl">带连接的网站名称</span></li>
+                                <li class="add_temp_listli" data-href="<(会员账号)>"><i class="add_temp_listi fl"></i><span class="add_temp_listspan fl">会员账号</span></li>
+                                <li class="add_temp_listli" data-href="<(会员姓名)>"><i class="add_temp_listi fl"></i><span class="add_temp_listspan fl">会员姓名</span></li>
+                                <li class="add_temp_listli" data-href="<(会员密码)>"><i class="add_temp_listi fl"></i><span class="add_temp_listspan fl">会员密码</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="hy_navbox hy_bianji2">
+                    <div class="hy_phonebianji fl">
+                        <div id="hy_phonetime"></div>
+                        <div class="hy_phonetextabox">
+                            <textarea name="" id="hy_phonetexta" class="form-control hy_phonetexta" rows="3" placeholder="">石豪，感谢您的注册！  您的帐号<(会员帐号)>  密码<(会员密码)></textarea>
+                        </div>
+                        <div class="hy_phonetextaboxbtm"><span class="hy_phonetextaboxbtmleft">46</span>/<span>63</span><span>字</span></div>
+                    </div>
+                    <div class="hy_bianjiright fl">
+                        <div class="add_temp">
+                            <div class="add_temptop">点击下列信息插入至光标处</div>
+                            <ul class="add_temp_list add_temp_list2">
+                                <li class="add_temp_listli" data-href="<(发送时间)>"><i class="add_temp_listi fl"></i><span class="add_temp_listspan fl">发送时间</span></li>
+                                <li class="add_temp_listli" data-href="<(网站名称)>"><i class="add_temp_listi fl"></i><span class="add_temp_listspan fl">网站名称</span></li>
+                                <li class="add_temp_listli" data-href="<(会员账号)>"><i class="add_temp_listi fl"></i><span class="add_temp_listspan fl">会员账号</span></li>
+                                <li class="add_temp_listli" data-href="<(会员姓名)>"><i class="add_temp_listi fl"></i><span class="add_temp_listspan fl">会员姓名</span></li>
+                                <li class="add_temp_listli" data-href="<(会员密码)>"><i class="add_temp_listi fl"></i><span class="add_temp_listspan fl">会员密码</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="hy_navbox hy_bianji3">
+                    <div class="hy_bianjileft hy_bianjileft1 fl">
+                        <div class="hybianji_boxtop">
+                            <div class="form-inline">
+                                <div class="form-group">
+                                    <label for="exampleInputName2" class="hybianji_boxtoplabel text-justify">主题：</label>
+                                    <input type="text" class="form-control" id="" placeholder="">
+                                </div>
+                                <div class="hybianji_boxcenter"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hy_bianjiright fl">
+                        <div class="add_temp">
+                            <div class="add_temptop">点击下列信息插入至光标处</div>
+                            <ul class="add_temp_list">
+                                <li class="add_temp_listli" data-href="<(发送时间)>"><i class="add_temp_listi fl"></i><span class="add_temp_listspan fl">发送时间</span></li>
+                                <li class="add_temp_listli" data-href="<(网站名称)>"><i class="add_temp_listi fl"></i><span class="add_temp_listspan fl">网站名称</span></li>
+                                <li class="add_temp_listli" data-href="<(网站网址)>"><i class="add_temp_listi fl"></i><span class="add_temp_listspan fl">网站网址</span></li>
+                                <li class="add_temp_listli" data-href="<(会员账号)>"><i class="add_temp_listi fl"></i><span class="add_temp_listspan fl">会员账号</span></li>
+                                <li class="add_temp_listli" data-href="<(留言人姓名)>"><i class="add_temp_listi fl"></i><span class="add_temp_listspan fl">留言人姓名</span></li>
+                                <li class="add_temp_listli" data-href="<(留言内容)>"><i class="add_temp_listi fl"></i><span class="add_temp_listspan fl">留言内容</span></li>
+                                <li class="add_temp_listli" data-href="<(留言回复内容)>"><i class="add_temp_listi fl"></i><span class="add_temp_listspan fl">留言回复内容</span></li>
+                                <li class="add_temp_listli" data-href="<(您的邮箱)>"><i class="add_temp_listi fl"></i><span class="add_temp_listspan fl">您的邮箱</span></li>
+                                <li class="add_temp_listli" data-href="<(手机号码)>"><i class="add_temp_listi fl"></i><span class="add_temp_listspan fl">手机号码</span></li>
+                                <li class="add_temp_listli" data-href="<(联系电话)>"><i class="add_temp_listi fl"></i><span class="add_temp_listspan fl">联系电话</span></li>
+                                <li class="add_temp_listli" data-href="<(公司名称)>"><i class="add_temp_listi fl"></i><span class="add_temp_listspan fl">公司名称</span></li>
+                                <li class="add_temp_listli" data-href="<(所在地区)>"><i class="add_temp_listi fl"></i><span class="add_temp_listspan fl">所在地区</span></li>
+                                <li class="add_temp_listli" data-href="<(联系地址)>"><i class="add_temp_listi fl"></i><span class="add_temp_listspan fl">联系地址</span></li>
+                                <li class="add_temp_listli" data-href="<(网址)>"><i class="add_temp_listi fl"></i><span class="add_temp_listspan fl">网址</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hy_btm">
+                <div class="hy_btn2">
+                    <button type="button" class="btn btn-info hy_btn1">保存</button>
+                    <button type="button" class="btn btn-default">恢复默认值</button>
+                    <button type="button" class="btn btn-default fr">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+
+</script>
+</html>

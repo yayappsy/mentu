@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.suggestion.dao.SuggestionSubjectDao">
+    
+	<sql id="suggestionSubjectColumns">
+		a.id AS "id",
+		a.subject_title AS "subjectTitle",
+		a.description AS "description",
+		a.is_show AS "isShow",
+		a.sort AS "sort",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="suggestionSubjectJoins">
+	</sql>
+    
+	<select id="get" resultType="SuggestionSubject">
+		SELECT 
+			<include refid="suggestionSubjectColumns"/>
+		FROM suggestion_subject a
+		<include refid="suggestionSubjectJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="SuggestionSubject">
+		SELECT 
+			<include refid="suggestionSubjectColumns"/>
+		FROM suggestion_subject a
+		<include refid="suggestionSubjectJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="SuggestionSubject">
+		SELECT 
+			<include refid="suggestionSubjectColumns"/>
+		FROM suggestion_subject a
+		<include refid="suggestionSubjectJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="subjectTitle != null and subjectTitle != ''">
+				AND a.subject_title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{subjectTitle}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{subjectTitle}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{subjectTitle},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SuggestionSubject">
+		SELECT 
+			<include refid="suggestionSubjectColumns"/>
+		FROM suggestion_subject a
+		<include refid="suggestionSubjectJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM suggestion_subject a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(*)		 
+		FROM suggestion_subject a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO suggestion_subject(
+			id,
+			subject_title,
+			description,
+			is_show,
+			sort,
+			create_date,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{subjectTitle},
+			#{description},
+			#{isShow},
+			#{sort},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE suggestion_subject SET 	
+			subject_title = #{subjectTitle},
+			description = #{description},
+			is_show = #{isShow},
+			sort = #{sort},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM suggestion_subject
+	
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteEntity">
+		UPDATE suggestion_subject SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

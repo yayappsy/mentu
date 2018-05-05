@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.consultation.dao.ConsultationDao">
+    
+	<sql id="consultationColumns">
+		a.id AS "id",
+		a.consultant_id AS "consultant.id",
+		a.consultation_type_id AS "consultationType.id",
+		a.content AS "content",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+		,ct.name AS "consultationType.name"
+		,m.nickname As "consultant.nickname"
+	</sql>
+	
+	<sql id="consultationJoins">
+	    join consultation_type ct on ct.id = a.consultation_type_id
+	    join v_member m on m.id = a.consultant_id
+	</sql>
+    
+	<select id="get" resultType="Consultation">
+		SELECT 
+			<include refid="consultationColumns"/>
+		FROM consultation a
+		<include refid="consultationJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="Consultation">
+		SELECT 
+			<include refid="consultationColumns"/>
+		FROM consultation a
+		<include refid="consultationJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="Consultation">
+		SELECT 
+			<include refid="consultationColumns"/>
+		FROM consultation a
+		<include refid="consultationJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="consultant != null and consultant.id != null and consultant.id != ''">
+				AND a.consultant_id = #{consultant.id}
+			</if>
+			<if test="consultationType != null and consultationType.id != null and consultationType.id != ''">
+				AND a.consultation_type_id = #{consultationType.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Consultation">
+		SELECT 
+			<include refid="consultationColumns"/>
+		FROM consultation a
+		<include refid="consultationJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="consultant != null and consultant.id != null and consultant.id != ''">
+				AND a.consultant_id = #{consultant.id}
+			</if>
+		</where>		
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM consultation a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(*)		 
+		FROM consultation a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO consultation(
+			id,
+			consultant_id,
+			consultation_type_id,
+			content,
+			create_date,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{consultant.id},
+			#{consultationType.id},
+			#{content},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE consultation SET 	
+			content = #{content},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM consultation
+	
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteEntity">
+		UPDATE consultation SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

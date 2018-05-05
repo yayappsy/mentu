@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.product.dao.ProductExtraDao">
+    
+	<sql id="productExtraColumns">
+		a.product_id AS "product.id",
+		a.game_id AS "game.id",
+		a.game_name AS "gameName",
+		a.vip_month AS "vipMonth",
+		a.lesson_number AS "lessonNumber",
+		a.is_forever AS "isForever",
+		a.gift AS "gift"
+	</sql>
+	
+	<sql id="productExtraJoins">
+	</sql>
+    
+	<select id="get" resultType="ProductExtra">
+		SELECT 
+			<include refid="productExtraColumns"/>
+		FROM product_extra a
+		<include refid="productExtraJoins"/>
+		WHERE a.product_id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="ProductExtra">
+		SELECT 
+			<include refid="productExtraColumns"/>
+		FROM product_extra a
+		<include refid="productExtraJoins"/>
+        <where>
+		<if test="game != null and game.id != null and game.id != ''">
+				AND a.game_id = #{game.id}
+			</if>
+			<if test="product != null and product.id != null and product.id != ''">
+				AND a.product_id = #{product.id}
+			</if>
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="ProductExtra">
+		SELECT 
+			<include refid="productExtraColumns"/>
+		FROM product_extra a
+		<include refid="productExtraJoins"/>
+		<where>
+			<if test="game != null and game.id != null and game.id != ''">
+				AND a.game_id = #{game.id}
+			</if>
+			<if test="product != null and product.id != null and product.id != ''">
+				AND a.product_id = #{product.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ProductExtra">
+		SELECT 
+			<include refid="productExtraColumns"/>
+		FROM product_extra a
+		<include refid="productExtraJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM product_extra a
+		<where>
+			
+			AND a.product_id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(*)		 
+		FROM product_extra a
+		<where>
+			
+			AND a.product_id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO product_extra(
+			product_id,
+			game_id,
+			game_name,
+			vip_month,
+			lesson_number,
+			is_forever,
+			gift
+		) VALUES (
+			#{id},
+			#{game.id},
+			#{gameName},
+			#{vipMonth},
+			#{lessonNumber},
+			#{isForever},
+			#{gift}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE product_extra SET 
+		    game_id = #{game.id},	
+		    game_name = #{gameName},
+			vip_month = #{vipMonth},
+			lesson_number = #{lessonNumber},
+			is_forever = #{isForever},
+			gift = #{gift}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM product_extra
+	
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatch">
+		DELETE FROM product_extra
+		WHERE
+			id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+	<update id="deleteEntity">
+		DELETE FROM product_extra
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatchEntity">
+		DELETE FROM product_extra
+		where
+		    id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+</mapper>

@@ -1,0 +1,49 @@
+@CHARSET "UTF-8";
+
+.btn-toolbar-custom {
+  background-color: #b2c6cd;
+  padding:8px;
+}
+.btn-toolbar-custom.pressed {
+  background-color: #d6e1e5;
+}
+.btn-toolbar-custom:hover {
+  background-color: #d6e1e5;
+}
+.btn-toolbar-custom > i {
+  color: #000;
+}
+
+.toolbar-custom {
+  background-color: #b2c6cd;
+}
+.toolbar-custom.tool-top .arrow {
+  border-color: #02baf2 transparent transparent;
+}
+.toolbar-custom.tool-bottom .arrow {
+  border-color: transparent transparent #b2c6cd;
+}
+.toolbar-custom.tool-left .arrow {
+  border-color: transparent transparent transparent #b2c6cd;
+}
+.toolbar-custom.tool-right .arrow {
+  border-color: transparent #02baf2 transparent transparent;
+}
+
+.toolbar-custom .tool-item {
+    width: 50px;
+    color:#fff;
+}
+.toolbar-custom .tool-item .text {
+    color:#fff;
+    padding-left:2px;
+}
+
+.toolbar-custom .tool-item > .fa {
+  color: white;
+}
+.toolbar-custom .tool-item.selected,
+.toolbar-custom .tool-item:hover {
+  background: #009dcd;
+  color: white;
+}

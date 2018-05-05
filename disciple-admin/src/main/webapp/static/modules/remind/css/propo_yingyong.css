@@ -1,0 +1,91 @@
+html body {
+    width: 100%;
+}
+
+.yw_bottom {
+    height: 50px;
+    line-height: 50px;
+}
+
+.yw_bottom a {
+    margin-top: 8px;
+}
+
+.yw_bottom a:nth-child(1) {
+    margin-left: 50px;
+}
+
+.yw_bottom a:nth-child(2) {
+    margin-right: 50px;
+}
+
+.yw_seltion {
+    overflow: hidden;
+    padding: 24px;
+}
+
+.yw_seltiontop {
+    line-height: 38px;
+}
+
+.yw_seltiontopbox {
+    overflow: hidden;
+}
+
+.propo_yingyongbox {
+    overflow: hidden;
+    position: relative;
+}
+
+html body .btn {
+    padding: 6px 20px;
+    height: auto;
+    line-height: 1.42857143;
+}
+
+.prese_btn1 {
+    color: #4d90cb;
+    cursor: pointer;
+    line-height: 38px;
+    margin-left: 10px;
+}
+
+hr {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 0;
+    border-top: 1px solid #eee;
+}
+
+.prese_p1 {
+    height: 40px;
+    line-height: 40px;
+    border: 1px solid #ccc;
+    padding-left: 10px;
+    margin: 10px 0;
+    background: #fafafa;
+}
+
+html body .form-control {
+    height: 38px;
+    width: 86%;
+}
+
+body .form-group {
+    overflow: hidden;
+    margin: 10px 0;
+}
+
+.form-control2 {
+    line-height: 38px;
+    margin-right: 10px;
+}
+
+.duanxin {
+    display: none;
+}
+
+.prese_p{
+    height:38px;
+    line-height: 38px;
+}

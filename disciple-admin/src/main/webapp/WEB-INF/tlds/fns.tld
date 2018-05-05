@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<taglib version="2.0" xmlns="http://java.sun.com/xml/ns/j2ee"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd">
+    
+ <description>custom functions</description>
+  <display-name>JSTL functions sys</display-name>
+  <tlib-version>1.1</tlib-version>
+  <short-name>fns</short-name>
+ <uri>http://www.itdiy.top/tags/functions</uri>
+ 
+  <function>
+    <description>获取管理路径</description>
+    <name>getAdminPath</name>
+    <function-class>com.thinkgem.javamg.common.config.Global</function-class>
+    <function-signature>java.lang.String getAdminPath()</function-signature>
+    <example>${fns:getAdminPath()}</example>
+  </function>
+  <function>
+    <description>获取网站路径</description>
+    <name>getFrontPath</name>
+    <function-class>com.thinkgem.javamg.common.config.Global</function-class>
+    <function-signature>java.lang.String getFrontPath()</function-signature>
+    <example>${fns:getFrontPath()}</example>
+  </function>
+  <function>
+    <description>获取网站URL后缀</description>
+    <name>getUrlSuffix</name>
+    <function-class>com.thinkgem.javamg.common.config.Global</function-class>
+    <function-signature>java.lang.String getUrlSuffix()</function-signature>
+    <example>${fns:getUrlSuffix()}</example>
+  </function>
+  <function>
+    <description>获取配置</description>
+    <name>getConfig</name>
+    <function-class>com.thinkgem.javamg.common.config.Global</function-class>
+    <function-signature>java.lang.String getConfig(java.lang.String)</function-signature>
+    <example>${fns:getConfig(key)}</example>
+  </function>
+  <function>
+    <description>获取常量</description>
+    <name>getConst</name>
+    <function-class>com.thinkgem.javamg.common.config.Global</function-class>
+    <function-signature>java.lang.Object getConst(java.lang.String)</function-signature>
+    <example>${fns:getConst(key)}</example>
+  </function>
+  
+  <!-- UserUtils -->
+  <function>
+    <description>获取当前用户对象</description>
+    <name>getUser</name>
+    <function-class>com.weimhc.admin.core.utils.AdminUserUtils</function-class>
+    <function-signature>com.weimhc.modules.sys.entity.User getUser()</function-signature>
+    <example>${fns:getUser()}</example>  
+  </function>
+  
+  <function>
+    <description>根据编码获取用户对象</description>
+    <name>getUserById</name>
+    <function-class>com.weimhc.admin.core.utils.AdminUserUtils</function-class>
+    <function-signature>com.weimhc.modules.sys.entity.User get(java.lang.String)</function-signature>
+    <example>${fns:getUserById(id)}</example>  
+  </function>
+  
+  <function>
+    <description>获取授权用户信息</description>
+    <name>getPrincipal</name>
+    <function-class>com.weimhc.admin.core.utils.AdminUserUtils</function-class>
+    <function-signature>com.weimhc.modules.sys.security.SystemAuthorizingRealm.Principal getPrincipal()</function-signature>
+    <example>${fns:getPrincipal()}</example>  
+  </function>
+  
+  <function>
+    <description>获取当前用户的菜单对象列表</description>
+    <name>getMenuList</name>
+    <function-class>com.weimhc.admin.core.utils.AdminUserUtils</function-class>
+    <function-signature>java.util.List getMenuList()</function-signature>
+    <example>${fns:getMenuList()}</example>  
+  </function>
+  
+  
+ 
+  
+  <function>
+    <description>获取当前用户缓存</description>
+    <name>getCache</name>
+    <function-class>com.weimhc.admin.core.utils.AdminUserUtils</function-class>
+    <function-signature>java.lang.Object getCache(java.lang.String, java.lang.Object)</function-signature>
+    <example>${fns:getCache(cacheName, defaultValue)}</example>  
+  </function>
+	
+  <!-- DictUtils -->
+  <function>
+    <description>获取字典标签</description>
+    <name>getDictLabel</name>
+    <function-class>com.weimhc.modules.sys.utils.DictUtils</function-class>
+    <function-signature>java.lang.String getDictLabel(java.lang.String, java.lang.String, java.lang.String)</function-signature>
+    <example>${fns:getDictLabel(value, type, defaultValue)}</example>  
+  </function>
+  
+  <function>
+    <description>获取字典标签(多个)</description>
+    <name>getDictLabels</name>
+    <function-class>com.weimhc.modules.sys.utils.DictUtils</function-class>
+    <function-signature>java.lang.String getDictLabels(java.lang.String, java.lang.String, java.lang.String)</function-signature>
+    <example>${fns:getDictLabels(values, type, defaultValue)}</example>  
+  </function>
+
+  <function>
+    <description>获取字典值</description>
+    <name>getDictValue</name>
+    <function-class>com.weimhc.modules.sys.utils.DictUtils</function-class>
+    <function-signature>java.lang.String getDictValue(java.lang.String, java.lang.String, java.lang.String)</function-signature>
+    <example>${fns:getDictValue(label, type, defaultValue)}</example>  
+  </function>
+  
+  <function>
+    <description>获取字典对象列表</description>
+    <name>getDictList</name>
+    <function-class>com.weimhc.modules.sys.utils.DictUtils</function-class>
+    <function-signature>java.util.List getDictList(java.lang.String)</function-signature>
+    <example>${fns:getDictList(type)}</example>  
+  </function>
+  
+  <!-- Encodes -->
+  <function>
+    <description>URL编码</description>
+    <name>urlEncode</name>
+    <function-class>com.thinkgem.javamg.common.utils.Encodes</function-class>
+    <function-signature>java.lang.String urlEncode(java.lang.String)</function-signature>
+    <example>${fns:urlEncode(part)}</example>  
+  </function>
+  <function>
+    <description>URL解码</description>
+    <name>urlDecode</name>
+    <function-class>com.thinkgem.javamg.common.utils.Encodes</function-class>
+    <function-signature>java.lang.String urlDecode(java.lang.String)</function-signature>
+    <example>${fns:urlDecode(part)}</example>  
+  </function>
+  <function>
+    <description>HTML编码</description>
+    <name>escapeHtml</name>
+    <function-class>com.thinkgem.javamg.common.utils.Encodes</function-class>
+    <function-signature>java.lang.String escapeHtml(java.lang.String)</function-signature>
+    <example>${fns:escapeHtml(html)}</example>  
+  </function>
+  <function>
+    <description>HTML解码</description>
+    <name>unescapeHtml</name>
+    <function-class>com.thinkgem.javamg.common.utils.Encodes</function-class>
+    <function-signature>java.lang.String unescapeHtml(java.lang.String)</function-signature>
+    <example>${fns:unescapeHtml(html)}</example>  
+  </function>
+  
+  <!-- StringUtils -->
+  <function>
+    <description>从后边开始截取字符串</description>
+    <name>substringAfterLast</name>
+    <function-class>org.apache.commons.lang3.StringUtils</function-class>
+    <function-signature>java.lang.String substringAfterLast(java.lang.String, java.lang.String)</function-signature>
+    <example>${fns:substringAfterLast(str,separator)}</example>  
+  </function>
+  <function>
+    <description>判断字符串是否以某某开头</description>
+    <name>startsWith</name>
+    <function-class>org.apache.commons.lang3.StringUtils</function-class>
+    <function-signature>boolean startsWith(java.lang.CharSequence, java.lang.CharSequence)</function-signature>
+    <example>${fns:startsWith(str,prefix)}</example> 
+  </function>
+  <function>
+    <description>判断字符串是否以某某结尾</description>
+    <name>endsWith</name>
+    <function-class>org.apache.commons.lang3.StringUtils</function-class>
+    <function-signature>boolean endsWith(java.lang.CharSequence, java.lang.CharSequence)</function-signature>
+    <example>${fns:endsWith(str,suffix)}</example> 
+  </function>
+  <function>
+    <description>判断字符串是否为空白</description>
+    <name>isBlank</name>
+    <function-class>org.apache.commons.lang3.StringUtils</function-class>
+    <function-signature>boolean isBlank(java.lang.CharSequence)</function-signature>
+    <example>${fns:isBlank(str)}</example> 
+  </function>
+  <function>
+    <description>判断字符串是否不为空白</description>
+    <name>isNotBlank</name>
+    <function-class>org.apache.commons.lang3.StringUtils</function-class>
+    <function-signature>boolean isNotBlank(java.lang.CharSequence)</function-signature>
+    <example>${fns:isNotBlank(str)}</example> 
+  </function>
+  <function>
+    <description>缩写字符串，超过最大宽度用“...”表示</description>
+    <name>abbr</name>
+    <function-class>com.thinkgem.javamg.common.utils.StringUtils</function-class>
+    <function-signature>java.lang.String abbr(java.lang.String, int)</function-signature>
+    <example>${fns:abbr(str,length)}</example>  
+  </function>
+  <function>
+    <description>替换掉HTML标签</description>
+    <name>replaceHtml</name>
+    <function-class>com.thinkgem.javamg.common.utils.StringUtils</function-class>
+    <function-signature>java.lang.String replaceHtml(java.lang.String)</function-signature>
+    <example>${fns:replaceHtml(html)}</example>  
+  </function>
+  <function>
+    <description>转换为JS获取对象值，生成三目运算返回结果。</description>
+    <name>jsGetVal</name>
+    <function-class>com.thinkgem.javamg.common.utils.StringUtils</function-class>
+    <function-signature>java.lang.String jsGetVal(java.lang.String)</function-signature>
+    <example>${fns:jsGetVal('row.user.id')}  返回：!row?'':!row.user?'':!row.user.id?'':row.user.id</example>  
+  </function>
+  
+  <!-- DateUtils -->
+  <function>
+    <description>获取当前日期</description>
+    <name>getDate</name>
+    <function-class>com.thinkgem.javamg.common.utils.DateUtils</function-class>
+    <function-signature>java.lang.String getDate(java.lang.String)</function-signature>
+    <example>${fns:getDate(pattern)}</example>  
+  </function>
+  <function>
+    <description>获取过去的天数</description>
+    <name>pastDays</name>
+    <function-class>com.thinkgem.javamg.common.utils.DateUtils</function-class>
+    <function-signature>long pastDays(java.util.Date)</function-signature>
+    <example>${fns:pastDays(date)}</example>  
+  </function>
+  
+  <!-- JsonMapper -->
+  <function>
+    <description>对象转换JSON字符串</description>
+    <name>toJson</name>
+    <function-class>com.thinkgem.javamg.common.mapper.JsonMapper</function-class>
+    <function-signature>java.lang.String toJsonString(java.lang.Object)</function-signature>
+    <example>${fns:toJson(object)}</example>  
+  </function>
+
+  <!-- AreaUtils -->
+  <function>
+    <description>获取中国所有省</description>
+    <name>getProvinceList</name>
+    <function-class>com.weimhc.modules.sys.utils.AreaUtils</function-class>
+    <function-signature>java.util.List getProvinceList()</function-signature>
+    <example>${fns:getProvinceList()}</example>  
+  </function>
+ 
+ <function>
+    <description>获取地区名称</description>
+    <name>getAreaName</name>
+    <function-class>com.weimhc.modules.sys.utils.AreaUtils</function-class>
+    <function-signature>java.lang.String getAreaName(java.lang.String, java.lang.String, java.lang.String)</function-signature>
+    <example>${fns:getAreaName(id, parentId, defaultValue)}</example>  
+  </function>
+  
+  <function>
+    <description>获取字典值</description>
+    <name>getAreaId</name>
+    <function-class>com.weimhc.modules.sys.utils.AreaUtils</function-class>
+    <function-signature>java.lang.String getAreaId(java.lang.String, java.lang.String, java.lang.String)</function-signature>
+    <example>${fns:getAreaId(name, parentId, defaultValue)}</example>  
+  </function>
+  
+  <function>
+    <description>获取地区对象列表</description>
+    <name>getAreaListByParent</name>
+    <function-class>com.weimhc.modules.sys.utils.AreaUtils</function-class>
+    <function-signature>java.util.List getSubAreaList(java.lang.String)</function-signature>
+    <example>${fns:getAreaListByParent(parentId)}</example>  
+  </function>
+    
+  <function>
+    <description>获取地区信息</description>
+    <name>getArea</name>
+    <function-class>com.weimhc.modules.sys.utils.AreaUtils</function-class>
+    <function-signature>com.thinkgem.javamg.modules.sys.entity.Area getArea(java.lang.String)</function-signature>
+    <example>${fns:getArea(areaId)}</example>  
+  </function>  
+  
+  <!-- 获取国际化数据 -->
+  <function>
+    <description>获取国际化值</description>
+    <name>getMessage</name>
+    <function-class>com.weimhc.framework.web.utils.MessageSourceUtils</function-class>
+    <function-signature>java.lang.String getMessageByLocaleStr(java.lang.String, java.lang.String, java.lang.Object[])</function-signature>
+    <example>${fns:getMessage(languageType, code, null)}</example>  
+  </function>
+  
+  <!-- SettingUtils -->
+  <!-- 获取配置信息 -->
+  <function>
+    <description>获取参数值</description>
+    <name>getSettingValue</name>
+    <function-class>com.weimhc.modules.base.utils.setting.SettingUtils</function-class>
+    <function-signature>java.lang.String getSettingValue(java.lang.String, java.lang.String)</function-signature>
+    <example>${fns:getSettingValue('copyright', 'site')}</example>  
+  </function>
+  
+  <function>
+    <description>获取参数标签</description>
+    <name>getSettingLabel</name>
+    <function-class>com.weimhc.modules.base.utils.setting.SettingUtils</function-class>
+    <function-signature>java.lang.String getSettingLabel(java.lang.String, java.lang.String)</function-signature>
+    <example>${fns:getSettingLabel('copyright', 'site')}</example>  
+  </function>
+  
+  
+ 
+
+   <!-- UploadUtils -->
+  <!-- 获取缩略图路径 -->
+  <function>
+    <description>获取缩略图路径</description>
+    <name>getDefaultThumbnailPath</name>
+    <function-class>com.weimhc.framework.utils.UploadUtils</function-class>
+    <function-signature>java.lang.String getThumbnailPath(java.lang.String) </function-signature>
+    <example>${fns:getThumbnailPath(imagePath)}</example>  
+  </function>
+  <function>
+    <description>获取缩略图路径</description>
+    <name>getThumbnailPath</name>
+    <function-class>com.weimhc.framework.utils.UploadUtils</function-class>
+    <function-signature>java.lang.String getThumbnailPath(java.lang.String,int,int) </function-signature>
+    <example>${fns:getThumbnailPath(imagePath,width,height)}</example>  
+  </function>
+  <function>
+    <description>获取图片访问路径</description>
+    <name>getAccessUrl</name>
+    <function-class>com.weimhc.framework.utils.UploadUtils</function-class>
+    <function-signature>java.lang.String getAccessUrl(java.lang.String) </function-signature>
+    <example>${fns:getAccessUrl(imagePath)}</example>  
+  </function>
+  
+   <function>
+    <description>获取缩略图默认访问路径</description>
+    <name>getDefaultTAccessThumbnailUrl</name>
+    <function-class>com.weimhc.framework.utils.UploadUtils</function-class>
+    <function-signature>java.lang.String getAccessThumbnailUrl(java.lang.String) </function-signature>
+    <example>${fns:getDefaultTAccessThumbnailUrl(imagePath)}</example>  
+  </function>
+  
+  <function>
+    <description>获取缩略图访问路径</description>
+    <name>getAccessThumbnailUrl</name>
+    <function-class>com.weimhc.framework.utils.UploadUtils</function-class>
+    <function-signature>java.lang.String getAccessThumbnailUrl(java.lang.String,int,int) </function-signature>
+    <example>${fns:getAccessThumbnailUrl(imagePath,width,height)}</example>  
+  </function>
+  
+    <!-- AdUtils -->
+  <!-- 获取广告位相关缓存信息 -->
+   <function>
+    <description>根据关键字获取广告</description>
+    <name>getAdPositonAll</name>
+    <function-class>com.weimhc.modules.ad.utils.AdUtils</function-class>
+    <function-signature>java.util.List findAdPositonAll()(java.lang.String)</function-signature>
+    <example>${fns:getAdPositonAll()}</example>  
+  </function>
+
+
+  <!-- 获取文章栏目相关缓存信息 -->
+   <function>
+    <description>根据父id获取文章栏目</description>
+    <name>getArticleCategory</name>
+    <function-class>com.weimhc.modules.article.utils.ArticleCategoryUtils</function-class>
+    <function-signature>java.util.List findByParentId(java.lang.String)</function-signature>
+    <example>${fns:getArticleCategory(parentId)}</example>  
+  </function>
+</taglib>
+

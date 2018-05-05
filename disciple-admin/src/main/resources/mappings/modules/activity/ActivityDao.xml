@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.activity.dao.ActivityDao">
+    
+	<sql id="activityColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.title AS "title",
+		a.detail AS "detail",
+		a.activity_type_id AS "activityType.id",
+		a.img_url AS "imgUrl",
+		a.background AS "background",
+		a.flow AS "flow",
+		a.begin_date AS "beginDate",
+		a.end_date AS "endDate",
+		a.apply_begin_date AS "applyBeginDate",
+		a.apply_end_date AS "applyEndDate",
+		a.number_limit AS "numberLimit",
+		a.url AS "url",
+		a.address AS "address",
+		a.is_recommend AS "isRecommend",
+		a.is_hot AS "isHot",
+		a.recommend_image AS "recommendImage",
+		a.sort AS "sort",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		a.remarks AS "remarks"
+	</sql>
+	
+	<sql id="activityJoins">
+	</sql>
+    
+	<select id="get" resultType="Activity">
+		SELECT 
+			<include refid="activityColumns"/>
+		FROM activity a
+		<include refid="activityJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="Activity">
+		SELECT 
+			<include refid="activityColumns"/>
+		FROM activity a
+		<include refid="activityJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="Activity">
+		SELECT 
+			<include refid="activityColumns"/>
+		FROM activity a
+		<include refid="activityJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Activity">
+		SELECT 
+			<include refid="activityColumns"/>
+		FROM activity a
+		<include refid="activityJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM activity a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(*)		 
+		FROM activity a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO activity(
+			id,
+			name,
+			title,
+			detail,
+			activity_type_id,
+			img_url,
+			background,
+			flow,
+			begin_date,
+			end_date,
+			apply_begin_date,
+			apply_end_date,
+			number_limit,
+			url,
+			address,
+			is_recommend,
+			is_hot,
+			recommend_image,
+			sort,
+			create_date,
+			update_date,
+			del_flag,
+			remarks
+		) VALUES (
+			#{id},
+			#{name},
+			#{title},
+			#{detail},
+			#{activityType.id},
+			#{imgUrl},
+			#{background},
+			#{flow},
+			#{beginDate},
+			#{endDate},
+			#{applyBeginDate},
+			#{applyEndDate},
+			#{numberLimit},
+			#{url},
+			#{address},
+			#{isRecommend},
+			#{isHot},
+			#{recommendImage},
+			#{sort},
+			#{createDate},
+			#{updateDate},
+			#{delFlag},
+			#{remarks}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE activity SET 	
+			name = #{name},
+			title = #{title},
+			detail = #{detail},
+			activity_type_id = #{activityType.id},
+			img_url = #{imgUrl},
+			background = #{background},
+			flow = #{flow},
+			begin_date = #{beginDate},
+			end_date = #{endDate},
+			apply_begin_date = #{applyBeginDate},
+			apply_end_date = #{applyEndDate},
+			number_limit = #{numberLimit},
+			url = #{url},
+			address = #{address},
+			is_recommend = #{isRecommend},
+			is_hot = #{isHot},
+			recommend_image = #{recommendImage},
+			sort = #{sort},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM activity
+	
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatch">
+		DELETE FROM activity
+		WHERE
+			id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+	<update id="deleteEntity">
+		UPDATE activity SET 
+			del_flag = #{DEL_FLAG_DELETE}
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatchEntity">
+		UPDATE activity SET 
+			del_flag = '1'
+		where
+		    id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+	<update id="updateSort">
+		UPDATE activity
+		SET sort = CASE id
+		<foreach collection="list" item="item">
+			WHEN #{item.id} THEN #{item.sort}
+		</foreach>
+		END
+		WHERE
+			id in
+			<foreach collection="list" item="item" open="(" separator="," close=")">
+			 #{item.id} 
+			</foreach>
+	</update>
+</mapper>

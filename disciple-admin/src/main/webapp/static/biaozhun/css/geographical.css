@@ -1,0 +1,32 @@
+.gp_wrap{
+    width:98%;
+    margin: 10px 1%;
+    padding:10px 1%;
+    background: white;
+}
+.pe_chartlist {
+    height: 26px;
+    width: 100%;
+    margin: 15px 0;
+}
+.gp_chart{
+    width:100%;
+    overflow: hidden;
+}
+.gp_chartst{
+    width:95%;
+    margin-left: 5%;
+    overflow: hidden;
+}
+.gp_chartleft{
+    width:40%;
+}
+.gp_chartright{
+    width:60%;
+}
+.china-map-table {
+    height: 331px;
+    width: 528px;
+    border-radius: 3px;
+    margin-left: 18%;
+}

@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.company.dao.CompanyDao">
+    
+	<sql id="companyColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.short_name AS "shortName",
+		a.main_business_description AS "mainBusinessDescription",
+		a.logo AS "logo",
+		a.area_id AS "area.id",
+		a.address AS "address",
+		a.industry_id AS "industry.id",
+		i.name AS "industry.name",
+		a.user_info_id AS "userInfo.id",
+		a.size AS "size",
+		a.site AS "site",
+		a.email AS "email",
+		a.introduce AS "introduce",
+		a.company_type AS "companyType",
+		a.organization_code AS "organizationCode",
+		a.founding_time AS "foundingTime",
+		a.capital AS "capital",
+		a.legal_name AS "legalName",
+		a.stage AS "stage",
+		a.proof_data AS "proofData",
+		a.is_pass AS "isPass",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.phone AS "phone",
+		s.name AS "area.name"
+	</sql>
+	
+	<sql id="companyJoins">
+	left join sys_area s on s.id = a.area_id
+	LEFT JOIN industry i ON i.id = a.industry_id
+	</sql>
+	
+    <select id="get" resultType="Company">
+		SELECT 
+			<include refid="companyColumns"/>
+		FROM company a
+		<include refid="companyJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Company">
+		SELECT 
+			<include refid="companyColumns"/>
+		FROM company a
+		<include refid="companyJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="shortName != null and shortName != ''">
+				AND a.short_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{shortName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{shortName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{shortName},'%')</if>
+			</if>
+			<if test="ids != null and ids != ''">
+				AND FIND_IN_SET(a.id,#{ids})
+			</if>
+			<if test="homeShow != null and homeShow != ''">
+				AND home_show = #{homeShow}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Company">
+		SELECT 
+			<include refid="companyColumns"/>
+		FROM company a
+		<include refid="companyJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		ORDER BY a.update_date DESC
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 
+			* 
+		FROM company a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(id)
+			* 
+		FROM company a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO company(
+			id,
+			name,
+			short_name,
+			main_business_description,
+			logo,
+			area_id,
+			address,
+			industry_id,
+			size,
+			site,
+			email,
+			introduce,
+			company_type,
+			organization_code,
+			founding_time,
+			capital,
+			legal_name,
+			stage,
+			proof_data,
+			create_date,
+			update_date,
+			remarks,
+			phone,
+			user_info_id,
+			del_flag
+		) VALUES (
+			#{id},
+			#{name},
+			#{shortName},
+			#{mainBusinessDescription},
+			#{logo},
+			#{area.id},
+			#{address},
+			#{industry.id},
+			#{size},
+			#{site},
+			#{email},
+			#{introduce},
+			#{companyType},
+			#{organizationCode},
+			#{foundingTime},
+			#{capital},
+			#{legalName},
+			#{stage},
+			#{proofData},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{phone},
+			#{userInfo.id},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE company SET 	
+			name = #{name},
+			short_name = #{shortName},
+			main_business_description = #{mainBusinessDescription},
+			logo = #{logo},
+			area_id = #{area.id},
+			address = #{address},
+			industry_id = #{industry.id},
+			size = #{size},
+			site = #{site},
+			email = #{email},
+			introduce = #{introduce},
+			company_type = #{companyType},
+			organization_code = #{organizationCode},
+			founding_time = #{foundingTime},
+			capital = #{capital},
+			legal_name = #{legalName},
+			stage = #{stage},
+			proof_data = #{proofData},
+			is_pass = #{isPass},
+			update_date = #{updateDate},
+			phone = #{phone},
+			user_info_id = #{userInfo.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE company SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 删除用户和角色关联表数据 -->
+	<delete id="deleteCompanyLabel">
+		DELETE FROM company_label_list WHERE company_id = #{id}
+	</delete>
+	
+	<!-- 插入用户和角色关联表数据 -->
+	<insert id="insertCompanyLabel">
+		INSERT INTO company_label_list(company_id, company_label_id)
+		<foreach collection="companyLabelList" item="companyLabel" separator=" union all ">
+			SELECT #{id}, #{companyLabel.id} FROM dual
+		</foreach>
+	</insert>
+
+	<select id="isPass" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT is_pass FROM company WHERE user_info_id = #{id}
+	</select>
+	<select id="getCompanyId" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT id FROM company WHERE user_info_id = #{id}
+	</select>
+
+	<update id="setAuditing" parameterType="java.lang.String">
+		UPDATE company SET is_pass = "2" WHERE id = #{companyId}
+	</update>
+
+	<update id="updateProofData">
+		UPDATE company SET proof_data = #{proofData} where id = #{id}
+	</update>
+	
+</mapper>

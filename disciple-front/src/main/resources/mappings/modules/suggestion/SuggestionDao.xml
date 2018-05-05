@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.suggestion.dao.SuggestionDao">
+    
+	<sql id="suggestionColumns">
+		a.id AS "id",
+		a.member_id AS "member.id",
+		a.suggestion_subject_id AS "suggestionSubject.id",
+		a.member_username AS "memberUsername",
+		a.content AS "content",
+		a.mobile AS "mobile",
+		a.images AS "images",
+		a.email As "email",
+		a.suggestion_type As "suggestionType",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		ss.subject_title AS "suggestionSubject.subjectTitle"
+	</sql>
+	
+	<sql id="suggestionJoins">
+	join suggestion_subject ss on ss.id=a.suggestion_subject_id
+	</sql>
+    
+	<select id="get" resultType="Suggestion">
+		SELECT 
+			<include refid="suggestionColumns"/>
+		FROM suggestion a
+		<include refid="suggestionJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="Suggestion">
+		SELECT 
+			<include refid="suggestionColumns"/>
+		FROM suggestion a
+		<include refid="suggestionJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="Suggestion">
+		SELECT 
+			<include refid="suggestionColumns"/>
+		FROM suggestion a
+		<include refid="suggestionJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="suggestionSubject != null and suggestionSubject.id !=null and suggestionSubject.id != ''">
+				AND a.suggestion_subject_id = #{suggestionSubject.id}
+			</if>
+			<if test="memberUsername != null and memberUsername != ''">
+				AND a.member_username LIKE 
+					<if test="dbName == 'oracle'">'%'||#{memberUsername}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{memberUsername}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{memberUsername},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Suggestion">
+		SELECT 
+			<include refid="suggestionColumns"/>
+		FROM suggestion a
+		<include refid="suggestionJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM suggestion a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(*)		 
+		FROM suggestion a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO suggestion(
+			id,
+			member_id,
+			suggestion_subject_id,
+			member_username,
+			email,
+		    suggestion_type,
+			content,
+			mobile,
+			images,
+			create_date,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{member.id},
+			#{suggestionSubject.id},
+			#{memberUsername},
+			#{email},
+		    #{suggestionType},
+			#{content},
+			#{mobile},
+			#{images},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE suggestion SET 	
+			member_id = #{member.id},
+			content = #{content},
+			mobile = #{mobile},
+			images = #{images},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM suggestion
+	
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteEntity">
+		UPDATE suggestion SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>地域分布</title>
+
+    <link rel="stylesheet" href="../css/geographical.css">
+     <link rel="stylesheet" href="../css/layout.css">
+    <script type="text/javascript" src="../js/geographical.js"></script>
+    <script src="../res/echarts/china.js"></script>
+    <script type="text/javascript" src="../js/common.js"></script>
+        <link rel="stylesheet" href="../res/time/daterangepicker-bs3.css">
+    <script type="text/javascript" src="../res/time/moment.min.js"></script>
+    <script type="text/javascript" src="../res/time/daterangepicker.js"></script>
+    <style>
+
+    </style>
+</head>
+<body>
+<div class="selectbox">
+    <div class="top">
+        <div class="sclef fl icon">地域分布(2017/04/12)<span class="glyphicon glyphicon-question-sign cs" aria-hidden="true"></span></div>
+        <div class="scrig fr">
+            <span class="icon cs"><i class="glyphicon glyphicon-heart scicon1" aria-hidden="true"></i>常用报告</span>
+            <span class="icon cs"><i class="glyphicon glyphicon-download-alt scicon1" aria-hidden="true"></i>下载</span>
+            <span class="icon cs"><i class="glyphicon glyphicon-pushpin" aria-hidden="true"></i></span>
+        </div>
+    </div>
+
+    <div class="sr_wrap1">
+        <div class="ta_div6">
+            <span class="fl ta_span2">时间：</span>
+            <ul class="tj_ul fl gp_ul1">    
+                <li data-id="today" class="tj_active searchTime">今天</li>
+                <li data-id="yesterday" class="searchTime">昨天</li>
+                <li data-id="lastweek" class="searchTime">最近7天</li>
+                <li data-id="lastmonth" class="searchTime">最近30天</li>
+            </ul>
+           
+            <span class="fr icon cs gp_btn5" style="margin-right: 20px"><span class="ta_span4"><span class="glyphicon glyphicon-chevron-up"></span></span><span class="ta_span5">收起筛选</span></span>
+        </div>
+        
+    </div>
+
+    <div class="page-tip">
+        <a class="tip-close open trackable"  href="javascript:void(0);"></a>
+        <div class="text">2012年11月1日起，受访页面新增访客数（UV）和IP数指标，11月1日前该指标数值为0。</div>
+        <span class="icon pv_icon cs"><span class="glyphicon glyphicon-remove"></span></span>
+    </div>
+
+    <div class="gp_wrap">
+        <div class="tj_navtap">
+            <ul class="nav nav-tabs tj_ultap">
+                <li role="presentation" class="active"><a href="#">按省</a></li>
+                <li role="presentation"><a href="#">按国家</a></li>
+            </ul>
+        </div>
+        <div  class="section pv_tabletop">
+            <table class="summary">
+                <tbody>
+                <tr>
+                    <td><span class="text">浏览量(PV)<a href="javascript:void(0);" data="pv_count" class="help">&nbsp;</a></span>
+                        <div id="pageViewCount" class="value summary-ellipsis" title="888">888</div>
+                    </td>
+                    <td><span class="text">访客数(UV)<a href="javascript:void(0);" data="visitor_count" class="help">&nbsp;</a></span>
+                        <div id="visitorCount" class="value summary-ellipsis" title="697">697</div>
+                    </td>
+                    <td><span class="text">IP数<a href="javascript:void(0);" data="ip_count" class="help">&nbsp;</a></span>
+                        <div id="ipCount" class="value summary-ellipsis" title="654">654</div>
+                    </td>
+                    <td><span class="text">跳出率<a href="javascript:void(0);" data="bounce_ratio" class="help">&nbsp;</a></span>
+                        <div id="bounceRate" class="value summary-ellipsis" title="92.1%">92.1%</div>
+                    </td>
+                    <td class="last"><span class="text">平均访问时长<a href="javascript:void(0);" data="avg_visit_time" class="help">&nbsp;</a></span>
+                        <div id="averageAccessTime" class="value summary-ellipsis" title="00:03:16">00:03:16</div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="gp_chart">
+            <div class="pe_chartlist">
+                <span class="fl span_gao ta_riqi"></span><div class="btn-group fl">
+                <button type="button" class="btn btn-default btn_gao">2017/04/12</button>
+                <button type="button" class="btn btn-default dropdown-toggle btn_gao1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <div class="col-lg-6 tj_div6">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="请输入关键词">
+                                <span class="input-group-btn tj_span1">
+                                     <button class="btn btn-default vs_btn4" type="button"><span class="glyphicon glyphicon-zoom-in"></span></button>
+                                </span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class=""><a href="#">全部</a></li>
+                    <li><a href="#">全国</a></li>
+                    <li><a href="#">省自治区</a></li>
+                    <li><a href="#">其它</a></li>
+                </ul>
+            </div>
+            </div>
+            <div class="gp_chartst">
+                <div class="gp_chartleft fl">
+                    <div id="chart_gpmap" style="height:330px;"></div>
+                </div>
+                <div class="gp_chartright fl">
+                    <div id="china-map-table" class="china-map-table l" style="border: 1px solid rgb(222, 222, 222);">
+                        <table class="table table-layout-03" style="width: 100%;">
+                            <thead>
+                            <tr class="group-item" >
+                                <td class="number-col"   colspan="1" rowspan="1" style="width: 25px">
+                                    <div class="td-content"></div>
+                                </td>
+                                <td class="text-left" colspan="1" style="width: 80px">
+                                    <div class="td-content">省份</div>
+                                </td>
+                                <td class="text-right url" colspan="1" style="width: 260px">
+                                    <div class="td-content">浏览量(PV)</div>
+                                </td>
+                                <td class="text-right ratio" style="width: 80px">
+                                    <div class="td-content">占比</div>
+                                </td>
+                            </tr>
+                            </thead>
+                        </table>
+                        <div class="constent-table hm-scroll" style="overflow: scroll;height: 330px;">
+                            <table class="table table-layout-03">
+                                <tbody id="visitDistrict">
+                                
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="chartline1 chartline cs">
+                <span class="icon spanchart"><span class="glyphicon glyphicon-chevron-up"></span></span>
+            </div>
+            <div class="vs_div9 pv_div1">
+                <span class="fl span_gao ta_riqi">展开内容：</span><div class="btn-group fl">
+                <button type="button" class="btn btn-default btn_gao">全部</button>
+                <button type="button" class="btn btn-default dropdown-toggle btn_gao1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="#">按地级市</a></li>
+                    <li><a href="#">按网络设备商</a></li>
+                </ul>
+            </div>
+            </div>
+            <div id="table pv_tabletop">
+                <table class="table table-layout-02">
+                    <thead>
+                    <tr class="group-title" >
+                        <td class="empty-col"  colspan="1" rowspan="2">
+                            <div class="td-content">&nbsp;</div>
+                        </td>
+                        <td class="no-expand-col"  colspan="1" rowspan="2">
+                            <div class="td-content">&nbsp;</div>
+                        </td>
+                        <td class="number-col"  colspan="1" rowspan="2">
+                            <div class="td-content">&nbsp;</div>
+                        </td>
+                        <td class="table-index" data="visit_district_title" id="visit_district_title" colspan="1" rowspan="2">
+                            <div class="td-content">地域</div>
+                        </td>
+                        <td class="no-operate-col"  colspan="" rowspan="2">
+                            <div class="td-content">&nbsp;</div>
+                        </td>
+                        <td class="group-name2 group" data="2" id="2" colspan="3" rowspan="">
+                            <div class="td-content">网站基础指标</div>
+                        </td>
+                        <td class="group-name3 group" data="3" id="3" colspan="2" rowspan="">
+                            <div class="td-content">流量质量指标</div>
+                        </td>
+                        <td class="empty-col last"  colspan="" rowspan="">
+                            <div class="td-content">&nbsp;</div>
+                        </td>
+                    </tr>
+                    <tr class="group-item" >
+                        <td class="number sortable desc group" data="pv_count" id="pv_count" colspan="" rowspan="">
+                            <div class="td-content">浏览量(PV)</div>
+                        </td>
+                        <td class="number sortable" data="visitor_count" id="visitor_count" colspan="" rowspan="">
+                            <div class="td-content">访客数(UV)</div>
+                        </td>
+                        <td class="number sortable" data="ip_count" id="ip_count" colspan="" rowspan="">
+                            <div class="td-content">IP数</div>
+                        </td>
+                        <td class="ratio sortable group" data="bounce_ratio" id="bounce_ratio" colspan="" rowspan="">
+                            <div class="td-content">跳出率</div>
+                        </td>
+                        <td class="time sortable" data="avg_visit_time" id="avg_visit_time" colspan="" rowspan="">
+                            <div class="td-content">平均访问时长</div>
+                        </td>
+                        <td class="empty-col last"  colspan="" rowspan="">
+                            <div class="td-content">&nbsp;</div>
+                        </td>
+                    </tr>
+                    </thead>
+                    <tbody id="visitList">
+                   
+                    </tbody>
+                    <tfoot id="totalVisit">
+                   
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

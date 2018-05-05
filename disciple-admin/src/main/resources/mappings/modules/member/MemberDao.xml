@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.member.dao.MemberDao">
+    
+	<sql id="memberColumns">
+		a.id AS "id",
+		a.sn AS "sn",
+		a.username AS "username",
+		a.avatar AS "avatar",
+		a.birth AS "birth",
+		a.email AS "email",
+		a.gender AS "gender",
+		a.mobile AS "mobile",
+		a.name AS "name",
+		a.nickname AS "nickname",
+		a.phone AS "phone",
+		a.register_ip AS "registerIp",
+		a.identity_card AS "identityCard",
+		a.birthplace_id AS "birthplace.id",
+		a.residence_id AS "residence.id",
+		a.nation AS "nation.id",
+		a.religious_belief AS "religiousBelief.id",
+		a.`education_id` AS "education.id",
+		a.qq AS "qq",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.business_system AS "userLoginAuthorization.businessSystem",
+		a.if_enabled AS "userLoginAuthorization.ifEnabled",
+		a.if_locked AS "userLoginAuthorization.ifLocked",
+		a.locked_date AS "userLoginAuthorization.lockedDate",
+		a.login_date AS "userLoginAuthorization.loginDate",
+		a.login_num AS "userLoginAuthorization.loginNum",
+		a.login_failure_count AS "userLoginAuthorization.loginFailureCount",
+		a.login_ip AS "userLoginAuthorization.loginIp",
+		a.im_username AS "imUsername",
+		a.education_experience AS "educationExperience",
+		a.birthplace_name AS "birthplaceName",
+		a.residence_name AS "residenceName"
+
+	</sql>
+	
+	
+	<sql id="memberJoins">
+   		left join user_corp_info uci on uci.user_info_id = a.id
+   		
+	</sql>
+    
+	<select id="get" resultType="Member">
+		SELECT 
+			<include refid="memberColumns"/>
+		FROM v_member a
+		<include refid="memberJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="Member">
+		SELECT 
+			<include refid="memberColumns"/>
+		FROM v_member a
+		<include refid="memberJoins"/>
+        <where>
+            <if test="id != null and id != ''">
+			   and a.id = #{id}
+			</if>
+            <if test="username != null and username != ''">
+			   and a.username = #{username}
+			</if>
+            <if test="email != null and email != ''">
+			   and a.email = #{email}
+			</if>
+            <if test="mobile != null and mobile != ''">
+			   and a.mobile = #{mobile}
+			</if>
+            <if test="sn != null and sn != ''">
+			   and a.sn = #{sn}
+			</if>
+			
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="Member">
+		SELECT 
+			<include refid="memberColumns"/>
+		FROM v_member a
+		<include refid="memberJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="username != null and username != ''">
+				AND a.username = #{username}
+			</if>
+			<if test="email != null and email != ''">
+				AND a.email = #{email}
+			</if>
+			<if test="nickname != null and nickname != ''">
+				AND a.nickname LIKE 
+					<if test="dbName == 'oracle'">'%'||#{nickname}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{nickname}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{nickname},'%')</if>
+			</if>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Member">
+		SELECT 
+			<include refid="memberColumns"/>
+		FROM v_member a
+		<include refid="memberJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	
+	<select id="exists" resultType="boolean">
+		SELECT 
+			* 
+		FROM v_member a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(id)
+		FROM v_member a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="usernameExists" resultType="boolean">
+		SELECT count(id)
+		FROM v_member a
+		<where>
+			a.username = #{username}
+		</where>				
+	</select>	
+	
+	<select id="emailExists" resultType="boolean">
+		SELECT count(id)
+		FROM v_member a
+		<where>
+			a.email = #{email}
+		</where>				
+	</select>
+	
+	<select id="mobileExists" resultType="boolean">
+		SELECT count(id)
+		FROM v_member a
+		<where>
+			a.mobile = #{mobile}
+		</where>				
+	</select>
+	
+	<select id="snExists" resultType="boolean">
+		SELECT count(id)
+		FROM v_member a
+		<where>
+			a.sn = #{sn}
+		</where>				
+	</select>
+			
+</mapper>

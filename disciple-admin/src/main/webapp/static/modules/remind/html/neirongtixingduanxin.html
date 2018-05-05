@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>短信内容提醒模板</title>
+    <link rel="stylesheet" href="../css/layout.css">
+    <script src="../res/jquery/jquery-3.1.1.js"></script>
+    <script src="../res/layer/layer.js"></script>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script type="text/javascript" src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <style>
+        .back_img {
+            height: 510px;
+            background: url(../css/img/MSMEditTem-01.png) 0 0 no-repeat;
+            overflow: hidden;
+            width: 250px;
+            float: left;
+            margin: 0 20px;
+        }
+
+        .back_imgbox {
+            width: 202px;
+            height: 310px;
+            margin: 90px 0 0 19px;
+        }
+
+        .yl_box {
+            float: left;
+            width: 150px;
+            height: 200px;
+            border: 1px solid #ccc;
+            margin-top: 100px;
+            display: none;
+        }
+
+        .yl_boxul {
+            height: 160px;
+            overflow-x: hidden;
+            overflow-y: scroll;
+            width: 150px;
+            padding: 0;
+        }
+
+        .yl_boxul li {
+            list-style: none;
+            cursor: pointer;
+            text-align: left;
+            line-height: 27px;
+            overflow: hidden;
+        }
+
+        .yl_boxul li span {
+            float: left;
+        }
+
+        .yl_top {
+            font-size: 12px;
+            line-height: 28px;
+            text-align: center;
+            background: #f2f2f2;;
+        }
+
+        .addicon {
+            font-size: 20px;
+            color: #999;
+            margin: 0 4px;
+            line-height: 24px;
+        }
+
+        .text_over {
+            overflow: hidden;
+            width: 100px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        #textarea {
+            width: 203px;
+            height: 309px;
+        }
+
+        .back_btm {
+            width: 203px;
+            height: 27px;
+            margin: 0 0 0 19px;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+<div class="back_img">
+    <div class="back_imgbox">
+        <textarea name="" id="textarea">【新增意向】（<(意向单号)>），<(意向说明前20汉字)>，联系信息：<(企业名称)>、<(客户姓名)> <(客户称谓)>、手机<(客户手机)>、固话<(客户固话)>、邮箱<(客户邮箱)>。</textarea>
+    </div>
+    <div class="back_btm">
+        约<strong class="number"></strong>/<span>140</span>字 <strong class="number1">2</strong>条
+    </div>
+</div>
+<div class="yl_box">
+    <div class="yl_top">点击下列信息插入光标处</div>
+    <ul class="yl_boxul">
+        <li data-href="<(意向单号)>"><span class="addicon">+</span><span class="text_over">意向单号</span></li>
+        <li data-href="<(意向说明前20汉字)>"><span class="addicon">+</span><span class="text_over">意向说明前20汉字</span></li>
+        <li data-href="<(客户姓名)>"><span class="addicon">+</span><span class="text_over">客户姓名</span></li>
+        <li data-href="<(客户称谓)>"><span class="addicon">+</span><span class="text_over">客户称谓</span></li>
+        <li data-href="<(客户手机)>"><span class="addicon">+</span><span class="text_over">客户手机</span></li>
+        <li data-href="<(客户邮箱)>"><span class="addicon">+</span><span class="text_over">客户邮箱</span></li>
+        <li data-href="<(客户邮箱)>"><span class="addicon">+</span><span class="text_over">客户邮箱</span></li>
+        <li data-href="<(客户邮箱)>"><span class="addicon">+</span><span class="text_over">客户邮箱</span></li>
+        <li data-href="<(客户邮箱)>"><span class="addicon">+</span><span class="text_over">客户邮箱</span></li>
+        <li data-href="<(客户邮箱)>"><span class="addicon">+</span><span class="text_over">客户邮箱</span></li>
+        <li data-href="<(客户邮箱)>"><span class="addicon">+</span><span class="text_over">客户邮箱</span></li>
+    </ul>
+</div>
+<script>
+    var textarea = $("#textarea");
+    textarea.focus(function () {
+        $(".yl_box").show();
+    });
+    length();
+    function length() {
+        var length = textarea.val().split("").length;
+        $(".number").html(length);
+        if (length > 140) {
+            $(".number1").html(Math.ceil(length / 140));
+        } else {
+            $(".number1").html(1);
+        }
+    }
+    document.getElementById("textarea").oninput = function () {
+        length()
+    };
+    $(".yl_boxul").on("click", "li", function () {
+        textarea.append($(this).attr("data-href"));
+        length();
+    })
+</script>
+</body>
+</html>

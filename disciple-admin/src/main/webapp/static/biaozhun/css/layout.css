@@ -1,0 +1,205 @@
+.sr_wrap1{
+    width:100%;
+    background: white;
+    margin-top: 20px;
+    padding:10px 0;
+}
+.se_wrap1{
+    width:100%;
+    background: white;
+    margin-top: 20px;
+    padding:10px 0;
+}
+.scp4 span{
+    color: #48cb6d;
+}
+.scp5 span{
+    color: #51a8f9;
+}
+.table-layout-02 td {
+    text-indent: 2em;
+    border: 1px solid #ededef;
+    height: 39px;
+    line-height: 39px;
+    padding-bottom: 0;
+    color: #414448;
+}
+.sr_btn5{
+    margin-right: 20px;
+}
+.pagination>li>a, .pagination>li>span {
+    position: relative;
+    float: left;
+    padding: 2px 12px;
+    margin-left: -1px;
+    line-height: 1.42857143;
+    color: #337ab7;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+
+.ta_span2{
+    height: 24px;
+    line-height: 24px;
+    margin-left: 20px;
+}
+.ta_riqi{
+    margin-left: 20px;
+}
+.checkbox{
+    margin:2px 0;
+    margin-left: 20px;
+}
+
+
+/*访客*/
+.ta_div6{
+    height:36px;
+    width:100%;
+}
+.ta_div1{
+    height:26px;
+    width:100%;
+}
+table.summary tr td div.value {
+    margin-top: 20px;
+    font-size: 20px;
+    color: #121315;
+}
+table.summary tr td {
+    text-align: left;
+    border-right: 1px solid #f0f0f0;
+    padding: 0 20px;
+}
+/*表格相关*/
+.checkbox+.checkbox, .radio+.radio {
+    margin-top: 2px;
+}
+.table thead {
+    background-color: #f4f4f4;
+}
+.table .group {
+    border-left: 1px solid #f0f0f0;
+}
+.table thead .group {
+    border-left: 1px solid #dedede;
+}
+table.summary tr td.last {
+    border-right: none;
+}
+
+
+
+/*灰色搜索*/
+.form-control{
+    height:26px;
+    padding:0;
+}
+.vs_btn4{
+    height:26px;
+    padding:0;
+}
+.vs_ul1 li{
+    float: left;
+    padding:0 12px;
+    height:24px ;
+    line-height: 24px;
+    border: 1px solid #e1e3e4;
+    border-right: none;
+    cursor: pointer;
+    margin:0;
+}
+.glyphicon-chevron-up{
+    color: #4aa6fc;
+}
+.vs_div9{
+    overflow: hidden;
+    margin: 10px 0;
+    padding:10px 0;
+    background: #f9f9f9;
+}
+.vs_input1{
+    color: #555;
+    border-radius: 2px;
+    margin-left: 3px;
+    padding-left:5px;
+}
+.vs_form1{
+    margin-left: 20px;
+}
+.vs_btn6{
+    padding:2px 12px;
+    margin-left: 20px;
+}
+.pagination>li>a, .pagination>li>span {
+    position: relative;
+    float: left;
+    padding: 2px 12px;
+    margin-left: -1px;
+    line-height: 1.42857143;
+    color: #337ab7;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+
+/*黄色提示*/
+.page-tip{
+    width:98%;
+    margin: 10px 1%;
+    padding:10px 1%;
+    background: #fffce1;
+    overflow: hidden;
+    position: relative;
+}
+.pv_icon{
+    position: absolute;
+    right:20px;
+    top:10px;
+}
+
+/*小表格部分*/
+.pv_wrap2{
+    width:98%;
+    margin: 10px 1%;
+    padding:10px 1%;
+    background: white;
+}
+.pv_tabletop{
+    width:100%;
+}
+.pv_tabletop table{
+    width:100%;
+    margin: 15px 0;
+}
+table.summary tr td div.value {
+    margin-top: 10px;
+}
+
+.chartline{
+    height: 28px;
+    text-align: center;
+    border-top: 1px solid #f0f0f0;
+}
+.sclef{
+    font-weight: bold;
+}
+
+    /*时间选择*/
+.timechange{
+    width:94px;
+    float: left;
+    margin-left: 20px;
+    border-radius: 2px;
+    padding-left: 3px;
+}
+.pe_wrap2{
+    width:98%;
+    margin: 10px 1%;
+    padding:10px 1%;
+    background: white;
+}
+.section{
+    margin: 15px 0;
+}

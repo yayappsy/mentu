@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.remind.dao.RemindTemplateDao">
+    
+	<sql id="remindTemplateColumns">
+		a.id AS "id",
+		a.remind_id AS "remind.id",
+		a.remind_way_id AS "remindWay.id",
+		a.addressee AS "addressee",
+		a.display_title AS "displayTitle",
+		a.actual_title AS "actualTitle",
+		a.display_content AS "displayContent",
+		a.actual_content AS "actualContent",
+		a.if_enabled AS "ifEnabled",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+		,rw.name As "remindWay.name"
+		,rw.max_length As "remindWay.maxLength"
+		,re.target_type AS "remind.targetType"
+		,re.name AS "remind.name"
+		,re.business_action AS "remind.businessAction"
+	</sql>
+	
+	<sql id="remindTemplateJoins">
+	   inner join remind re on re.id = a.remind_id
+	   inner join remind_way rw on rw.id = remind_way_id
+	</sql>
+    
+	<select id="get" resultType="RemindTemplate">
+		SELECT 
+			<include refid="remindTemplateColumns"/>
+		FROM remind_template a
+		<include refid="remindTemplateJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="RemindTemplate">
+		SELECT 
+			<include refid="remindTemplateColumns"/>
+		FROM remind_template a
+		<include refid="remindTemplateJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="RemindTemplate">
+		SELECT 
+			<include refid="remindTemplateColumns"/>
+		FROM remind_template a
+		<include refid="remindTemplateJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="remind != null and remind.id != null and remind.id != ''">
+			  and  a.remind_id = #{remind.id}
+			</if>
+			<if test="remind != null and remind.businessAction != null ">
+			  and  re.business_action = #{remind.businessAction}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="RemindTemplate">
+		SELECT 
+			<include refid="remindTemplateColumns"/>
+		FROM remind_template a
+		<include refid="remindTemplateJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="remind != null and remind.id != null and remind.id != ''">
+			  and  a.remind_id = #{remind.id}
+			</if>
+			<if test="remind != null and remind.businessAction != null ">
+			  and  re.business_action = #{remind.businessAction}
+			</if>
+		</where>		
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.remind_way_id 
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM remind_template a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(*)		 
+		FROM remind_template a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT ignore INTO remind_template(
+			id,
+			remind_id,
+			remind_way_id,
+			create_date,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{remind.id},
+			#{remindWay.id},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE remind_template SET 	
+			addressee = #{addressee},
+			if_enabled = #{ifEnabled},
+			display_title = #{displayTitle},
+			actual_title = #{actualTitle},
+			display_content = #{displayContent},
+			actual_content = #{actualContent},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateRemindContent">
+		UPDATE remind_template SET 	
+			display_title = #{displayTitle},
+			actual_title = #{actualTitle},
+			display_content = #{displayContent},
+			actual_content = #{actualContent}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM remind_template
+	
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatch">
+		DELETE FROM remind_template
+		WHERE
+			id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+	<update id="deleteEntity">
+		UPDATE remind_template SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatchEntity">
+		UPDATE remind_template SET 
+			del_flag = '1'
+		where
+		    id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+</mapper>

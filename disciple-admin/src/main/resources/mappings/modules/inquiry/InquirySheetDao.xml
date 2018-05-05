@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.inquiry.dao.InquirySheetDao">
+    
+	<sql id="inquirySheetColumns">
+		a.id AS "id",
+		a.sn AS "sn",
+		a.name AS "name",
+		a.member_id AS "member.id",
+		a.member_nickname AS "memberNickname",
+		a.is_member AS "isMember",
+		a.email AS "email",
+		a.phone AS "phone",
+		a.mobile AS "mobile",
+		a.fax_number AS "faxNumber",
+		a.detailed_address AS "detailedAddress",
+		a.zipcode AS "zipcode",
+		a.detail AS "detail",
+		a.is_accept_email AS "isAcceptEmail",
+		a.is_accept_sms AS "isAcceptSms",
+		a.status AS "status",
+		a.source AS "source",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="inquirySheetJoins">
+	</sql>
+    
+	<select id="get" resultType="InquirySheet">
+		SELECT 
+			<include refid="inquirySheetColumns"/>
+		FROM inquiry_sheet a
+		<include refid="inquirySheetJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="InquirySheet">
+		SELECT 
+			<include refid="inquirySheetColumns"/>
+		FROM inquiry_sheet a
+		<include refid="inquirySheetJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="InquirySheet">
+		SELECT 
+			<include refid="inquirySheetColumns"/>
+		FROM inquiry_sheet a
+		<include refid="inquirySheetJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="InquirySheet">
+		SELECT 
+			<include refid="inquirySheetColumns"/>
+		FROM inquiry_sheet a
+		<include refid="inquirySheetJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM inquiry_sheet a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(*)		 
+		FROM inquiry_sheet a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO inquiry_sheet(
+			id,
+			sn,
+			name,
+			member_id,
+			member_nickname,
+			is_member,
+			email,
+			phone,
+			mobile,
+			fax_number,
+			detailed_address,
+			zipcode,
+			detail,
+			is_accept_email,
+			is_accept_sms,
+			status,
+			source,
+			create_date,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{sn},
+			#{name},
+			#{member.id},
+			#{memberNickname},
+			#{isMember},
+			#{email},
+			#{phone},
+			#{mobile},
+			#{faxNumber},
+			#{detailedAddress},
+			#{zipcode},
+			#{detail},
+			#{isAcceptEmail},
+			#{isAcceptSms},
+			#{status},
+			#{source},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE inquiry_sheet SET 	
+			name = #{name},
+			member_id = #{member.id},
+			member_nickname = #{memberNickname},
+			is_member = #{isMember},
+			email = #{email},
+			phone = #{phone}, 
+			mobile = #{mobile},
+			fax_number = #{faxNumber},
+			detailed_address = #{detailedAddress},
+			zipcode = #{zipcode},
+			detail = #{detail},
+			is_accept_email = #{isAcceptEmail},
+			is_accept_sms = #{isAcceptSms},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM inquiry_sheet
+	
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatch">
+		DELETE FROM inquiry_sheet
+		WHERE
+			id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+	<update id="updateStatus">
+		UPDATE inquiry_sheet SET 
+			status = #{status},
+			update_date = #{updateDate}
+		WHERE id = #{id} 
+	</update>
+	
+	<update id="deleteEntity">
+		DELETE FROM inquiry_sheet
+	    WHERE inquiry_sheet_id = #{id}
+	</update>
+	
+	<update id="deleteBatchEntity">
+		UPDATE inquiry_sheet SET 
+			del_flag = '1'
+		where
+		    id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+</mapper>

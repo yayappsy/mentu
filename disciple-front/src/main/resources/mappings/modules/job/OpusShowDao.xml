@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.job.dao.OpusShowDao">
+    
+	<sql id="opusShowColumns">
+		a.id AS "id",
+		a.resume_id AS "resumeId",
+		a.member_id AS "memberId",
+		a.url AS "url",
+		a.`explain` AS "explain",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="opusShowJoins">
+	</sql>
+    
+	<select id="get" resultType="OpusShow">
+		SELECT 
+			<include refid="opusShowColumns"/>
+		FROM opus_show a
+		<include refid="opusShowJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="OpusShow">
+		SELECT 
+			<include refid="opusShowColumns"/>
+		FROM opus_show a
+		<include refid="opusShowJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="OpusShow">
+		SELECT 
+			<include refid="opusShowColumns"/>
+		FROM opus_show a
+		<include refid="opusShowJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="resumeId != null and resumeId != ''">
+				AND a.resume_id = #{resumeId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="OpusShow">
+		SELECT 
+			<include refid="opusShowColumns"/>
+		FROM opus_show a
+		<include refid="opusShowJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="resumeId != null and resumeId != ''">
+				AND a.resume_id = #{resumeId}
+			</if>
+		</where>		
+		ORDER BY a.update_date DESC
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM opus_show a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT 	count(a.id) 	 
+		FROM opus_show a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO opus_show(
+			id,
+			resume_id,
+			member_id,
+			url,
+			`explain`,
+			create_date,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{resumeId},
+			#{memberId},
+			#{url},
+			#{explain},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<insert id="insertOrUpdate" >
+		<!-- 查看是否存,如果存在及更新，否则插入 -->
+	    <selectKey keyProperty="sqlMap.count" order="BEFORE" resultType="int">  
+	        select count(id) as num from opus_show where id = #{id}
+	    </selectKey>  
+	    <if test="sqlMap.count > 0">  
+			UPDATE opus_show SET 	
+								resume_id = #{resumeId},
+				member_id = #{memberId},
+				url = #{url},
+				`explain` = #{explain},
+				update_date = #{updateDate},
+				remarks = #{remarks}
+			WHERE id = #{id}
+   		 </if> 
+   		 <if test="sqlMap.count == 0">  
+			INSERT INTO opus_show(
+											id,
+						resume_id,
+						member_id,
+						url,
+						`explain`,
+						create_date,
+						update_date,
+						remarks,
+						del_flag
+					) VALUES (
+											#{id},
+						#{resumeId},
+						#{memberId},
+						#{url},
+						#{explain},
+						#{createDate},
+						#{updateDate},
+						#{remarks},
+						#{delFlag}
+					)
+		</if> 
+	</insert>
+	
+	<update id="update">
+		UPDATE opus_show SET 	
+			resume_id = #{resumeId},
+			member_id = #{memberId},
+			url = #{url},
+			`explain` = #{explain},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM opus_show
+	
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatch">
+		DELETE FROM opus_show
+		WHERE
+			id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+	<update id="deleteEntity">
+		UPDATE opus_show SET 
+			del_flag = #{DEL_FLAG_DELETE}
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatchEntity">
+		UPDATE opus_show SET 
+			del_flag = '1'
+		where
+		    id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+</mapper>

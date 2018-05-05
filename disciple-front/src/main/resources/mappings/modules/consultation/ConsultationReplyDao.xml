@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.consultation.dao.ConsultationReplyDao">
+    
+    <resultMap id="consultationReplyResult" type="ConsultationReply">
+        <id property="id" column="id" />
+		<result property="consultation.id" column="consultation.id" />
+		<result property="consultation.content" column="consultation.content" />
+		<result property="consultation.consultationType.id" column="consultation.consultationType.id" />
+		<result property="replier.id" column="replier.id" />
+		<result property="replier.name" column="replier.name" />
+		<result property="replier.avatar" column="replier.avatar" />
+		<result property="content" column="content" />
+		<result property="suggest" column="suggest" />
+		<result property="replyType" column="replyType" />
+		<collection property="replys" ofType="ConsultationReply">
+			<id property="id" column="menuList.id" />
+		</collection>
+	</resultMap>
+	
+	<sql id="consultationReplyColumns">
+		a.id AS "id",
+		a.consultation_id AS "consultation.id",
+		a.replier_id AS "replier.id",
+		m.name AS "replier.name",
+		m.avatar AS "replier.avatar",
+		a.content AS "content",
+		a.suggest AS "suggest",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.parent_id As "parent.id",
+		a.reply_type As "replyType",
+		a.del_flag AS "delFlag"
+		<!-- ,c.content AS "consultation.content"
+		,c.consultation_type_id AS "consultation.consultationType.id"
+		,c.consultant_id AS "consultation.consultant.id" -->
+	</sql>
+	
+	<sql id="consultationReplyJoins">
+	<!-- join consultation c on c.id=a.consultation_id -->
+	join v_member m on m.id=a.replier_id
+	</sql>
+    
+	<select id="get" resultType="ConsultationReply">
+		SELECT 
+			<include refid="consultationReplyColumns"/>
+		FROM consultation_reply a
+		<include refid="consultationReplyJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="ConsultationReply">
+		SELECT 
+			<include refid="consultationReplyColumns"/>
+		FROM consultation_reply a
+		<include refid="consultationReplyJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="ConsultationReply">
+		SELECT 
+			<include refid="consultationReplyColumns"/>
+		FROM consultation_reply a
+		<include refid="consultationReplyJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="consultation != null and consultation.id !=null and consultation.id != ''">
+				AND a.consultation_id = #{consultation.id} 
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ConsultationReply">
+		SELECT 
+			<include refid="consultationReplyColumns"/>
+		FROM consultation_reply a
+		<include refid="consultationReplyJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="parent != null and parent.id !=null and parent.id != ''">
+				AND a.parent_id = #{parent.id} 
+			</if>
+			<if test="replyType != null">
+				AND a.reply_type = #{replyType} 
+			</if>
+			<if test="consultation != null and consultation.id !=null and consultation.id != ''">
+				AND a.consultation_id = #{consultation.id} 
+			</if>
+		</where>		
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date asc
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(*) 
+		FROM consultation_reply a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(*)		 
+		FROM consultation_reply a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO consultation_reply(
+			id,
+			consultation_id,
+			replier_id,
+			parent_id,
+		    reply_type,
+			content,
+			suggest,
+			create_date,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{consultation.id},
+			#{replier.id},
+			#{parent.id},
+			#{replyType},
+			#{content},
+			#{suggest},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE consultation_reply SET 	
+			content = #{content},
+			suggest = #{suggest},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM consultation_reply
+	
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteEntity">
+		UPDATE consultation_reply SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

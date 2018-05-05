@@ -1,0 +1,79 @@
+.m-banner{ width:100%; height:360px; background:url(../images/single_banner.png) center no-repeat;}
+
+.m-main{ width:1198px; margin:0 auto; border:1px solid #F2F2F2;}
+
+.s_name{ color:#349cd1; font-size:24px; text-align:center; height:90px; line-height:90px; background:#f5f5f5;}
+
+/*负责声明*/
+.s_box1{ padding:20px; line-height:30px; color:#595757;}
+.s_box1 .box{ margin-bottom:25px; font-size:16px;}
+.s_box1 .box .title{ font-weight:bold;}
+.s_box1 .box .title span{ display:inline-block; width:29px; height:29px; text-indent:5px; color:#fff; background:url(../images/sm.png) no-repeat; margin-right:5px;}
+
+
+/*客服服务*/
+.s_box2{ padding-top:20px; line-height:30px; color:#595757;}
+.s_box2 .box{ padding:0px 20px; margin-bottom:25px; font-size:16px;}
+
+.s_box2 .item{ text-align:center; width:294px; padding:50px 52px; height:220px; overflow:hidden; border-right:1px solid #F2F2F2; float:left;}
+.s_box2 .item a.name{ border-bottom:1px solid #349dd1; padding:5px 10px; font-size:16px; font-weight:bold; color:#333333;}
+.s_box2 .item .desc{ text-align:left; padding-top:20px; line-height:25px;}
+
+.s_box2 .line{clear:both; border-bottom:1px solid #F2F2F2;}
+
+.s_copyright{ clear:both; font-size:18px; padding:50px 0px; padding-left:60px;}
+
+
+/*联系我们*/
+.s_box3{ padding:40px 100px;}
+.s_box3 .name{ color:#349cd1; font-size:18px; border-bottom:1px dashed #349cd1; line-height:50px;}
+
+.s_box3 .box1{ padding-top:30px; margin-bottom:40px;}
+.s_box3 .box1 p{ height:31px; line-height:31px; padding-left:70px; font-size:18px; color:#333333; margin-bottom:10px;}
+.s_box3 .box1 p.p0{ font-size:20px; font-weight:bold; margin-bottom:20px;}
+.s_box3 .box1 p.p1{ background:url(../images/link_01.png) no-repeat;}
+.s_box3 .box1 p.p2{ background:url(../images/link_02.png) no-repeat;}
+.s_box3 .box1 p.p3{ background:url(../images/link_03.png) no-repeat;}
+.s_box3 .box1 p.p4{ background:url(../images/link_04.png) no-repeat;}
+.s_box3 .box1 p.p5{ background:url(../images/link_05.png) no-repeat;}
+.s_box3 .box1 p.p6{ background:url(../images/link_06.png) no-repeat;}
+
+.s_box3 .box2{ padding-top:30px; padding-left:70px; margin-bottom:40px;}
+.s_box3 .box2 p{line-height:30px; font-size:18px; color:#333333; margin-bottom:20px;}
+
+/*意见反馈*/
+.s_box4{ width:695px; padding:80px 0px; margin:0 auto;}
+.s_box4 .item{margin-bottom:20px; padding-left:70px;}
+.s_box4 .need{ color:red;}
+.s_box4 .text_box{float:left; width:502px; position:relative;}
+.s_box4 .item .text{ height:38px; width:500px;color: #a5a5a5; border:1px solid #f2f2f2; -webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+border-radius: 5px; text-indent:10px;}
+.s_box4 .item label{ display:block;}
+.s_box4 .item .confirm{ font-size:10px; color:#e94040; position:absolute;}
+.s_box4 .fieldname{ display:inline-block; line-height:38px; float:left; width:105px; padding-right:15px; text-align:right; font-size:18px;}
+.s_box4 .agreement{ height:18px; line-height:18px;}
+/*.s_box4 .agreement .checkbox{ display:inline-block; width:18px; margin-right:5px; height:18px; cursor:pointer;}
+.s_box4 .agreement .check{ background:url(../images/no_check.png) no-repeat;}
+.s_box4 .agreement .checked{ background:url(../images/checked.png) no-repeat;}
+.s_box4 .agreement input[type=checkbox]{ display:block; width:18px; height:18px; cursor:pointer; filter:alpha(opacity=0); -moz-opacity:0; -khtml-opacity:0; opacity:0;}
+*/
+.s_box4 .agreement a{color:#2e96ef; line-height:18px;}
+.s_box4 .bnt{  width:150px; height:40px; border:none; background:#2fa8e1;border:1px solid #2fa8e1; 
+-webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+border-radius: 5px; color:#fff;  font-size:18px; cursor:pointer;}
+.s_box4 .codebnt{ display:inline-block;  position:absolute; right:180px; top:0px; width:108px; height:38px;  -webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+border-radius: 5px; line-height:38px; cursor:pointer; text-align:center; font-size:16px; background:url(../images/code_bnt.png) repeat-x;}
+.s_box4 .codebnt_on{ background:url(../images/code_bnt_on.png) repeat-x;}
+
+.s_box4 .change_code{ cursor:pointer; line-height:38px; width:120px; position:absolute; right:50px;}
+
+.s_box4 textarea{ padding:10px 0px; height:120px !important;}
+
+.s_box4 .success{ width:320px; margin:0 auto; text-align:center; margin-bottom:100px;}
+.s_box4 .success p{font-size:30px; color:#787878; margin-bottom:30px;}
+.s_box4 .success a{ display:block; width:150px; height:40px; background:#e94040; font-size:18px; color:#fff; line-height:40px; -webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+border-radius: 5px;}

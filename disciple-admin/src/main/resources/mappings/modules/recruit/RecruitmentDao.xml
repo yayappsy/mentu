@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.recruit.dao.RecruitmentDao">
+    
+	<sql id="recruitmentColumns">
+		a.id AS "id",
+		a.job_title AS "jobTitle",
+		a.gender AS "gender",
+		a.salary_range_id AS "salaryRangeId",
+		a.area_id AS "area.id",
+		a.age_limit AS "ageLimit",
+		a.deadline AS "deadline",
+		a.keywords AS "keywords",
+		a.number AS "number",
+		a.employ_type AS "employType.id",
+		a.minimum_education_id AS "minimumEducation.id",
+		a.working_time_id AS "workingTime.id",
+		a.release_date AS "releaseDate",
+		a.department_id AS "department.id",
+		a.working_property AS "workingProperty",
+		a.resume_language AS "resumeLanguage",
+		a.is_show AS "isShow",
+		a.job_description AS "jobDescription",
+		a.requirement AS "requirement",
+		a.other AS "other",
+		a.position_mark AS "positionMark",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		rt.name AS "employType.name"
+	</sql>
+	
+	<sql id="recruitmentJoins">
+		LEFT JOIN sys_area a5 ON a5.id = a.area_id
+		left join recruitment_type rt on rt.id=a.employ_type
+	</sql>
+    
+	<select id="get" resultType="Recruitment">
+		SELECT 
+			<include refid="recruitmentColumns"/>
+		FROM recruitment a
+		<include refid="recruitmentJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="Recruitment">
+		SELECT 
+			<include refid="recruitmentColumns"/>
+		FROM recruitment a
+		<include refid="recruitmentJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="Recruitment">
+		SELECT 
+			<include refid="recruitmentColumns"/>
+		FROM recruitment a
+		<include refid="recruitmentJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Recruitment">
+		SELECT 
+			<include refid="recruitmentColumns"/>
+		FROM recruitment a
+		<include refid="recruitmentJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM recruitment a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(*)		 
+		FROM recruitment a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO recruitment(
+			id,
+			job_title,
+			gender,
+			salary_range_id,
+			area_id,
+			age_limit,
+			deadline,
+			keywords,
+			number,
+			employ_type,
+			minimum_education_id,
+			working_time_id,
+			release_date,
+			department_id,
+			working_property,
+			resume_language,
+			is_show,
+			job_description,
+			requirement,
+			other,
+			position_mark,
+			create_date,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{jobTitle},
+			#{gender},
+			#{salaryRangeId},
+			#{area.id},
+			#{ageLimit},
+			#{deadline},
+			#{keywords},
+			#{number},
+			#{employType.id},
+			#{minimumEducation.id},
+			#{workingTime.id},
+			#{releaseDate},
+			#{department.id},
+			#{workingProperty},
+			#{resumeLanguage},
+			#{isShow},
+			#{jobDescription},
+			#{requirement},
+			#{other},
+			#{positionMark},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE recruitment SET 	
+			job_title = #{jobTitle},
+			gender = #{gender},
+			salary_range_id = #{salaryRangeId},
+			area_id = #{area.id},
+			age_limit = #{ageLimit},
+			deadline = #{deadline},
+			keywords = #{keywords},
+			number = #{number},
+			employ_type = #{employType.id},
+			minimum_education_id = #{minimumEducation.id},
+			working_time_id = #{workingTime.id},
+			department_id = #{department.id},
+			working_property = #{workingProperty},
+			release_date = #{releaseDate},
+			resume_language = #{resumeLanguage},
+			is_show = #{isShow},
+			job_description = #{jobDescription},
+			requirement = #{requirement},
+			other = #{other},
+			position_mark = #{positionMark},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM recruitment
+	
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteEntity">
+		UPDATE recruitment SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

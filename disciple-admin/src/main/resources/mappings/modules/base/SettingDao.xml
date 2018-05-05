@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.base.dao.SettingDao">
+    
+	<sql id="settingColumns">
+		a.name AS "name",
+		a.label AS "label",
+		a.type AS "type",
+		a.description AS "description",
+		a.sort AS "sort",
+		a.is_required AS "isRequired",
+		a.is_editable AS "isEditable",
+		a.`value`
+	</sql>
+	
+	<sql id="settingJoins">
+	</sql>
+    
+	<select id="get" resultType="Setting">
+		SELECT 
+			<include refid="settingColumns"/>
+		FROM sys_setting a
+		<include refid="settingJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="Setting">
+		SELECT 
+			<include refid="settingColumns"/>
+		FROM sys_setting a
+		<include refid="settingJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="Setting">
+		SELECT 
+			<include refid="settingColumns"/>
+		FROM sys_setting a
+		<include refid="settingJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="label != null and label != ''">
+				AND a.label = #{label}
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Setting">
+		SELECT 
+			<include refid="settingColumns"/>
+		FROM sys_setting a
+		<include refid="settingJoins"/>
+		<where>
+			
+		</where>	
+		ORDER BY a.sort	
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 
+			* 
+		FROM sys_setting a
+		<where>
+			
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(id)
+			* 
+		FROM sys_setting a
+		<where>
+			
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sys_setting(
+			name,
+			label,
+			type,
+			description,
+			value
+		) VALUES (
+			#{name},
+			#{label},
+			#{type},
+			#{description},
+			#{value}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_setting SET 	
+			name = #{name},
+			label = #{label},
+			type = #{type},
+			description = #{description},
+			value = #{value}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM sys_setting
+	
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteEntity">
+		DELETE FROM sys_setting
+		WHERE id = #{id}
+	</update>
+	
+	<update id="saveSettings">
+		<foreach collection="settings" index="index" item="set" separator=";">
+			UPDATE sys_setting
+			<set>
+				sys_setting.`value`=#{set.value}
+			</set>
+			where sys_setting.name=#{set.name}
+			and sys_setting.type = #{type}
+		</foreach>
+	</update>
+</mapper>

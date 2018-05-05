@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.user.dao.UserAuthDao">
+
+	<sql id="userAuthColumns">
+		a.id AS "id",
+		a.user_info_id AS "userInfo.id",
+		a.identity_type AS "identityType",
+		a.identifier AS "identifier",
+		a.credential AS "credential",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="userAuthJoins">
+	</sql>
+
+	<select id="get" resultType="UserAuth">
+		SELECT
+		<include refid="userAuthColumns" />
+		FROM user_auth a
+		<include refid="userAuthJoins" />
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getEntity" resultType="UserAuth">
+		SELECT
+		<include refid="userAuthColumns" />
+		FROM user_auth a
+		<include refid="userAuthJoins" />
+		<where>
+			<if test="id != null and id != ''">
+				and a.id = #{id}
+			</if>
+			<if test="identifier != null and identifier != ''">
+				and a.identifier = #{identifier}
+			</if>
+			<if test="identityType != null and identityType != ''">
+				and a.identity_type = #{identityType}
+			</if>
+			<if test="id != null and id != ''">
+				and a.id = #{id}
+			</if>
+			<if test="userInfo != null and userInfo.id != null and userInfo.id != ''">
+				and a.user_info_id = #{userInfo.id}
+			</if>
+		</where>
+	</select>
+
+	<select id="findList" resultType="UserAuth">
+		SELECT
+		<include refid="userAuthColumns" />
+		FROM user_auth a
+		<include refid="userAuthJoins" />
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="identifier != null and identifier != ''">
+				and a.identifier = #{identifier}
+			</if>
+			<if test="userInfo != null and userInfo.id != null and userInfo.id != ''">
+				and a.user_info_id = #{userInfo.id}
+			</if>
+			<if test="sqlMap.searchType == 'identityTypes'">
+				and a.identity_type in
+				<foreach item="item" index="index" collection="sqlMap.searchStr"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+		<choose>
+			<when
+				test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="UserAuth">
+		SELECT
+		<include refid="userAuthColumns" />
+		FROM user_auth a
+		<include refid="userAuthJoins" />
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when
+				test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="exists" resultType="boolean">
+		SELECT count(*)
+		FROM user_auth a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>
+	</select>
+
+	<select id="count" resultType="long">
+		SELECT count(*)
+		FROM user_auth a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO user_auth(
+		id,
+		user_info_id,
+		identity_type,
+		identifier,
+		credential,
+		create_date,
+		update_date,
+		remarks,
+		del_flag
+		) VALUES (
+		#{id},
+		#{userInfo.id},
+		#{identityType},
+		#{identifier},
+		#{credential},
+		#{createDate},
+		#{updateDate},
+		#{remarks},
+		#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE user_auth SET
+		user_info_id = #{userInfo.id},
+		identity_type = #{identityType},
+		identifier = #{identifier},
+		credential = #{credential},
+		update_date = #{updateDate},
+		remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+
+		DELETE FROM user_auth
+
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteEntity">
+		UPDATE user_auth SET
+		del_flag = #{DEL_FLAG_DELETE}
+		<where>
+			<if test="id != null and id != ''">
+				id = #{id}
+			</if>
+			<if test="userInfo != null and userInfo.id !=null and userInfo.id != ''">
+				user_info_id = #{userInfo.id}
+			</if>
+		</where>
+	</update>
+
+	<update id="updatePassword">
+		UPDATE user_auth SET
+		credential = #{credential},
+		update_date = #{updateDate}
+		<where>
+			user_info_id = #{userInfo.id}
+			<choose>
+				<when test="ifThirdPart == false">
+					and if_third_part = '0'
+				</when>
+				<otherwise>
+					and identityType = #{identityType}
+					and identifier = #{identifier}
+				</otherwise>
+			</choose>
+		</where>
+	</update>
+
+	<update id="insertPassword">
+		INSERT INTO user_auth(
+		id,
+		user_info_id,
+		identity_type,
+		identifier,
+		credential,
+		create_date,
+		update_date,
+		remarks,
+		del_flag
+		) VALUES (
+		#{id},
+		#{userInfo.id},
+		#{identityType},
+		#{identifier},
+		#{credential},
+		#{createDate},
+		#{updateDate},
+		#{remarks},
+		#{delFlag}
+		)
+	</update>
+
+</mapper>

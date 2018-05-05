@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.payment.dao.PaymentTurnoverDao">
+    
+	<sql id="paymentTurnoverColumns">
+		a.id AS "id",
+		a.sn AS "sn",
+		a.order_id AS "order.id",
+		a.payment_method_id AS "paymentMethod.id",
+		a.status AS "status",
+		a.payment_from AS "paymentFrom",
+		a.amount AS "amount",
+		a.trade_type AS "tradeType",
+		a.buyer_id AS "buyer.id",
+		a.buyer_name AS "buyerNickname",
+		a.create_date AS "createDate"
+	</sql>
+	
+	<sql id="paymentTurnoverJoins">
+	</sql>
+    
+	<select id="get" resultType="PaymentTurnover">
+		SELECT 
+			<include refid="paymentTurnoverColumns"/>
+		FROM payment_turnover a
+		<include refid="paymentTurnoverJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="PaymentTurnover">
+		SELECT 
+			<include refid="paymentTurnoverColumns"/>
+		FROM payment_turnover a
+		<include refid="paymentTurnoverJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="PaymentTurnover">
+		SELECT 
+			<include refid="paymentTurnoverColumns"/>
+		FROM payment_turnover a
+		<include refid="paymentTurnoverJoins"/>
+		<where>
+			
+			<if test="sn != null and sn != ''">
+				AND a.sn = #{sn}
+			</if>
+			<if test="order != null and order.id !=null and order.id != ''">
+				AND a.order_id = #{order.id}
+			</if>
+			<if test="paymentMethod != null and paymentMethod != ''">
+				AND a.payment_method_id = #{paymentMethod.id}
+			</if>
+			
+			<if test="buyerNickname != null and buyerNickname != ''">
+				AND a.buyer_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{buyerNickname}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{buyerNickname}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{buyerNickname},'%')</if>
+			</if>
+			
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="PaymentTurnover">
+		SELECT 
+			<include refid="paymentTurnoverColumns"/>
+		FROM payment_turnover a
+		<include refid="paymentTurnoverJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM payment_turnover a
+		<where>
+			
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(*)		 
+		FROM payment_turnover a
+		<where>
+			
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO payment_turnover(
+			id,
+			sn,
+			order_id,
+			payment_method_id,
+			name,
+			status,
+			payment_from,
+			amount,
+			trade_type,
+			buyer_id,
+			buyer_name,
+			create_date
+		) VALUES (
+			#{id},
+			#{sn},
+			#{order.id},
+			#{paymentMethod.id},
+			#{name},
+			#{status},
+			#{paymentFrom},
+			#{amount},
+			#{tradeType},
+			#{buyer.id},
+			#{buyerNickname},
+			#{createDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE payment_turnover SET 	
+			sn = #{sn},
+			order_id = #{order},
+			payment_method_id = #{paymentMethod.id},
+			name = #{name},
+			status = #{status},
+			payment_from = #{paymentFrom},
+			amount = #{amount},
+			trade_type = #{tradeType},
+			buyer_id = #{buyer.id},
+			buyer_name = #{buyerNickname}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM payment_turnover
+	
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatch">
+		DELETE FROM payment_turnover
+		WHERE
+			id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+	<update id="deleteEntity">
+		DELETE FROM payment_turnover
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatchEntity">
+		DELETE FROM payment_turnover
+		where
+		    id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+</mapper>

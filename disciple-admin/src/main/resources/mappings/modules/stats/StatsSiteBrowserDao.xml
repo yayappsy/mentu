@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.stats.dao.StatsSiteBrowserDao">
+    
+	<sql id="statsSiteBrowserColumns">
+		a.id AS "id",
+		a.page_view_count AS "pageViewCount",
+		a.visitor_count AS "visitorCount",
+		a.new_visitor_count AS "newVisitorCount",
+		a.new_visitor_rate AS "newVisitorRate",
+		a.browse_count AS "browseCount",
+		a.ip_count AS "ipCount",
+		a.bounce_rate AS "bounceRate",
+		a.conversions_count AS "conversionsCount",
+		a.conversions_rate AS "conversionsRate",
+		a.average_browse_page_count AS "averageBrowsePageCount",
+		a.average_access_time AS "averageAccessTime",
+		a.browser_name AS "browserName",
+		a.browser_type AS "browserType",
+		a.create_date AS "createDate",
+		a.dimensions AS "dimensions",
+		a.year AS "year",
+		a.month AS "month",
+		a.day AS "day",
+		a.hour AS "hour"
+	</sql>
+	
+	<sql id="statsSiteBrowserJoins">
+	</sql>
+    
+	<select id="get" resultType="StatsSiteBrowser">
+		SELECT 
+			<include refid="statsSiteBrowserColumns"/>
+		FROM stats_site_browser a
+		<include refid="statsSiteBrowserJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="StatsSiteBrowser">
+		SELECT 
+			<include refid="statsSiteBrowserColumns"/>
+		FROM stats_site_browser a
+		<include refid="statsSiteBrowserJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="StatsSiteBrowser">
+		SELECT 
+			<include refid="statsSiteBrowserColumns"/>
+		FROM stats_site_browser a
+		<include refid="statsSiteBrowserJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="StatsSiteBrowser">
+		SELECT 
+			<include refid="statsSiteBrowserColumns"/>
+		FROM stats_site_browser a
+		<include refid="statsSiteBrowserJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM stats_site_browser a
+		<where>
+			
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(*)		 
+		FROM stats_site_browser a
+		<where>
+			
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO stats_site_browser(
+			id,
+			page_view_count,
+			visitor_count,
+			new_visitor_count,
+			new_visitor_rate,
+			browse_count,
+			ip_count,
+			bounce_rate,
+			conversions_count,
+			conversions_rate,
+			average_browse_page_count,
+			average_access_time,
+			browser_name,
+			browser_type,
+			create_date,
+			dimensions,
+			year,
+			month,
+			day,
+			hour
+		) VALUES (
+			#{id},
+			#{pageViewCount},
+			#{visitorCount},
+			#{newVisitorCount},
+			#{newVisitorRate},
+			#{browseCount},
+			#{ipCount},
+			#{bounceRate},
+			#{conversionsCount},
+			#{conversionsRate},
+			#{averageBrowsePageCount},
+			#{averageAccessTime},
+			#{browserName},
+			#{browserType},
+			#{createDate},
+			#{dimensions},
+			#{year},
+			#{month},
+			#{day},
+			#{hour}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE stats_site_browser SET 	
+			page_view_count = #{pageViewCount},
+			visitor_count = #{visitorCount},
+			new_visitor_count = #{newVisitorCount},
+			new_visitor_rate = #{newVisitorRate},
+			browse_count = #{browseCount},
+			ip_count = #{ipCount},
+			bounce_rate = #{bounceRate},
+			conversions_count = #{conversionsCount},
+			conversions_rate = #{conversionsRate},
+			average_browse_page_count = #{averageBrowsePageCount},
+			average_access_time = #{averageAccessTime},
+			browser_name = #{browserName},
+			browser_type = #{browserType},
+			dimensions = #{dimensions},
+			year = #{year},
+			month = #{month},
+			day = #{day},
+			hour = #{hour}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM stats_site_browser
+	
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatch">
+		DELETE FROM stats_site_browser
+		WHERE
+			id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+	<update id="deleteEntity">
+		DELETE FROM stats_site_browser
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatchEntity">
+		DELETE FROM stats_site_browser
+		where
+		    id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+	<select id="findSiteBrowser" resultType="StatsSiteBrowser">
+		SELECT 
+			<include refid="statsSiteBrowserColumns"/>
+		FROM stats_site_browser a
+		<include refid="statsSiteBrowserJoins"/>
+		<where>
+			a.year=#{year} and a.month=#{month} and a.day=#{day}
+		</where>		
+	</select>
+	
+</mapper>

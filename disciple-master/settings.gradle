@@ -1,0 +1,1 @@
+includeFlat "$myProjectName-core", "$myProjectName-admin", "$myProjectName-front"

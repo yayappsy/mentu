@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>配置</title>
+    <link rel="stylesheet" href="../css/layout.css">
+    <script src="../res/jquery/jquery-3.1.1.js"></script>
+    <script src="../res/layer/layer.js"></script>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script type="text/javascript" src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <style>
+        .peizhi{
+            position: relative;
+            width:100%;
+            overflow: hidden;
+            height:100%;
+        }
+        .form_box{
+            margin: 15px;
+        }
+        .btn_youjian{
+            cursor: pointer;
+            color: #4193f7;
+        }
+    </style>
+</head>
+<body>
+<div class="peizhi">
+    <div class="alert alert-success" role="alert">请正确填写以下信息，以保证通过本系统前台和后台发送的邮件均能成功发送。<span class="btn_youjian">邮件测试</span></div>
+    <div class="form_box">
+        <div class="form-group">
+            <label class="peizhi_label"><span style="color: red;">*</span>邮箱地址：</label>
+            <input type="email" class="form-control" placeholder="">
+        </div>
+        <div class="form-group">
+            <label class="peizhi_label"><span style="color: red;">*</span>密码：</label>
+            <input type="password" class="form-control" placeholder="">
+        </div>
+        <div class="form-group">
+            <label class="peizhi_label"><span style="color: red;">*</span>发信名称：</label>
+            <input type="password" class="form-control" placeholder="">
+        </div>
+        <div class="form-group">
+            <label class="peizhi_label"><span style="color: red;">*</span>发送服务器（SMTP）：</label>
+            <input type="password" class="form-control" placeholder="">
+            <span class="huoqu">自动获取</span>
+        </div>
+    </div>
+</div>
+<script>
+    $(".btn_youjian").on("click",function () {
+        parent.layer.open({
+            type: 2,
+            title: '配置企业邮箱',
+            maxmin: true,
+            shadeClose: true, //点击遮罩关闭层
+            area : ['530px' , '270px'],
+            content: ['youjian.html','no'],
+            btn:['确认','取消'],
+            btnAlign: 'c' //按钮居中
+        });
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.base.dao.SnDao">
+    
+	<sql id="snColumns">
+		a.id AS "id",
+		a.last_value AS "lastValue",
+		a.sn_type AS "snType",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="snJoins">
+	</sql>
+    
+	<select id="get" resultType="Sn">
+		SELECT 
+			<include refid="snColumns"/>
+		FROM sys_sn a
+		<include refid="snJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="Sn">
+		SELECT 
+			<include refid="snColumns"/>
+		FROM sys_sn a
+		<include refid="snJoins"/>
+        <where>
+           <if test="snType != null and snType !=''">
+			and a.sn_type = #{snType}
+			</if>
+           <if test="id != null and id !=''">
+			and a.id = #{id}
+			</if>
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="Sn">
+		SELECT 
+			<include refid="snColumns"/>
+		FROM sys_sn a
+		<include refid="snJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="lastValue != null and lastValue != ''">
+				AND a.last_value = #{lastValue}
+			</if>
+			<if test="snType != null and snType != ''">
+				AND a.sn_type = #{snType}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Sn">
+		SELECT 
+			<include refid="snColumns"/>
+		FROM sys_sn a
+		<include refid="snJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM sys_sn a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(*)		 
+		FROM sys_sn a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sys_sn(
+			id,
+			last_value,
+			sn_type,
+			create_date,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{lastValue},
+			#{snType},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_sn SET 	
+			last_value = #{lastValue},
+			sn_type = #{snType},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM sys_sn
+	
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteEntity">
+		UPDATE sys_sn SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

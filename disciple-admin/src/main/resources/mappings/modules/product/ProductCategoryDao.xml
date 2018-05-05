@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.product.dao.ProductCategoryDao">
+    
+	<sql id="productCategoryColumns">
+		a.id AS "id",
+		a.property_template_id AS "propertyTemplate.id",
+		a.grade AS "grade",
+		a.name AS "name",
+		a.image_url AS "imageUrl",
+		a.parent_ids AS "parentIds",
+		a.parent_id AS "parent.id",
+		a.is_show AS "isShow",
+		a.is_relate_sub AS "isRelateSub",
+		a.sort AS "sort",
+		a.commission_ratio AS "commissionRatio",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="productCategoryJoins">
+	</sql>
+    
+	<select id="get" resultType="ProductCategory">
+		SELECT 
+			<include refid="productCategoryColumns"/>
+		FROM product_category a
+		<include refid="productCategoryJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="ProductCategory">
+		SELECT 
+			<include refid="productCategoryColumns"/>
+		FROM product_category a
+		<include refid="productCategoryJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="ProductCategory">
+		SELECT 
+			<include refid="productCategoryColumns"/>
+		FROM product_category a
+		<include refid="productCategoryJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="parentIds != null and parentIds != ''">
+				AND a.parent_ids LIKE 
+					<if test="dbName == 'oracle'">'%'||#{parentIds}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{parentIds}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{parentIds},'%')</if>
+			</if>
+		</where>
+		ORDER BY a.sort ASC
+	</select>
+	
+	<select id="findAllList" resultType="ProductCategory">
+		SELECT 
+			<include refid="productCategoryColumns"/>
+		FROM product_category a
+		<include refid="productCategoryJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		ORDER BY a.sort ASC
+	</select>
+	
+	<select id="findByParentIdsLike" resultType="ProductCategory">
+		SELECT
+			a.id,
+			a.parent_id AS "parent.id",
+			a.parent_ids
+		FROM product_category a
+		<include refid="productCategoryJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.parent_ids LIKE #{parentIds}
+		</where>
+		ORDER BY a.sort ASC
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO product_category(
+			id,
+			property_template_id,
+			grade,
+			name,
+			image_url,
+			parent_id,
+			parent_ids,
+			is_show,
+			is_relate_sub,
+			sort,
+			commission_ratio,
+			create_date,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{propertyTemplate.id},
+			#{grade},
+			#{name},
+			#{imageUrl},
+			#{parent.id},
+			#{parentIds},
+			#{isShow},
+			#{isRelateSub},
+			#{sort},
+			#{commissionRatio},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE product_category SET 	
+			property_template_id = #{propertyTemplate.id},
+			grade = #{grade},
+			name = #{name},
+			image_url = #{imageUrl},
+			parent_ids = #{parentIds},
+			parent_id = #{parent.id},
+			is_show = #{isShow},
+			is_relate_sub = #{isRelateSub},
+			sort = #{sort},
+			commission_ratio = #{commissionRatio},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateParentIds">
+		UPDATE product_category SET 
+			parent_id = #{parent.id}, 
+			parent_ids = #{parentIds}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM product_category
+	
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteEntity">
+		UPDATE product_category SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id} OR parent_ids LIKE '%,'||#{id}||',%'
+	</update>
+	
+</mapper>

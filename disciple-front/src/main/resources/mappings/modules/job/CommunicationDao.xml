@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.job.dao.CommunicationDao">
+
+	<sql id="communicationColumns">
+		a.id AS "id",
+		a.user_id AS "userId",
+		u.name AS "userName",
+		a.company_id AS "companyId",
+		c.name AS "companyName",
+		a.type AS "type",
+		a.content AS "content",
+		a.is_read AS "isRead",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="communicationJoins">
+		LEFT JOIN user_info u ON u.id = a.user_id
+		LEFT JOIN company c ON c.id = a.company_id
+	</sql>
+
+	<select id="get" resultType="Communication">
+		SELECT
+		<include refid="communicationColumns"/>
+		FROM communication a
+		<include refid="communicationJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getEntity" resultType="Communication">
+		SELECT
+		<include refid="communicationColumns"/>
+		FROM communication a
+		<include refid="communicationJoins"/>
+		<where>
+			and a.id = #{id}
+		</where>
+	</select>
+
+	<select id="findList" resultType="Communication">
+		SELECT
+		<include refid="communicationColumns"/>
+		FROM communication a
+		<include refid="communicationJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="userId != null and userId != ''">
+				AND a.user_id = #{userId}
+			</if>
+			<if test="companyId != null and companyId != ''">
+				AND a.company_id = #{companyId}
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="isRead != null and isRead != ''">
+				AND a.is_read = #{isRead}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="Communication">
+		SELECT
+		<include refid="communicationColumns"/>
+		FROM communication a
+		<include refid="communicationJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		ORDER BY a.update_date DESC
+	</select>
+
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id)
+		FROM communication a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>
+	</select>
+
+	<select id="count" resultType="long">
+		SELECT 	count(a.id)
+		FROM communication a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO communication(
+		id,
+		user_id,
+		company_id,
+		type,
+		content,
+		is_read,
+		create_date,
+		update_date,
+		remarks,
+		del_flag
+		) VALUES (
+		#{id},
+		#{userId},
+		#{companyId},
+		#{type},
+		#{content},
+		#{isRead},
+		#{createDate},
+		#{updateDate},
+		#{remarks},
+		#{delFlag}
+		)
+	</insert>
+
+	<insert id="insertOrUpdate" >
+		<!-- 查看是否存,如果存在及更新，否则插入 -->
+		<selectKey keyProperty="sqlMap.count" order="BEFORE" resultType="int">
+			select count(id) as num from communication where id = #{id}
+		</selectKey>
+		<if test="sqlMap.count > 0">
+			UPDATE communication SET
+			user_id = #{userId},
+			company_id = #{companyId},
+			type = #{type},
+			content = #{content},
+			is_read = #{isRead},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+			WHERE id = #{id}
+		</if>
+		<if test="sqlMap.count == 0">
+			INSERT INTO communication(
+			id,
+			user_id,
+			company_id,
+			type,
+			content,
+			is_read,
+			create_date,
+			update_date,
+			remarks,
+			del_flag
+			) VALUES (
+			#{id},
+			#{userId},
+			#{companyId},
+			#{type},
+			#{content},
+			#{isRead},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+			)
+		</if>
+	</insert>
+
+	<update id="update">
+		UPDATE communication SET
+		user_id = #{userId},
+		company_id = #{companyId},
+		type = #{type},
+		content = #{content},
+		is_read = #{isRead},
+		update_date = #{updateDate},
+		remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+
+		DELETE FROM communication
+
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteBatch">
+		DELETE FROM communication
+		WHERE
+		id in
+		<foreach collection="array" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+
+	<update id="deleteEntity">
+		UPDATE communication SET
+		del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteBatchEntity">
+		UPDATE communication SET
+		del_flag = '1'
+		where
+		id in
+		<foreach collection="array" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+
+	<update id="isRead">
+		UPDATE communication SET is_read = "1"
+		WHERE
+			receive_id = #{receiveId}
+			and
+			send_id = #{sendId}
+	</update>
+	
+</mapper>

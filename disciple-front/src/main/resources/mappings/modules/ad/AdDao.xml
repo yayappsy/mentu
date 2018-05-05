@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.ad.dao.AdDao">
+    
+	<sql id="adColumns">
+		a.id AS "id",
+		a.ad_position_id AS "adPosition.id",
+		a.title AS "title",
+		a.description AS "description",
+		a.effect AS "effect",
+		a.end_date AS "endDate",
+		a.begin_date AS "beginDate",
+		a.is_forever AS "isForever",
+		a.is_autoplay AS "isAutoplay",
+        a.height AS "height",
+		a.width AS "width",
+		a.pop_height AS "popHeight",
+		a.pop_width AS "popWidth",
+		a.location_top AS "locationTop",
+		a.location_left AS "locationLeft",
+		a.content_type AS "contentType",
+		a.path AS "path",
+		a.url AS "url",
+		a.content AS "content",		
+		a.is_show AS "isShow",
+		a.sort AS "sort",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+		,adp.name as "adPosition.name"
+		,adp.ad_type AS "adType"
+	</sql>
+	
+	<sql id="adJoins">
+	   inner join ad_position adp on adp.id = a.ad_position_id
+	</sql>
+    
+	<select id="get" resultType="Ad">
+		SELECT 
+			<include refid="adColumns"/>
+		FROM ad a
+		<include refid="adJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="Ad">
+		SELECT 
+			<include refid="adColumns"/>
+		FROM ad a
+		<include refid="adJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="Ad">
+		SELECT 
+			<include refid="adColumns"/>
+		FROM ad a
+		<include refid="adJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="adPosition != null and adPosition.id != null and adPosition.id != ''">
+				AND a.ad_position_id = #{adPosition.id}
+			</if>
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+			<if test="isShow != null and isShow != ''">
+				AND a.is_show = #{isShow}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Ad">
+		SELECT 
+			<include refid="adColumns"/>
+		FROM ad a
+		<include refid="adJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findCarouselList" resultType="Ad">
+		SELECT 
+			<include refid="adColumns"/>
+		FROM ad a
+		<include refid="adJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} and a.ad_position_id='201'
+		</where>				
+				ORDER BY a.update_date DESC		
+	</select>
+	
+	<select id="findImageList" resultType="Ad">
+		SELECT 
+			<include refid="adColumns"/>
+		FROM ad a
+		<include refid="adJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} and a.ad_position_id='102'
+		</where>				
+				ORDER BY a.update_date DESC		
+	</select>
+	
+	<select id="findCenterImage" resultType="Ad">
+		SELECT 
+			<include refid="adColumns"/>
+		FROM ad a
+		<include refid="adJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} and a.ad_position_id='106'
+		</where>				
+				ORDER BY a.update_date DESC		
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(*) 
+		FROM ad a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(*)		 
+		FROM ad a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ad(
+			id,
+			ad_position_id,
+			title,
+			description,
+			effect,
+			end_date,
+			begin_date,
+			is_forever,
+			is_autoplay,
+			height,
+			width,
+			pop_height,
+			pop_width,
+			location_top,
+			location_left,
+			content_type,
+			path,
+			url,
+			content,
+			sort,
+			create_date,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{adPosition.id},
+			#{title},
+			#{description},
+			#{effect},
+			#{endDate},
+			#{beginDate},
+			#{isForever},
+			#{isAutoplay},
+			#{height},
+			#{width},
+			#{popHeight},
+			#{popWidth},
+			#{locationTop},
+			#{locationLeft},
+			#{contentType},
+			#{path},
+			#{url},
+			#{content},
+			#{sort},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ad SET 	
+			title = #{title},
+			description = #{description},
+			effect = #{effect},
+			end_date = #{endDate},
+			begin_date = #{beginDate},
+			is_forever = #{isForever},
+			is_autoplay = #{isAutoplay},
+			height = #{height},
+			width = #{width},
+			pop_height = #{popHeight},
+			pop_width = #{popWidth},
+			location_top = #{locationTop},
+			location_left = #{locationLeft},
+			content_type = #{contentType},
+			path = #{path},
+			url = #{url},
+			content = #{content},
+			is_show = #{isShow},
+			sort = #{sort},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM ad
+	
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteEntity">
+		UPDATE ad SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateSort">
+		UPDATE ad
+		SET sort = CASE id
+		<foreach collection="list" item="item">
+			WHEN #{item.id} THEN #{item.sort}
+		</foreach>
+		END
+		WHERE
+			id in
+			<foreach collection="list" item="item" open="(" separator="," close=")">
+			 #{item.id} 
+			</foreach>
+	</update>
+</mapper>

@@ -1,0 +1,522 @@
+.pw_shaixuanbtn{
+    height:33px;
+    line-height: 33px;
+    padding:0 6px;
+}
+.section .form-contro2{
+    height:23.5px;
+    margin-top: 4.5px;
+}
+.form-inline{
+    margin-right:10px;
+}
+.font_shuiyin{
+    cursor: pointer;
+}
+.op_navtop{
+    overflow: hidden;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 0 0 5px 0;
+    width:100%;
+    background: white;
+    height:30px;
+    line-height: 30px;
+}
+.op_navul li{
+    float: left;
+    padding:0 8px;
+    margin-right: 2px;
+    height:20px;
+    line-height: 20px;
+    color: #6b6b6b;
+    border-radius: 3px;
+    cursor: pointer;
+    border:1px solid transparent;
+}
+.op_navul li:hover{
+    background: #f5f5f5;
+    border:1px solid #ccc;
+    color: #6b6b6b;
+}
+.op_navul{
+    margin-bottom: 0;
+    margin-top: 5px;
+}
+.op_navspan{
+    color: #006699;
+    margin: 5px 2px 0 10px;
+    height:20px;
+    line-height: 20px;
+    display: inline-block;
+    padding:0 6px;
+}
+.section .op_navtop .op_active{
+    color: #fff;
+    background: #424242;
+}
+.section .op_navtop .iconfont{
+    margin-right: 20px;
+    font-size: 8px;
+    cursor: pointer;
+}
+#pe_time{
+    display: none;
+    margin-left: 14px;
+}
+html body .form-control {
+    height: 25px;
+}
+#wenjianxuanze{
+    display: none;
+    margin-left: 10px;
+}
+.navbtmbox{
+    display: none;
+}
+.op_navuploadbox .hy_btn1{
+    background:#4aa6fc;
+    color: #fff;
+}
+
+@media all and (min-width: 1280px){
+
+}
+@media all and (min-width: 0px) and (max-width:1280px){
+    body .section{
+        width:1060px;
+    }
+    body .op_article{
+        width:1060px;
+    }
+}
+
+
+
+.op_navuploadbox{
+    height:36px;
+    line-height: 36px;
+}
+.glyphicon-open{
+    color: #dcdcdc;
+}
+.op_btn1{
+    margin-top: 5px;
+    margin-left: 10px;
+}
+.btn-default{
+    background: #f3f3f3;
+}
+.op_icon1{
+    cursor: pointer;
+    display: block;
+    margin-right: 8px;
+    overflow: hidden;
+    margin-top: 2px;
+}
+.op_icon1 .glyphicon{
+    padding:4px;
+    font-size: 16px;
+    color: #666;
+    border:1px solid transparent;
+}
+.op_icon1 .op_icon1active{
+    border:1px solid #ccc;
+    color: #2e6da4;
+}
+.op_articleleft{
+    width:180px;
+    overflow: hidden;
+    box-shadow: 0 0 2px 1px #ccc inset;
+    height: 770px;
+    margin-top: 2px;
+}
+.op_articleright{
+    overflow: hidden;
+    border-top: 1px solid #ccc;
+}
+.op_tupianbuju{
+    width:100%;
+    height:auto;
+    overflow: hidden;
+    display: none;
+}
+.op_articleright .op_bujuqiehuancative{
+    display: block;
+}
+.container-fluid{
+    width:180px;
+    margin-left: 0;
+    padding:0;
+}
+html body .accordion-heading{
+    padding:2px 12px;
+    background: #ccc;
+    width:180px;
+    text-align: left;
+}
+.accordion-heading .accordion-toggle{
+    color: red;
+
+}
+.accordion-toggle{
+    text-decoration: none;
+    color: #323437;
+}
+.accordion-inner{
+    padding:5px 12px;
+}
+#picker1{
+    overflow: hidden;
+    margin-top: 2px;
+}
+/*弹窗相关*/
+.chufa{
+    cursor: pointer;
+}
+.propobox{
+    position: fixed;
+    background: rgba(0,0,0,0.5);
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+    display: none;
+    z-index: 2000;
+}
+.proposmall{
+    width:550px;
+    margin: 0 auto;
+    height:420px;
+    background: white;
+    display: none;
+}
+.close{
+    cursor: pointer;
+    float: right;
+    margin-right: 10px;
+}
+.po1_top{
+    height:36px;
+    background: #4aa6fc;
+    line-height: 36px;
+
+}
+.po1_top span{
+    color: #fff;
+    margin-left: 10px;
+    float: left;
+    font-weight: bold;
+    font-size: 14px;
+}
+.po1_top .close_fenlei{
+    cursor: pointer;
+    float: right;
+    margin-right: 10px;
+}
+.po1_select{
+    width:510px;
+    margin: 12px auto;
+    overflow: hidden;
+}
+.po1_topbtn{
+    overflow: hidden;
+}
+.po1_topbtn1{
+    background: #4aa6fc;
+    color: #fff;
+}
+.po1_tabletop{
+    width:100%;
+    margin-top: 10px;
+}
+.po1_tabletopleft{
+    width:59%;
+    height:28px;
+    line-height: 28px;
+    background: #f2f2f2;
+    padding-left: 1%;
+}
+.po1_tabletopright{
+    width:39%;
+    height:28px;
+    line-height: 28px;
+    background: #f2f2f2;
+    padding-left: 1%;
+}
+.po1_tabul{
+    height:290px;
+    overflow: auto;
+}
+
+/*添加分类*/
+.proposaddlei{
+    width:550px;
+    margin: 0 auto;
+    height:420px;
+    background: white;
+    display: none;
+    position: absolute;
+}
+.proposshuiyin{
+    width:550px;
+    margin: 0 auto;
+    height:420px;
+    background: white;
+    display: none;
+    position: relative;
+}
+.po1_top .close_addfenlei{
+    cursor: pointer;
+    float: right;
+    margin-right: 10px;
+}
+.po1_top .close_shuiyin{
+    cursor: pointer;
+    float: right;
+    margin-right: 10px;
+}
+.addfen_selectbox{
+    overflow: hidden;
+    margin-top: 24px;
+}
+.addfen_selectboxleft{
+    height:30px;
+    width:150px;
+    text-align: right;
+    line-height: 25px;
+}
+.addfen_selectboxselect{
+    height:26px;
+    width:300px;
+    padding:0 6px;
+}
+.font_shuiyin{
+    line-height: 26px;
+    margin-left: 2px;
+}
+.addfen_span{
+    line-height: 20px;
+    margin-left: 4px;
+}
+.addfen_selectboxselectcheck{
+    height:16px;
+    width:16px;
+    float: left;
+}
+.addfen_selecbtm{
+    height:36px;
+    position: absolute;
+    bottom:0;
+    left:0;
+    width:100%;
+    background: #f2f2f2 ;
+}
+.addfen_btn{
+    margin-left: 210px;
+}
+.pol_tuozhuai{
+    position: relative;
+    width:105px;
+    display: none;
+}
+.pol_baocun{
+    background: #7ed141;
+    display: inline-block;
+    height:24px;
+    padding: 0 6px;
+    color: #fff;
+    position: absolute;
+    top:0;
+    left:0;
+}
+.pol_quxiao{
+    padding: 0 6px;
+    height:24px;
+    position: absolute;
+    right:0;
+    top:0;
+}
+/*图片库*/
+.op_tupianbujuul{
+    overflow: hidden;
+    padding-bottom: 30px;
+}
+.op_tupianbujuul li{
+    width: 120px;
+    height: 133px;
+    padding: 13px 12px;
+    float: left;
+    margin: 10px 0 0 10px;
+    background: url(../css/img/zzp_list_all.png) 0 -183px;
+    box-sizing:content-box;
+    position: relative;
+    display: block;
+}
+.op_tupianbujuul li:hover{
+    background: url(../css/img/zzp_list_all.png) 0 -516px;
+}
+.op_tupianbujuimgbox{
+    overflow: hidden;
+    position: relative;
+    height:90px;
+}
+.op_tupianbujuimgbox img{
+    max-width: 120px;
+    max-height: 90px;
+    _width: 120px;
+    _height: 96px;
+    vertical-align: middle;
+    display: block;
+    margin: 0 auto;
+}
+.op_tupianbujuimgbox input{
+    position: absolute;
+    top:-4px;
+    left:0px;
+    width: 13px;
+    height: 13px;
+}
+.op_tupianbujup{
+    margin: 5px auto;
+    display: block;
+    text-align: center;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.op_tupianbujup1{
+    color: #AEAEAE;
+    height: 14px;
+    line-height: 14px;
+    overflow: hidden;
+    text-align: center;
+    font-size: 12px;
+}
+.op_tupianbujucheck{
+    height:121px;
+    width: 28px;
+    background: url(../css/img/zzp-ico-buoy.png) left -34px no-repeat;
+    position: absolute;
+    margin-bottom: 3px;
+    right:5px;
+    top:13px;
+    display: none;
+}
+.op_tupianbujucheck div{
+    width:24px;
+    height:24px;
+    margin: 1px auto;
+    cursor: pointer;
+}
+.op_tupianbujucheck div:nth-child(1){
+    overflow: hidden;
+    background: url("../css/img/zzp-ico-buoy.png") -40px -36px no-repeat;
+}
+.op_tupianbujucheck div:nth-child(2){
+    overflow: hidden;
+    background: url("../css/img/zzp-ico-buoy.png") -89px -36px no-repeat;
+}
+.op_tupianbujucheck div:nth-child(3){
+    overflow: hidden;
+    background: url("../css/img/zzp-ico-buoy.png") -40px -67px no-repeat;
+}
+.op_tupianbujucheck div:nth-child(4){
+    overflow: hidden;
+    background: url("../css/img/zzp-ico-buoy.png") -40px -99px no-repeat;
+}
+.op_tupianbujucheck div:nth-child(4):hover{
+    overflow: hidden;
+    background: url("../css/img/zzp-ico-buoy.png") -96px -99px no-repeat;
+}
+.op_tupianbujucheck .xialachufa{
+    width:24px;
+    height:20px;
+    margin: 1px auto;
+    overflow: hidden;
+    background: url("../css/img/zzp-ico-buoy.png") -31px -156px no-repeat;
+    cursor: pointer;
+}
+.op_articleright .xialachufabox{
+    border:1px solid #7386d8;
+    padding:1px;
+    overflow: hidden;
+    position: absolute;
+    left: 1px;
+    bottom: -29px;
+    width:80px;
+    z-index: 1000;
+    background: white;
+    height:40px;
+    display: none;
+}
+.xialachufali{
+    padding:3px auto;
+    text-align: center;
+    width:80px;
+    background: white;
+    height:20px;
+    margin: 0;
+    line-height: 20px;
+    cursor: pointer;
+}
+.xialachufali:hover{
+    background: #3b69c7;
+    color: #fff;
+}
+.delate_photo{
+    position: absolute;
+    width: 162px;
+    height: 50px;
+    border: 1px solid #dc7700;
+    border-radius: 5px;
+    left: -10px;
+    top: 117px;
+    z-index: 2000;
+    background: white;
+    display: none;
+}
+.delate_photoleft{
+    margin: 10px 5px;
+}
+.delate_phototext{
+    width:120px;
+    margin: 6px auto;
+}
+.op_article .delate_phototextbtn{
+    height:20px;
+    line-height: 20px;
+    padding: 0 8px;
+    font-size: 12px;
+}
+/*图片浏览弹窗*/
+.propophoto_liulan .close_liulan{
+    cursor: pointer;
+    float: right;
+    margin-right: 10px;
+}
+.propophoto_liulan{
+    display: none;
+    position: absolute;
+}
+.propophoto_liuimgbox{
+    overflow: hidden;
+}
+/*图片编辑*/
+.propobox .close_xiugai{
+    cursor: pointer;
+    float: right;
+    margin-right: 10px;
+}
+.propo_bianji{
+    display: none;
+    width:550px;
+    margin: 0 auto;
+    height:420px;
+    background:white;
+    position: relative;
+}
+.bianji_img{
+    width:100px;
+    height:100px;
+    float: left;
+}

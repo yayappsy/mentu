@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>图片仓库</title>
+
+    <link rel="stylesheet" href="../css/picturewarehouse.css">
+    <script type="text/javascript" src="../js/picturewarehouse.js"></script>
+
+    <link rel="stylesheet" href="../res/webuploader/webuploader.css">
+    <script type="text/javascript" src="../res/webuploader/dist/webuploader.html5only.js?verson=1"></script>
+
+    <style>
+
+
+    </style>
+</head>
+<body>
+<div class="section">
+    <div class="op_sectiontop">
+        <span class="iconfont icon-ren fl"></span><span class="icon-ren1 fl">您正在：</span><span class="icon-ren2 fl">图片库</span>
+        <div class="pw_shaixuanbtn fr cs"><span>筛选</span><span class="icon iconshaixuan"><span class="glyphicon glyphicon-chevron-up"></span></span></div>
+        <div class="form-inline fr">
+            <div class="input-group">
+                <input type="text" class="form-control form-contro2" placeholder="Search for...">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button">搜索</button>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="op_navtop navtopbox">
+        <span class="fl ta_span2">类型：</span>
+        <ul class="tj_ul fl op_leixing">
+            <li class="tj_active">全部</li>
+            <li>gif</li>
+            <li>jpg</li>
+            <li>png</li>
+            <li>jpeg</li>
+        </ul>
+        <span class="fl ta_span2">上传日期：</span>
+        <ul class="tj_ul fl op_riqi">
+            <li class="tj_active">全部</li>
+            <li>今天</li>
+            <li>本周</li>
+            <li>本月</li>
+            <li>自定义</li>
+        </ul>
+        <input type="text" name="reservation" id="pe_time" class="form-control timechange fl" value="" placeholder="请选择时间段..."/>
+        <span class="icon iconnavtopicon fr"><span class="iconfont icon-sanjiao"></span></span>
+    </div>
+    <div class="op_navtop navbtmbox">
+        <span class="fl ta_span2">水印：</span>
+        <ul class="tj_ul fl op_shuiying">
+            <li class="tj_active">全部</li>
+            <li>是</li>
+            <li>否</li>
+        </ul>
+        <span class="fl ta_span2">文件大小：</span>
+        <ul class="tj_ul fl op_wenjian">
+            <li class="tj_active">全部</li>
+            <li>200k内</li>
+            <li>500k内</li>
+            <li>自定义</li>
+        </ul>
+        <div class="form-inline fl" id="wenjianxuanze">
+            <div class="form-group">
+                <input type="text" class="form-control" id="exampleInputName2" placeholder="">
+            </div>
+            k -
+            <div class="form-group">
+                <input type="text" class="form-control" id="exampleInputEmail2" placeholder="">
+            </div>
+            k
+            <button type="submit" class="btn btn-default">确认</button>
+        </div>
+    </div>
+    <div class="op_navuploadbox">
+        <button type="button" class="btn op_btn1 btn-primary fl"><span id="picker1" class="glyphicon glyphicon-open updata_pic">上传图片</span></button>
+        <button type="button" class="chufa btn op_btn1 btn-default fl">分类管理</button>
+        <button type="button" class="btn op_shuiyin op_btn1 btn-default fl">水印设置</button>
+        <span class="icon op_icon1 fr"><span class="glyphicon glyphicon-th-large op_icon1active"></span></span>
+        <span class="icon op_icon1 fr"><span class="glyphicon glyphicon-th"></span></span>
+    </div>
+    <div class="op_article">
+        <div class="op_articleleft fl">
+            <ul id="treeDemo" class="ztree showIcon"></ul>
+        </div>
+        <div class="op_articleright fl">
+            <div class="op_tupianbuju op_liebiao">开发中</div>
+            <div class="op_tupianbuju op_xiaotubiao op_bujuqiehuancative">
+                <ul class="op_tupianbujuul">
+                    <li>
+                        <div class="op_tupianbujuimgbox">
+                            <img class="op_tuimg" src="../css/img/ke10.jpg" alt="">
+                            <input type="checkbox" placeholder="">
+                        </div>
+                        <div class="op_tupianbujup">阿萨德阿萨德浓氨水对咯女浓氨水对咯女</div>
+                        <div class="op_tupianbujup1">2017-05-08</div>
+                        <div class="op_tupianbujucheck">
+                            <div class="photo_liulanchufa"></div>
+                            <div class="photo_xiugaichufa"></div>
+                            <div></div>
+                            <div class="delate_chufa"></div>
+                            <p class="xialachufa"></p>
+                            <div class="xialachufabox">
+                                <p class="xialachufali">转移</p>
+                                <p class="xialachufali">添加水印</p>
+                            </div>
+                        </div>
+
+                        <div class="delate_photo">
+                            <div class="delate_photoleft fl"><img src="../css/img/confirm.png" alt=""></div>
+                            <div class="delate_phototext fl">
+                                <span>您确定要删除吗？</span>
+                                <span class="btn btn-default delate_phototextbtn">确定</span>
+                                <span class="btn btn-default delate_phototextbtn delate_phototextbtnquxiao">取消</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="op_tupianbujuimgbox">
+                            <img class="op_tuimg" src="../css/img/ke11.jpg" alt="">
+                            <input type="checkbox" placeholder="">
+                        </div>
+                        <div class="op_tupianbujup">阿水对咯女</div>
+                        <div class="op_tupianbujup1">2017-05-07</div>
+                        <div class="op_tupianbujucheck">
+                            <div class="photo_liulanchufa"></div>
+                            <div class="photo_xiugaichufa"></div>
+                            <div></div>
+                            <div class="delate_chufa"></div>
+                            <p class="xialachufa"></p>
+                            <div class="xialachufabox">
+                                <p class="xialachufali">转移</p>
+                                <p class="xialachufali">添加水印</p>
+                            </div>
+                        </div>
+                        <div class="delate_photo">
+                            <div class="delate_photoleft fl"><img src="../css/img/confirm.png" alt=""></div>
+                            <div class="delate_phototext fl">
+                                <span>您确定要删除吗？</span>
+                                <span class="btn btn-default delate_phototextbtn">确定</span>
+                                <span class="btn btn-default delate_phototextbtn delate_phototextbtnquxiao">取消</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="op_tupianbujuimgbox">
+                            <img class="op_tuimg" src="../css/img/ns1.jpg" alt="">
+                            <input type="checkbox" placeholder="">
+                        </div>
+                        <div class="op_tupianbujup">阿水对咯女</div>
+                        <div class="op_tupianbujup1">2017-05-07</div>
+                        <div class="op_tupianbujucheck">
+                            <div class="photo_liulanchufa"></div>
+                            <div class="photo_xiugaichufa"></div>
+                            <div></div>
+                            <div class="delate_chufa"></div>
+                            <p class="xialachufa"></p>
+                            <div class="xialachufabox">
+                                <p class="xialachufali">转移</p>
+                                <p class="xialachufali">添加水印</p>
+                            </div>
+                        </div>
+                        <div class="delate_photo">
+                            <div class="delate_photoleft fl"><img src="../css/img/confirm.png" alt=""></div>
+                            <div class="delate_phototext fl">
+                                <span>您确定要删除吗？</span>
+                                <span class="btn btn-default delate_phototextbtn">确定</span>
+                                <span class="btn btn-default delate_phototextbtn delate_phototextbtnquxiao">取消</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="op_tupianbujuimgbox">
+                            <img class="op_tuimg" src="../css/img/ns2.jpg" alt="">
+                            <input type="checkbox" placeholder="">
+                        </div>
+                        <div class="op_tupianbujup">阿水对咯女</div>
+                        <div class="op_tupianbujup1">2017-05-07</div>
+                        <div class="op_tupianbujucheck">
+                            <div class="photo_liulanchufa"></div>
+                            <div class="photo_xiugaichufa"></div>
+                            <div></div>
+                            <div class="delate_chufa"></div>
+                            <p class="xialachufa"></p>
+                            <div class="xialachufabox">
+                                <p class="xialachufali">转移</p>
+                                <p class="xialachufali">添加水印</p>
+                            </div>
+                        </div>
+                        <div class="delate_photo">
+                            <div class="delate_photoleft fl"><img src="../css/img/confirm.png" alt=""></div>
+                            <div class="delate_phototext fl">
+                                <span>您确定要删除吗？</span>
+                                <span class="btn btn-default delate_phototextbtn">确定</span>
+                                <span class="btn btn-default delate_phototextbtn delate_phototextbtnquxiao">取消</span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="propobox">
+    <div class="proposmall">
+        <div class="po1_top"><span>分类管理</span><span class="close_fenlei">×</span></div>
+        <div class="po1_select">
+            <div class="po1_topbtn">
+                <button type="button" class="po1_topbtn1 chufaaddfenlei btn btn-info op_btn1 btn-default fl"><span class="iconfont icon-jiahao"></span>添加分类</button>
+                <button type="button" class="startdrag btn op_btn1 btn-default fl">开启拖拽排序</button>
+                <button class="btn op_btn1 pol_tuozhuai btn-default fl"><span class="pol_baocun">保存排序</span><span class="pol_quxiao">取消</span></button>
+            </div>
+            <div class="po1_table">
+                <div class="po1_tabletop">
+                    <div class="po1_tabletopleft fl">分类</div>
+                    <div class="po1_tabletopright fl">操作</div>
+                </div>
+                <ul id="treepropo" class="po1_tabul ztree showIcon"></ul>
+            </div>
+        </div>
+    </div>
+    <div class="proposaddlei">
+        <div class="po1_top"><span>添加分类</span><span class="close_addfenlei">×</span></div>
+        <div class="addfen_selectbox">
+            <div class="fl addfen_selectboxleft">所属分类：</div>
+            <select class="addfen_selectboxselect fl"  name="" id="" >
+                <option value="">作为一级分类</option>
+                <option value="">产品内容维护图片</option>
+                <option value="">产品品牌维护图片</option>
+                <option value="">产品规格维护图片</option>
+            </select>
+        </div>
+        <div class="addfen_selectbox">
+            <div class="fl addfen_selectboxleft"><span style="color: red;">*</span>名称：</div>
+            <input class="addfen_selectboxselect fl">
+        </div>
+        <div class="addfen_selectbox">
+            <div class="fl addfen_selectboxleft">选择模块：</div>
+            <select class="addfen_selectboxselect fl"  name="">
+                <option value="">请选择</option>
+                <option value="">资讯内容</option>
+                <option value="">友情链接</option>
+                <option value="">产品内容</option>
+                <option value="">产品品牌</option>
+                <option value="">图册管理</option>
+                <option value="">广告管理</option>
+                <option value="">幻灯管理</option>
+                <option value="">内容管理</option>
+                <option value="">产品规格</option>
+                <option value="">其他图片</option>
+                <option value="">招聘管理</option>
+            </select>
+        </div>
+        <div class="addfen_selecbtm">
+            <button type="button" class="btn addfen_btn op_btn1 btn-default fl">确认</button>
+            <button type="button" class="btn op_btn1 btn-default fl close_addfenlei">取消</button>
+        </div>
+    </div>
+    <div class="proposshuiyin">
+        <div class="po1_top"><span>水印设置</span><span class="close_shuiyin">×</span></div>
+        <form action="" >
+            <div class="addfen_selectbox" style="margin-top: 10px;">
+                <div class="fl addfen_selectboxleft"><span style="color: red;">*</span>显示样式：</div>
+                <input class="addfen_selectboxselect addfen_selectboxselectcheck fl" name="shuiyin" type="radio" id="text_ra">
+                <label class="fl font_shuiyin" for="text_ra">文字水印：</label>
+                <input class="addfen_selectboxselect addfen_selectboxselectcheck fl" name="shuiyin" type="radio" id="photo_ra">
+                <label class="fl font_shuiyin" for="photo_ra">图片水印：</label>
+            </div>
+            <div class="addfen_selectbox" style="margin-top: 10px;">
+                <div class="fl addfen_selectboxleft"><span style="color: red;">*</span>水印文字信息：</div>
+                <input class="addfen_selectboxselect fl">
+            </div>
+            <div class="addfen_selectbox" style="margin-top: 10px;">
+                <div class="fl addfen_selectboxleft">加粗：</div>
+                <input class="addfen_selectboxselect addfen_selectboxselectcheck fl" type="checkbox" checked>
+            </div>
+            <div class="addfen_selectbox" style="margin-top: 10px;">
+                <div class="fl addfen_selectboxleft"><span style="color: red;">*</span>字体：</div>
+                <select class="addfen_selectboxselect fl"  name="">
+                    <option value="">宋体</option>
+                    <option value="">楷体</option>
+                    <option value="">黑体</option>
+                    <option value="">仿宋</option>
+                    <option value="">新宋体</option>
+                    <option value="">隶书</option>
+                </select>
+            </div>
+            <div class="addfen_selectbox" style="margin-top: 10px;">
+                <div class="fl addfen_selectboxleft"><span style="color: red;">*</span>颜色：</div>
+                <input class="addfen_selectboxselect fl" type="color">
+            </div>
+            <div class="addfen_selectbox" style="margin-top: 10px;">
+                <div class="fl addfen_selectboxleft"><span style="color: red;">*</span>大小：</div>
+                <input class="addfen_selectboxselect fl"><span class="fl addfen_span">px</span>
+            </div>
+            <div class="addfen_selectbox" style="margin-top: 10px;">
+                <div class="fl addfen_selectboxleft"><span style="color: red;">*</span>显示位置：</div>
+                <select class="addfen_selectboxselect fl"  name="">
+                    <option value="">左上</option>
+                    <option value="">左下</option>
+                    <option value="">居中</option>
+                    <option value="">右上</option>
+                    <option value="">右下</option>
+                </select>
+            </div>
+            <div class="addfen_selectbox" style="margin-top: 10px;">
+                <div class="fl addfen_selectboxleft"><span style="color: red;">*</span>透明度：</div>
+                <input class="addfen_selectboxselect fl"><span class="fl addfen_span">%</span>
+            </div>
+        </form>
+        <div class="addfen_selecbtm">
+            <button type="button" style="margin-left: 190px;" class="btn btn-info op_btn1 fl">确认</button>
+            <button type="reset" class="btn op_btn1 btn-default fl">重置</button>
+            <button type="button" class="btn op_btn1 btn-default fl">预览</button>
+        </div>
+    </div>
+    <div class="propophoto_liulan">
+        <div class="po1_top"><span>图片浏览</span><span class="close_liulan">×</span></div>
+        <div class="propophoto_liuimgbox"></div>
+    </div>
+    <div class="propo_bianji">
+        <div class="po1_top"><span>修改图片</span><span class="close_xiugai">×</span></div>
+        <div class="addfen_selectbox" style="margin-top: 10px;">
+            <div class="fl addfen_selectboxleft"><span style="color: red;">*</span>图片名称：</div>
+            <input class="addfen_selectboxselect fl">
+        </div>
+        <div class="addfen_selectbox" style="margin-top: 10px;">
+            <div class="fl addfen_selectboxleft">图片分类：</div>
+            <select class="addfen_selectboxselect fl"  name="">
+                <option value="">作为一级分类</option>
+                <option value="">产品内容维护图片</option>
+                <option value="">产品品牌维护图片</option>
+                <option value="">产品规格维护图片</option>
+            </select>
+        </div>
+        <div class="addfen_selectbox bianji_imgbox" style="margin-top: 10px;">
+            <div class="fl addfen_selectboxleft">图片：</div>
+            <img class="bianji_img" src="" alt="">
+            <button type="button" class="btn op_btn1 btn-primary fl"><span id="picker2" class="glyphicon glyphicon-open updata_pic">上传图片</span></button>
+        </div>
+        <div class="addfen_selectbox" style="margin-top: 10px;">
+            <div class="fl addfen_selectboxleft">水印：</div>
+            <div class="btn-group" data-toggle="buttons">
+                <label class="btn btn-default active">
+                    <input type="checkbox" autocomplete="off">是
+                </label>
+                <label class="btn btn-default">
+                    <input type="checkbox" autocomplete="off" >否
+                </label>
+            </div>
+        </div>
+        <div class="addfen_selecbtm">
+            <button type="button" class="btn addfen_btn op_btn1 btn-default fl">确认</button>
+            <button style="float: left;" type="button" class="btn op_btn1 btn-default fl close_xiugai">取消</button>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+$(".op_icon1").click(function () {
+    $(".op_icon1").find("span").removeClass("op_icon1active");
+    $(this).find("span").addClass("op_icon1active");
+    var $inndex;
+    if($(this).index()=="3"){$inndex=1}
+    if($(this).index()=="4"){$inndex=0}
+    $(".op_tupianbuju").removeClass("op_bujuqiehuancative").eq($inndex).addClass("op_bujuqiehuancative");
+});
+function section() {
+    $(".op_articleright").css("width",$(".section").width()-180+"px");
+}
+    section();
+$(window).resize(function(){
+    section();
+});
+
+
+</script>
+</html>

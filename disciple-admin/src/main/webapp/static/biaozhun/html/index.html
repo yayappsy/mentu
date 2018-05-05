@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>统计网站</title>
+
+    <script type="text/javascript" src="../res/jquery/jquery-3.1.1.js"></script>
+    <link rel="stylesheet" href="../css/common.css">
+     <link rel="stylesheet" href="../css/layout.css">
+    <script type="text/javascript" src="../js/common.js"></script>
+    <link rel="stylesheet" href="../res/bootstrap/css/bootstrap.min.css">
+    <script type="text/javascript" src="../res/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../res/time/daterangepicker-bs3.css">
+    <script type="text/javascript" src="../res/time/moment.min.js"></script>
+    <script type="text/javascript" src="../res/time/daterangepicker.js"></script>
+
+    <script type="text/javascript" src="../res/echarts/echarts.min.js"></script>
+    <style>
+        .nav_left{
+            position: fixed;
+            left:0;
+            top:72px;
+            width:172px;
+            overflow: hidden;
+        }
+        .select{
+            margin-left: 172px;
+            overflow: hidden;
+        }
+        .list-group-item {
+            position: relative;
+            display: block;
+            padding: 10px 10px;
+            margin-bottom: -1px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+        }
+    </style>
+
+</head>
+<body>
+<div class="main">
+    <div class="header navbar navbar-default">
+        <div class="navbar-header">
+            <button class="navbar-toggle" data-toggle="collapse" data-target="#myNavs">
+                <span class="sr-only">切换导航</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="#" class="navbar-brand">东北F4</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavs">
+            <ul class="nav nav-pills nav-justified">
+                <li class='active'>
+                    <a href="#">张三</a>
+                </li>
+                <li>
+                    <a href="#">李四</a>
+                </li>
+                <li>
+                    <a href="#">王保长</a>
+                </li>
+                <li>
+                    <a href="#">花花</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="sections">
+        <div class="nav_left fl">
+            <div class="list-group">
+                <button type="button" class="list-group-item" data-href="survey.html">网页概况</button>
+                <button type="button" class="list-group-item" data-href="visitor.html">实时访客</button>
+                <button type="button" class="list-group-item" data-href="trendanalysis.html">趋势分析</button>
+                <button type="button" class="list-group-item" data-href="sources.html">全部来源</button>
+                <button type="button" class="list-group-item" data-href="sezrchengine.html">搜索引擎</button>
+            </div>
+            <div class="list-group">
+                <button type="button" class="list-group-item" data-href="pageview.html">受访页面</button>
+                <button type="button" class="list-group-item" data-href="pageentry.html">入口页面</button>
+                <button type="button" class="list-group-item" data-href="geographical.html">地域分布</button>
+                <button type="button" class="list-group-item" data-href="systemenvironments.html">系统环境</button>
+                <button type="button" class="list-group-item" data-href="xinlaovisitor.html">新老访客</button>
+            </div>
+            <div class="list-group">
+                <button type="button" class="list-group-item" data-href="loyalty.html">忠诚度</button>
+            </div>
+        </div>
+        <div class="fl select" id="select">
+            656
+        </div>
+    </div>
+</div>
+</body>
+<script>
+var $select = $("#select");
+if(localStorage.getItem("data_href")!=null){
+    $select.load(localStorage.getItem("data_href"));
+}else{
+    $select.load("survey.html");
+}
+$(".list-group").on("click",".list-group-item",function () {
+    console.log($(this).attr("data-href"));
+    $select.load($(this).attr("data-href"));
+    localStorage.setItem("data_href",$(this).attr("data-href"))
+});
+$select.css("width",window.innerWidth-172+"px");
+$(window).resize(function(){
+    //console.log(window.innerWidth);
+    $select.css("width",window.innerWidth-172+"px")
+});
+</script>
+</html>

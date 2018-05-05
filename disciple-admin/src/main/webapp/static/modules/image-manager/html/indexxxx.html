@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="../res/jquery/jquery-3.1.1.js"></script>
+    <link rel="stylesheet" href="../res/webuploader/webuploader.css">
+    <script type="text/javascript" src="../res/webuploader/dist/webuploader.html5only.js?verson=1"></script>
+</head>
+<body>
+<button id="pickerxiugai">dianji</button>
+<script>
+    //图片上传
+    jQuery(function() {
+        var $ = jQuery,
+            state = 'pending',
+            uploader;
+        uploader = WebUploader.create({
+            // 不压缩image
+            resize: true,
+            // 文件接收服务端。
+            server: 'http://114.215.18.56/api/fileupload',
+            // 选择文件的按钮。可选。
+
+            // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+            pick: '#pickerxiugai'
+        });
+        // 当有文件添加进来的时候
+        uploader.on( 'fileQueued', function( file ) {
+            uploader.upload();
+            console.log(6);
+        });
+        // 文件上传过程中创建进度条实时显示。
+        uploader.on( 'uploadProgress', function( file, percentage ) {
+            var $li = $( '#'+file.id ),
+                $percent = $li.find('.progress .progress-bar');
+            // 避免重复创建
+            console.log(7);
+            if ( !$percent.length ) {
+                $percent = $('<div class="progress progress-striped active">' +
+                    '<div class="progress-bar" role="progressbar" style="width: 0%">' +
+                    '</div>' +
+                    '</div>').appendTo( $li ).find('.progress-bar');
+            }
+            $li.find('p.state').text('上传中');
+            $percent.css( 'width', percentage * 100 + '%' );
+        });
+        uploader.on( 'uploadSuccess', function( file,ret ) {
+            //console.log(file);
+            console.log(8);
+            console.log(ret.data.url);
+            $( '#'+file.id ).find('p.state').text('已上传');
+        });
+        uploader.on( 'uploadError', function( file ) {
+            $( '#'+file.id ).find('p.state').text('上传出错');
+        });
+        uploader.on( 'uploadComplete', function( file ) {
+            $( '#'+file.id ).find('.progress').fadeOut();
+        });
+    });
+</script>
+</body>
+</html>

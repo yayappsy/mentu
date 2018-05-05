@@ -1,0 +1,160 @@
+*{
+    margin:0;
+    padding:0;
+    list-style: none;
+    text-decoration: none;
+    font-size: 13px;
+    font-family: "宋体",Arial, Helvetica, sans-serif;
+    color: #323437;
+}
+
+html body div{
+    -webkit-box-sizing: content-box;!important;
+    -moz-box-sizing: content-box;!important;
+    box-sizing: content-box;!important;
+}
+html body .form-control {
+    height: 28px;
+}
+html body .btn {
+    padding: 0 12px;
+    height:24px;
+    line-height: 24px;
+}
+.fl{
+    float: left;
+}
+.fr{
+    float: right;
+}
+.cs{
+    cursor: pointer;
+}
+.dn{
+    display: none;
+}
+@media all and (min-width: 1280px){
+    body{
+        width: 100%;
+    }
+}
+@media all and (min-width: 0px) and (max-width:1280px){
+    body{
+        width: 1280px;
+    }
+    body header{
+        background: #f6ff3b;
+    }
+    .section_right .op_wrap{
+        width:900px;
+    }
+}
+
+
+
+@font-face {font-family: "iconfont";
+    src: url('//at.alicdn.com/t/font_1bvfd8sw5m0wwmi.eot?t=1495528830865'); /* IE9*/
+    src: url('//at.alicdn.com/t/font_1bvfd8sw5m0wwmi.eot?t=1495528830865#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('//at.alicdn.com/t/font_1bvfd8sw5m0wwmi.woff?t=1495528830865') format('woff'), /* chrome, firefox */
+    url('//at.alicdn.com/t/font_1bvfd8sw5m0wwmi.ttf?t=1495528830865') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+    url('//at.alicdn.com/t/font_1bvfd8sw5m0wwmi.svg?t=1495528830865#iconfont') format('svg'); /* iOS 4.1- */
+}
+
+.iconfont {
+    font-family:"iconfont" !important;
+    font-size:16px;
+    font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-jiahao:before { content: "\e615"; }
+
+.icon-arrow121112:before { content: "\e60d"; }
+
+.icon-sanjiao:before { content: "\e683"; }
+
+.icon-gou:before { content: "\e638"; }
+
+.icon-ren-:before { content: "\e60b"; }
+
+.icon-sanjiao1:before { content: "\e609"; }
+
+
+.icon-arrow121112{
+    font-size: 18px;
+    float: left;
+    color: #fff;
+    line-height: 18px;
+}
+.icon-gou{
+    padding-right: 3px;
+    color: #58ba50;
+    font-size: 19px;
+}
+.icon-jiahao{
+    font-size: 10px;
+    float: left;
+    color: #fff;
+}
+.section{
+    width:100%;
+    overflow: hidden;
+}
+.section .timechange{
+    margin-top: 6px;
+    width:120px;
+}
+.showmessageclass{
+    border:1px solid #58ba50;
+    border-radius:5px;
+    padding:4px 12px;
+    line-height:24px;
+    position:fixed;
+    background:rgba(255,255,255,0.8);
+    display:none;
+}
+
+/*顶部样式*/
+.op_sectiontop{
+    height:33px;
+    padding:0 10px;
+    line-height: 33px;
+    border-bottom: 1px solid #ccc;
+}
+.icon-ren{
+    color: #666;
+}
+.icon-ren1{
+    margin-left: 5px;
+}
+.icon-ren2{
+    color: #1a4b8e;
+}
+
+.tj_ul{
+    display: inline-block;
+    border: 1px solid #e1e3e4;
+    overflow: hidden;
+    padding:0;
+    margin-top: 5px;
+}
+.tj_ul li {
+    float: left;
+    padding: 0 12px;
+    height: 24px;
+    line-height: 24px;
+    border-right: none;
+    cursor: pointer;
+    margin: 0;
+}
+.tj_active {
+    background: #4aa6fc;
+    color: #fff;
+}
+.ta_span2 {
+    margin-top: 5px;
+    height: 24px;
+    line-height: 24px;
+    margin-left: 20px;
+}

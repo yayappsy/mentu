@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.base.dao.OnlineCustomerServiceDao">
+    
+	<sql id="onlineCustomerServiceColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.type AS "type",
+		a.account AS "account",
+		a.description AS "description",
+		a.is_show AS "isShow",
+		a.sort AS "sort",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="onlineCustomerServiceJoins">
+	</sql>
+    
+	<select id="get" resultType="OnlineCustomerService">
+		SELECT 
+			<include refid="onlineCustomerServiceColumns"/>
+		FROM online_customer_service a
+		<include refid="onlineCustomerServiceJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getEntity" resultType="OnlineCustomerService">
+		SELECT 
+			<include refid="onlineCustomerServiceColumns"/>
+		FROM online_customer_service a
+		<include refid="onlineCustomerServiceJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="OnlineCustomerService">
+		SELECT 
+			<include refid="onlineCustomerServiceColumns"/>
+		FROM online_customer_service a
+		<include refid="onlineCustomerServiceJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="OnlineCustomerService">
+		SELECT 
+			<include refid="onlineCustomerServiceColumns"/>
+		FROM online_customer_service a
+		<include refid="onlineCustomerServiceJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM online_customer_service a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT count(*)		 
+		FROM online_customer_service a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO online_customer_service(
+			id,
+			name,
+			type,
+			account,
+			description,
+			is_show,
+			sort,
+			create_date,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{name},
+			#{type},
+			#{account},
+			#{description},
+			#{isShow},
+			#{sort},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE online_customer_service SET 	
+			name = #{name},
+			type = #{type},
+			account = #{account},
+			description = #{description},
+			is_show = #{isShow},
+			sort = #{sort},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM online_customer_service
+	
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatch">
+		DELETE FROM online_customer_service
+		WHERE
+			id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+	<update id="deleteEntity">
+		UPDATE online_customer_service SET 
+			del_flag = #{DEL_FLAG_DELETE}
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatchEntity">
+		UPDATE online_customer_service SET 
+			del_flag = '1'
+		where
+		    id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+	<update id="updateSort">
+		UPDATE online_customer_service
+		SET sort = CASE id
+		<foreach collection="list" item="item">
+			WHEN #{item.id} THEN #{item.sort}
+		</foreach>
+		END
+		WHERE
+			id in
+			<foreach collection="list" item="item" open="(" separator="," close=")">
+			 #{item.id} 
+			</foreach>
+	</update>
+</mapper>

@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weimhc.modules.job.dao.PracticeLiveDao">
+    
+	<sql id="practiceLiveColumns">
+		a.id AS "id",
+		a.resume_id AS "resumeId",
+		a.member_id AS "memberId",
+		a.company_name AS "companyName",
+		a.job_name AS "jobName",
+		a.city_id AS "city.id",
+		sa.name AS "city.name",
+		a.begin_date AS "beginDate",
+		a.end_date AS "endDate",
+		a.description AS "description",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="practiceLiveJoins">
+		LEFT JOIN sys_area sa ON sa.id = a.city_id
+	</sql>
+    
+	<select id="get" resultType="PracticeLive">
+		SELECT 
+			<include refid="practiceLiveColumns"/>
+		FROM practice_live a
+		<include refid="practiceLiveJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByResumeId" resultType="PracticeLive" parameterType="java.lang.String">
+		SELECT
+			<include refid="practiceLiveColumns"/>
+		FROM practice_live a
+		<include refid="practiceLiveJoins"/>
+		WHERE a.resume_id = #{resumeId}
+	</select>
+	
+	<select id="getEntity" resultType="PracticeLive">
+		SELECT 
+			<include refid="practiceLiveColumns"/>
+		FROM practice_live a
+		<include refid="practiceLiveJoins"/>
+        <where>
+			and a.id = #{id}
+		</where>		
+	</select>	
+	
+	<select id="findList" resultType="PracticeLive">
+		SELECT 
+			<include refid="practiceLiveColumns"/>
+		FROM practice_live a
+		<include refid="practiceLiveJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="resumeId != null and resumeId != ''">
+				AND a.resume_id = #{resumeId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.pageable.orderBy != null and page.pageable.orderBy != ''">
+				ORDER BY ${page.pageable.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="PracticeLive">
+		SELECT 
+			<include refid="practiceLiveColumns"/>
+		FROM practice_live a
+		<include refid="practiceLiveJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="resumeId != null and resumeId != ''">
+				AND a.resume_id = #{resumeId}
+			</if>
+		</where>		
+		ORDER BY a.update_date DESC
+	</select>
+	
+	<select id="exists" resultType="boolean">
+		SELECT 	count(a.id) 
+		FROM practice_live a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<select id="count" resultType="long">
+		SELECT 	count(a.id) 	 
+		FROM practice_live a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.id = #{id}
+		</where>				
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO practice_live(
+			id,
+			resume_id,
+			member_id,
+			company_name,
+			job_name,
+			city_id,
+			begin_date,
+			end_date,
+			description,
+			create_date,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{resumeId},
+			#{memberId},
+			#{companyName},
+			#{jobName},
+			#{city.id},
+			#{beginDate},
+			#{endDate},
+			#{description},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<insert id="insertOrUpdate" >
+		<!-- 查看是否存,如果存在及更新，否则插入 -->
+	    <selectKey keyProperty="sqlMap.count" order="BEFORE" resultType="int">  
+	        select count(id) as num from practice_live where id = #{id}
+	    </selectKey>  
+	    <if test="sqlMap.count > 0">  
+			UPDATE practice_live SET 	
+								resume_id = #{resumeId},
+				member_id = #{memberId},
+				company_name = #{companyName},
+				job_name = #{jobName},
+				city_id = #{city.id},
+				begin_date = #{beginDate},
+				end_date = #{endDate},
+				description = #{description},
+				update_date = #{updateDate},
+				remarks = #{remarks}
+			WHERE id = #{id}
+   		 </if> 
+   		 <if test="sqlMap.count == 0">  
+			INSERT INTO practice_live(
+											id,
+						resume_id,
+						member_id,
+						company_name,
+						job_name,
+						city_id,
+						begin_date,
+						end_date,
+						description,
+						create_date,
+						update_date,
+						remarks,
+						del_flag
+					) VALUES (
+											#{id},
+						#{resumeId},
+						#{memberId},
+						#{companyName},
+						#{jobName},
+						#{city.id},
+						#{beginDate},
+						#{endDate},
+						#{description},
+						#{createDate},
+						#{updateDate},
+						#{remarks},
+						#{delFlag}
+					)
+		</if> 
+	</insert>
+	
+	<update id="update">
+		UPDATE practice_live SET 	
+			resume_id = #{resumeId},
+			member_id = #{memberId},
+			company_name = #{companyName},
+			job_name = #{jobName},
+			city_id = #{city.id},
+			begin_date = #{beginDate},
+			end_date = #{endDate},
+			description = #{description},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+
+		DELETE FROM practice_live
+	
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatch">
+		DELETE FROM practice_live
+		WHERE
+			id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+	<update id="deleteEntity">
+		UPDATE practice_live SET 
+			del_flag = #{DEL_FLAG_DELETE}
+	    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBatchEntity">
+		UPDATE practice_live SET 
+			del_flag = '1'
+		where
+		    id in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+			 #{item} 
+			</foreach>
+	</update>
+	
+</mapper>
